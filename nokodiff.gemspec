@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "simplecov"
 
   spec.add_dependency "actionview", ">= 6", "< 8.1.2"
-  spec.add_dependency "gds-api-adapters", "~> 101.0.0"
+  spec.add_dependency "gds-api-adapters", ">= 101.0", "< 101.2"
   spec.add_dependency "govspeak", ">= 10.6.3"
   spec.add_dependency "rails", ">= 6", "< 8.1.2"
   spec.add_dependency "view_component", "~> 4"
