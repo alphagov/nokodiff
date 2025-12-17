@@ -1,0 +1,35 @@
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  codeql-sast:
+    name: CodeQL SAST scan
+    uses: alphagov/govuk-infrastructure/.github/workflows/codeql-analysis.yml@main
+    permissions:
+      security-events: write
+
+  dependency-review:
+    name: Dependency Review scan
+    uses: alphagov/govuk-infrastructure/.github/workflows/dependency-review.yml@main
+
+  # This matrix job runs the test suite against multiple Ruby versions
+  test_matrix:
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: [3.2, 3.3]
+    runs-on: ubuntu-latest
+    env:
+      GOVUK_CONTENT_SCHEMAS_PATH: vendor/publishing-api/content_schemas
+    steps:
+      - uses: actions/checkout@v4
+      - name: Checkout Publishing API for content schemas
+        uses: actions/checkout@v4
+        with:
+          repository: alphagov/publishing-api
+          ref: main
+          path: vendor/publishing-api
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - run: bundle exec rake
