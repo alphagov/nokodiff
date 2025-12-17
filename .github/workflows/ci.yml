@@ -21,9 +21,9 @@ jobs:
     env:
       GOVUK_CONTENT_SCHEMAS_PATH: vendor/publishing-api/content_schemas
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Checkout Publishing API for content schemas
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: alphagov/publishing-api
           ref: main
