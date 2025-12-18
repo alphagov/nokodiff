@@ -1,4 +1,13 @@
-on: [push, pull_request, workflow_dispatch]
+name: CI
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - ".git**"
+  pull_request:
 
 jobs:
   codeql-sast:
@@ -21,9 +30,9 @@ jobs:
     env:
       GOVUK_CONTENT_SCHEMAS_PATH: vendor/publishing-api/content_schemas
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Checkout Publishing API for content schemas
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: alphagov/publishing-api
           ref: main
@@ -33,3 +42,43 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
       - run: bundle exec rake
+
+  # Branch protection rules cannot directly depend on status checks from matrix jobs.
+  # So instead we define `test` as a dummy job which only runs after the preceding `test_matrix` checks have passed.
+  # Solution inspired by: https://github.community/t/status-check-for-a-matrix-jobs/127354/3
+  test:
+    needs: test_matrix
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "All matrix tests have passed 🚀"
+
+  publish:
+    needs: test
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/main' }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ruby/setup-ruby@v1
+        with:
+          rubygems: latest
+      - uses: actions/setup-node@v6.1.0
+        with:
+          node-version: lts/* # use the latest LTS release
+      - run: yarn install
+      - env:
+          GEM_HOST_API_KEY: ${{ secrets.ALPHAGOV_RUBYGEMS_API_KEY }}
+        run: |
+          VERSION=$(ruby -r rubygems -e "puts Gem::Specification::load('nokodiff.gemspec').version")
+          GEM_VERSION=$(gem list --exact --remote nokodiff)
+          
+          if [ "${GEM_VERSION}" != "nokodiff (${VERSION})" ]; then
+            gem build nokodiff.gemspec
+            gem push "nokodiff-${VERSION}.gem"
+          fi
+          
+          if ! git ls-remote --tags --exit-code origin v"${VERSION}"; then
+            git tag v"${VERSION}"
+            git push --tags
+          fi
