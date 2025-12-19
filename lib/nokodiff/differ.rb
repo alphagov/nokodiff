@@ -13,22 +13,22 @@ module Nokodiff
         when :changed
           %(
         <div class="diff">
-           <del>#{char_diff_html(diff[:before], diff[:after]).first}</del>
+           <del aria-label="removed content">#{char_diff_html(diff[:before], diff[:after]).first}</del>
         </div>
         <div class="diff">
-            <ins>#{char_diff_html(diff[:before], diff[:after]).last}</ins>
+            <ins aria-label="added content">#{char_diff_html(diff[:before], diff[:after]).last}</ins>
         </div>
         )
         when :deleted
           %(
         <div class="diff">
-          <del>#{diff[:before]}</del>
+          <del aria-label="removed content">#{diff[:before]}</del>
         </div>
         )
         when :added
           %(
         <div class="diff">
-          <ins>#{diff[:after]}</ins>
+          <ins aria-label="added content">#{diff[:after]}</ins>
         </div>
         )
         end

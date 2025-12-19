@@ -17,8 +17,8 @@ RSpec.describe Nokodiff do
           expect(output).not_to include('<div class="diff">')
           expect(output).to include("Title: example")
 
-          expect(output).not_to include("<del>")
-          expect(output).not_to include("<ins>")
+          expect(output).not_to include('<del aria-label="removed content">')
+          expect(output).not_to include('<ins aria-label="added content">')
         end
       end
 
@@ -30,11 +30,11 @@ RSpec.describe Nokodiff do
           output = Nokodiff.diff(before_html, after_html)
 
           expect(output).to include('<div class="diff">')
-          expect(output).to include("<del><p>Title: e<strong>xampl</strong>e</p></del>")
-          expect(output).to include("<ins><p>Title: <strong>n</strong>e<strong>w t</strong>e<strong>xt</strong></p></ins>")
+          expect(output).to include('<del aria-label="removed content"><p>Title: e<strong>xampl</strong>e</p></del>')
+          expect(output).to include('<ins aria-label="added content"><p>Title: <strong>n</strong>e<strong>w t</strong>e<strong>xt</strong></p></ins>')
 
-          expect(output).to include("<del>")
-          expect(output).to include("<ins>")
+          expect(output).to include('<del aria-label="removed content">')
+          expect(output).to include('<ins aria-label="added content">')
         end
       end
 
@@ -46,11 +46,11 @@ RSpec.describe Nokodiff do
           output = Nokodiff.diff(before_html, after_html)
 
           expect(output).to include('<div class="diff">')
-          expect(output).to include("<del><p>Monday to Friday, 9am to midday <strong>and 2pm to 4:30pm </strong>(closed on bank holidays)</p></del>")
-          expect(output).to include("<ins><p>Monday to Friday, 9am to midday (closed on bank holidays)</p></ins>")
+          expect(output).to include('<del aria-label="removed content"><p>Monday to Friday, 9am to midday <strong>and 2pm to 4:30pm </strong>(closed on bank holidays)</p></del>')
+          expect(output).to include('<ins aria-label="added content"><p>Monday to Friday, 9am to midday (closed on bank holidays)</p></ins>')
 
-          expect(output).to include("<del>")
-          expect(output).to include("<ins>")
+          expect(output).to include('<del aria-label="removed content">')
+          expect(output).to include('<ins aria-label="added content">')
         end
       end
     end
@@ -80,8 +80,8 @@ RSpec.describe Nokodiff do
         expect(output).to include('<li><a href="https://a.example.com">Link <strong>A</strong></a></li>')
         expect(output).to include('<li><a href="https://a.example.com">Link <strong>B</strong></a></li>')
 
-        expect(output).to include("<del>")
-        expect(output).to include("<ins>")
+        expect(output).to include('<del aria-label="removed content">')
+        expect(output).to include('<ins aria-label="added content">')
       end
     end
   end
