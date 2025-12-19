@@ -13,10 +13,10 @@ module Nokodiff
         when :changed
           %(
         <div class="diff">
-           <del>#{diff[:before].to_html}</del>
+           <del>#{char_diff_html(diff[:before], diff[:after]).first}</del>
         </div>
         <div class="diff">
-            <ins>#{diff[:after].to_html}</ins>
+            <ins>#{char_diff_html(diff[:before], diff[:after]).last}</ins>
         </div>
         )
         when :deleted
@@ -58,6 +58,105 @@ module Nokodiff
         elsif after_node
           { status: :deleted, before: nil, after: after_node }
         end
+      end
+    end
+
+    def char_diff_html(old_html, new_html)
+      old_fragment = old_html.dup
+      new_fragment = new_html.dup
+
+      diff_text_nodes(old_fragment, new_fragment)
+
+      merge_adjacent_strong_tags(old_fragment)
+      merge_adjacent_strong_tags(new_fragment)
+
+      [old_fragment.to_html, new_fragment.to_html]
+    end
+
+    def diff_text_nodes(old_node, new_node)
+      if old_node.text? && new_node.text?
+        diff_text_node_content(old_node, new_node)
+      elsif old_node.element? && new_node.element?
+        old_children = old_node.children.to_a
+        new_children = new_node.children.to_a
+        max = [old_children.length, new_children.length].max
+
+        (0..max).each do |i|
+          original = old_children[i]
+          new = new_children[i]
+
+          next unless original && new
+
+          diff_text_nodes(original, new)
+        end
+      end
+    end
+
+    def diff_text_node_content(old_text_node, new_text_node)
+      old_chars = old_text_node.text.chars
+      new_chars = new_text_node.text.chars
+
+      diff = Diff::LCS.sdiff(old_chars, new_chars)
+
+      old_fragment = Nokogiri::HTML::DocumentFragment.parse("")
+      new_fragment = Nokogiri::HTML::DocumentFragment.parse("")
+
+      buffer_old = ""
+      buffer_new = ""
+
+      diff.each do |change|
+        case change.action
+        when "="
+          buffer_old << change.old_element
+          buffer_new << change.new_element
+        when "!"
+          flush_buffer(old_fragment, buffer_old)
+          flush_buffer(new_fragment, buffer_new)
+
+          old_fragment.add_child(wrap_in_strong(change.old_element, old_fragment))
+          new_fragment.add_child(wrap_in_strong(change.new_element, new_fragment))
+        when "-"
+          flush_buffer(old_fragment, buffer_old)
+          old_fragment.add_child(wrap_in_strong(change.old_element, old_fragment))
+        when "+"
+          flush_buffer(new_fragment, buffer_new)
+          new_fragment.add_child(wrap_in_strong(change.new_element, new_fragment))
+        end
+      end
+
+      flush_buffer(old_fragment, buffer_old)
+      flush_buffer(new_fragment, buffer_new)
+
+      old_text_node.replace(old_fragment)
+      new_text_node.replace(new_fragment)
+    end
+
+    def flush_buffer(fragment, buffer)
+      return if buffer.empty?
+
+      fragment.add_child(Nokogiri::XML::Text.new(buffer, fragment))
+      buffer.clear
+    end
+
+    def wrap_in_strong(char, fragment)
+      Nokogiri::XML::Node.new("strong", fragment.document).tap { |n| n.content = char }
+    end
+
+    def merge_adjacent_strong_tags(node)
+      return unless node.element?
+
+      node.children.each do |child|
+        merge_adjacent_strong_tags(child) if child.element?
+      end
+
+      node.children.each_cons(2) do |left, right|
+        next unless left.name == "strong" && right.name == "strong"
+
+        left.content = left.content + right.content
+        right.remove
+
+        merge_adjacent_strong_tags(node)
+        break
       end
     end
   end
