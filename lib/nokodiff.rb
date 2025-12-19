@@ -4,6 +4,7 @@ require "nokogiri"
 require "diff-lcs"
 
 require_relative "nokodiff/version"
+require_relative "nokodiff/engine"
 require_relative "nokodiff/differ"
 
 module Nokodiff
