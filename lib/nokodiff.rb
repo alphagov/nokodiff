@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require "nokogiri"
+require "diff-lcs"
+
 require_relative "nokodiff/version"
 require_relative "nokodiff/differ"
 
