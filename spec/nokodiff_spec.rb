@@ -83,6 +83,33 @@ RSpec.describe Nokodiff do
         expect(output).to include('<del aria-label="removed content">')
         expect(output).to include('<ins aria-label="added content">')
       end
+
+      it "diffs a removed link against the matching line" do
+        before_html = <<-HTML
+          <div>
+            <p><strong>Example links:</strong></p>
+              <ul>
+                <li><a href="https://a.example.com">Link A</a></li>
+                <li><a href="https://b.example.com">Link B</a></li>
+              </ul>
+          </div>
+        HTML
+
+        after_html = <<-HTML
+          <div>
+            <p><strong>Example links:</strong></p>
+              <ul>
+                <li><a href="https://b.example.com">Link B</a></li>
+              </ul>
+          </div>
+        HTML
+
+        output = Nokodiff.diff(before_html, after_html)
+
+        expect(output).to include('<li><a href="https://a.example.com">Link <strong>A</strong></a></li>')
+        expect(output).to include('<li><a href="https://b.example.com"><strong>Link B</strong></a></li>')
+        expect(output).to include('<li><a href="https://b.example.com">Link <strong>B</strong></a></li>')
+      end
     end
   end
 end
