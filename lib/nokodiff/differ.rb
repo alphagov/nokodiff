@@ -110,29 +110,36 @@ module Nokodiff
           buffer_old << change.old_element
           buffer_new << change.new_element
         when "!"
-          old_fragment.add_child(Nokogiri::XML::Text.new(buffer_old, old_fragment)) unless buffer_old.empty?
-          new_fragment.add_child(Nokogiri::XML::Text.new(buffer_new, new_fragment)) unless buffer_new.empty?
-          buffer_old = ""
-          buffer_new = ""
+          flush_buffer(old_fragment, buffer_old)
+          flush_buffer(new_fragment, buffer_new)
 
-          old_fragment.add_child(Nokogiri::XML::Node.new("strong", old_fragment.document).tap { |n| n.content = change.old_element })
-          new_fragment.add_child(Nokogiri::XML::Node.new("strong", new_fragment.document).tap { |n| n.content = change.new_element })
+          old_fragment.add_child(wrap_in_strong(change.old_element, old_fragment))
+          new_fragment.add_child(wrap_in_strong(change.new_element, new_fragment))
         when "-"
-          old_fragment.add_child(Nokogiri::XML::Text.new(buffer_old, old_fragment)) unless buffer_old.empty?
-          buffer_old = ""
-          old_fragment.add_child(Nokogiri::XML::Node.new("strong", old_fragment.document).tap { |n| n.content = change.old_element })
+          flush_buffer(old_fragment, buffer_old)
+          old_fragment.add_child(wrap_in_strong(change.old_element, old_fragment))
         when "+"
-          new_fragment.add_child(Nokogiri::XML::Text.new(buffer_new, new_fragment)) unless buffer_new.empty?
-          buffer_new = ""
-          new_fragment.add_child(Nokogiri::XML::Node.new("strong", new_fragment.document).tap { |n| n.content = change.new_element })
+          flush_buffer(new_fragment, buffer_new)
+          new_fragment.add_child(wrap_in_strong(change.new_element, new_fragment))
         end
       end
 
-      old_fragment.add_child(Nokogiri::XML::Text.new(buffer_old, old_fragment)) unless buffer_old.empty?
-      new_fragment.add_child(Nokogiri::XML::Text.new(buffer_new, new_fragment)) unless buffer_new.empty?
+      flush_buffer(old_fragment, buffer_old)
+      flush_buffer(new_fragment, buffer_new)
 
       old_text_node.replace(old_fragment)
       new_text_node.replace(new_fragment)
+    end
+
+    def flush_buffer(fragment, buffer)
+      return if buffer.empty?
+
+      fragment.add_child(Nokogiri::XML::Text.new(buffer, fragment))
+      buffer.clear
+    end
+
+    def wrap_in_strong(char, fragment)
+      Nokogiri::XML::Node.new("strong", fragment.document).tap { |n| n.content = char }
     end
 
     def merge_adjacent_strong_tags(node)
