@@ -74,25 +74,30 @@ module Nokodiff
     end
 
     def diff_text_nodes(old_node, new_node)
-      if old_node.text? && new_node.text?
+      if old_node&.text? || new_node&.text?
         diff_text_node_content(old_node, new_node)
-      elsif old_node.element? && new_node.element?
-        old_children = old_node.children.to_a
-        new_children = new_node.children.to_a
+      elsif old_node&.element? || new_node&.element?
+        old_children = old_node ? old_node.children.to_a : []
+        new_children = new_node ? new_node.children.to_a : []
         max = [old_children.length, new_children.length].max
 
         (0..max).each do |i|
-          original = old_children[i]
-          new = new_children[i]
-
-          next unless original && new
-
-          diff_text_nodes(original, new)
+          diff_text_nodes(old_children[i], new_children[i])
         end
       end
     end
 
     def diff_text_node_content(old_text_node, new_text_node)
+      if old_text_node && new_text_node.nil?
+        old_text_node.replace(wrap_in_strong(old_text_node.to_html, old_text_node.parent))
+        return
+      end
+
+      if old_text_node.nil? && new_text_node
+        new_text_node.replace(wrap_in_strong(new_text_node.to_html, new_text_node.parent))
+        return
+      end
+
       old_chars = old_text_node.text.chars
       new_chars = new_text_node.text.chars
 
