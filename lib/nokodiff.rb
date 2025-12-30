@@ -9,7 +9,13 @@ require_relative "nokodiff/differ"
 
 module Nokodiff
   def self.diff(before_html, after_html)
-    Differ.new(before_html, after_html).to_html
+    html = Differ.new(before_html, after_html).to_html
+
+    if html.respond_to?(:html_safe)
+      html.html_safe
+    else
+      html
+    end
   end
 
   class Error < StandardError; end
