@@ -4,10 +4,13 @@ $added-color: #e6fff3;
 $strong-added-color: #99ffcf;
 $removed-color: #fadede;
 $strong-removed-color: #f3aeac;
+$text-colour: #0b0c0c;
+$light-grey: #f3f2f1;
+$black: #0b0c0c;
 
 .compare-editions {
-  border: 1px solid govuk-colour("light-grey");
-  border-left: 40px solid govuk-colour("light-grey");
+  border: 1px solid $light-grey;
+  border-left: 40px solid $light-grey;
   padding: 15px;
 
   .diff {
@@ -33,7 +36,7 @@ $strong-removed-color: #f3aeac;
     strong {
       font-weight: normal;
       background-color: $strong-removed-color;
-      border-bottom: 2px dashed govuk-colour("black");
+      border-bottom: 2px dashed $black;
     }
   }
 
@@ -44,7 +47,7 @@ $strong-removed-color: #f3aeac;
     strong {
       font-weight: normal;
       background-color: $strong-added-color;
-      border-bottom: 2px dashed govuk-colour("black");
+      border-bottom: 2px dashed $black;
     }
   }
 
@@ -59,13 +62,13 @@ $strong-removed-color: #f3aeac;
   }
 
   del::before {
-    color: $govuk-text-colour;
+    color: $text-colour;
     background-color: $strong-removed-color;
     content: "−";
   }
 
   ins::before {
-    color: $govuk-text-colour;
+    color: $text-colour;
     background-color: $strong-added-color;
     content: "+";
   }
