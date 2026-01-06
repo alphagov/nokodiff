@@ -103,13 +103,49 @@ module Nokodiff
 
       diff = Diff::LCS.sdiff(old_chars, new_chars)
 
-      old_fragment = Nokogiri::HTML::DocumentFragment.parse("")
-      new_fragment = Nokogiri::HTML::DocumentFragment.parse("")
+      old_fragment, new_fragment = ChangesInFragments.new(diff).call
 
-      buffer_old = ""
-      buffer_new = ""
+      old_text_node.replace(old_fragment)
+      new_text_node.replace(new_fragment)
+    end
 
-      diff.each do |change|
+    def wrap_in_strong(char, fragment)
+      Nokogiri::XML::Node.new("strong", fragment.document).tap { |n| n.content = char }
+    end
+
+
+
+    def merge_adjacent_strong_tags(node)
+      return unless node.element?
+
+      node.children.each do |child|
+        merge_adjacent_strong_tags(child) if child.element?
+      end
+
+      node.children.each_cons(2) do |left, right|
+        next unless left.name == "strong" && right.name == "strong"
+
+        left.content = left.content + right.content
+        right.remove
+
+        merge_adjacent_strong_tags(node)
+        break
+      end
+    end
+  end
+
+  class ChangesInFragments
+    def initialize(diff)
+      @diff = diff
+      @old_fragment = Nokogiri::HTML::DocumentFragment.parse("")
+      @new_fragment = Nokogiri::HTML::DocumentFragment.parse("")
+
+      @buffer_old = ""
+      @buffer_new = ""
+    end
+
+    def call
+      @diff.each do |change|
         case change.action
         when "="
           buffer_old << change.old_element
@@ -132,9 +168,14 @@ module Nokodiff
       flush_buffer(old_fragment, buffer_old)
       flush_buffer(new_fragment, buffer_new)
 
-      old_text_node.replace(old_fragment)
-      new_text_node.replace(new_fragment)
+      [old_fragment, new_fragment]
     end
+
+    private
+
+    attr_accessor :old_fragment, :new_fragment, :buffer_old, :buffer_new
+
+
 
     def flush_buffer(fragment, buffer)
       return if buffer.empty?
@@ -145,24 +186,6 @@ module Nokodiff
 
     def wrap_in_strong(char, fragment)
       Nokogiri::XML::Node.new("strong", fragment.document).tap { |n| n.content = char }
-    end
-
-    def merge_adjacent_strong_tags(node)
-      return unless node.element?
-
-      node.children.each do |child|
-        merge_adjacent_strong_tags(child) if child.element?
-      end
-
-      node.children.each_cons(2) do |left, right|
-        next unless left.name == "strong" && right.name == "strong"
-
-        left.content = left.content + right.content
-        right.remove
-
-        merge_adjacent_strong_tags(node)
-        break
-      end
     end
   end
 end
