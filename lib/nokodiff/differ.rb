@@ -151,17 +151,11 @@ module Nokodiff
           buffer_old << change.old_element
           buffer_new << change.new_element
         when "!"
-          flush_buffer(old_fragment, buffer_old)
-          flush_buffer(new_fragment, buffer_new)
-
-          old_fragment.add_child(wrap_in_strong(change.old_element, old_fragment))
-          new_fragment.add_child(wrap_in_strong(change.new_element, new_fragment))
+          identify_change(change)
         when "-"
-          flush_buffer(old_fragment, buffer_old)
-          old_fragment.add_child(wrap_in_strong(change.old_element, old_fragment))
+          identify_deletion(change)
         when "+"
-          flush_buffer(new_fragment, buffer_new)
-          new_fragment.add_child(wrap_in_strong(change.new_element, new_fragment))
+          identify_addition(change)
         end
       end
 
@@ -175,6 +169,24 @@ module Nokodiff
 
     attr_accessor :old_fragment, :new_fragment, :buffer_old, :buffer_new
 
+    def identify_change(change)
+      flush_buffer(old_fragment, buffer_old)
+      flush_buffer(new_fragment, buffer_new)
+
+      old_fragment.add_child(wrap_in_strong(change.old_element, old_fragment))
+      new_fragment.add_child(wrap_in_strong(change.new_element, new_fragment))
+    end
+
+    def identify_deletion(change)
+      flush_buffer(old_fragment, buffer_old)
+      old_fragment.add_child(wrap_in_strong(change.old_element, old_fragment))
+    end
+
+
+    def identify_addition(change)
+      flush_buffer(new_fragment, buffer_new)
+      new_fragment.add_child(wrap_in_strong(change.new_element, new_fragment))
+    end
 
 
     def flush_buffer(fragment, buffer)
