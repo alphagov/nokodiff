@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
+require "simplecov"
+SimpleCov.start
+
 require "nokodiff"
+require "active_support/core_ext/string/output_safety"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
