@@ -87,7 +87,7 @@ module Nokodiff
     def deleted_block(html)
       %(
         <div class="diff">
-           <del>#{html}</del>
+           <del aria-label="removed content">#{html}</del>
         </div>
       )
     end
@@ -95,7 +95,7 @@ module Nokodiff
     def added_block(html)
       %(
         <div class="diff">
-           <ins>#{html}</ins>
+           <ins aria-label="added content">#{html}</ins>
         </div>
       )
     end

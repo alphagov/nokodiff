@@ -94,8 +94,8 @@ RSpec.describe Nokodiff do
 
           expect(result).to include("<p>Hello world!</p>")
           expect(result).not_to include('<div class="diff">')
-          expect(result).not_to include("<del>")
-          expect(result).not_to include("<ins>")
+          expect(result).not_to include('<del aria-label="removed content">')
+          expect(result).not_to include('<ins aria-label="added content">')
         end
       end
 
@@ -107,8 +107,8 @@ RSpec.describe Nokodiff do
           result = Nokodiff.diff(before_html, after_html)
 
           expect(result).to include('<div class="diff">')
-          expect(result).to include("<del><p><strong>Hell</strong>o world!</p></del>")
-          expect(result).to include("<ins><p><strong>G</strong>o<strong>odbye</strong> world!</p></ins>")
+          expect(result).to include('<del aria-label="removed content"><p><strong>Hell</strong>o world!</p></del>')
+          expect(result).to include('<ins aria-label="added content"><p><strong>G</strong>o<strong>odbye</strong> world!</p></ins>')
         end
       end
 
@@ -120,8 +120,8 @@ RSpec.describe Nokodiff do
           result = Nokodiff.diff(before_html, after_html)
 
           expect(result).to include('<div class="diff">')
-          expect(result).to include("<del><p>Hello world!</p></del>")
-          expect(result).not_to include("<ins>")
+          expect(result).to include('<del aria-label="removed content"><p>Hello world!</p></del>')
+          expect(result).not_to include('<ins aria-label="added content">')
         end
       end
 
@@ -133,8 +133,8 @@ RSpec.describe Nokodiff do
           result = Nokodiff.diff(before_html, after_html)
 
           expect(result).to include('<div class="diff">')
-          expect(result).not_to include("<del>")
-          expect(result).to include("<ins><p>Hello world!</p></ins>")
+          expect(result).not_to include('<del aria-label="removed content">')
+          expect(result).to include('<ins aria-label="added content"><p>Hello world!</p></ins>')
         end
       end
     end
@@ -163,8 +163,8 @@ RSpec.describe Nokodiff do
         expect(output).to include('<li><a href="https://a.example.com">Link <strong>A</strong></a></li>')
         expect(output).to include('<li><a href="https://a.example.com">Link <strong>B</strong></a></li>')
 
-        expect(output).to include("<del>")
-        expect(output).to include("<ins>")
+        expect(output).to include('<del aria-label="removed content">')
+        expect(output).to include('<ins aria-label="added content">')
       end
 
       it "diffs a removed link against the matching line" do
@@ -204,7 +204,7 @@ RSpec.describe Nokodiff do
           result = Nokodiff.diff(before_html, after_html)
 
           expect(result).to include('<div class="diff">')
-          expect(result).to include("<ins><p> a <strong>b c</strong></p></ins>")
+          expect(result).to include('<ins aria-label="added content"><p> a <strong>b c</strong></p></ins>')
         end
       end
 
@@ -216,7 +216,7 @@ RSpec.describe Nokodiff do
           result = Nokodiff.diff(before_html, after_html)
 
           expect(result).to include('<div class="diff">')
-          expect(result).to include("<ins><p> <strong>a </strong>b <strong>c</strong></p></ins>")
+          expect(result).to include('<ins aria-label="added content"><p> <strong>a </strong>b <strong>c</strong></p></ins>')
         end
       end
     end

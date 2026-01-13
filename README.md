@@ -41,6 +41,15 @@ In the erb file:
 </div>
 ```
 
+### Including the CSS
+
+In your application.scss file include:
+```scss
+@import "nokodiff";
+```
+
+This will include the styling for `<del>`, `<ins>` and `<strong>` tags to allow colour coding, highlighting and underlining of changes.
+
 ## Licence
 
 The gem is available as open source under the terms of the [MIT License.](https://opensource.org/license/MIT)

@@ -6,6 +6,7 @@ require "diff-lcs"
 require_relative "nokodiff/formatting_helpers"
 require_relative "nokodiff/version"
 require_relative "nokodiff/differ"
+require_relative "nokodiff/engine"
 require_relative "nokodiff/text_node_diffs"
 require_relative "nokodiff/changes_in_fragments"
 
