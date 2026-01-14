@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rubocop-govuk", "5.1.20"
   spec.add_development_dependency "simplecov"
 
-  spec.add_dependency "actionview", ">= 6", "< 8.1.2"
+  spec.add_dependency "actionview", ">= 6", "< 8.1.3"
   spec.add_dependency "diff-lcs"
   spec.add_dependency "gds-api-adapters", ">= 101.0", "< 101.3"
   spec.add_dependency "govspeak", ">= 10.6.3"
