@@ -22,6 +22,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = %w[lib]
 
+  spec.add_development_dependency "activesupport"
   spec.add_development_dependency "rake", "13.3.1"
   spec.add_development_dependency "rspec-html-matchers", "0.10.0"
   spec.add_development_dependency "rspec-rails"
@@ -29,6 +30,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "simplecov"
 
   spec.add_dependency "actionview", ">= 6", "< 8.1.2"
+  spec.add_dependency "diff-lcs"
   spec.add_dependency "gds-api-adapters", "~> 101.0.0"
   spec.add_dependency "govspeak", ">= 10.6.3"
   spec.add_dependency "rails", ">= 6", "< 8.1.2"

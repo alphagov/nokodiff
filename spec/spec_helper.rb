@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
+require "simplecov"
+SimpleCov.start do
+  minimum_coverage 100
+  add_filter "lib/nokodiff/engine.rb"
+end
+
 require "nokodiff"
+require "active_support/core_ext/string/output_safety"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
