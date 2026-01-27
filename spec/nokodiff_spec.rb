@@ -251,5 +251,31 @@ RSpec.describe Nokodiff do
         end
       end
     end
+
+    context "complex content" do
+      let(:before_html) do
+        File.read(
+          File.expand_path("../spec/fixtures/html/complex_before_with_description.html", __dir__),
+        )
+      end
+
+      let(:after_html) do
+        File.read(
+          File.expand_path("../spec/fixtures/html/complex_after_with_description.html", __dir__),
+        )
+      end
+
+      let(:diff) do
+        File.read(
+          File.expand_path("../spec/fixtures/html/complex_diff_with_description.html", __dir__),
+        )
+      end
+
+      it "highlights the right bit of output" do
+        output = Nokodiff.diff(before_html, after_html)
+
+        expect(output).to eq(diff)
+      end
+    end
   end
 end
