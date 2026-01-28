@@ -1,7 +1,11 @@
 module Nokodiff
   module FormattingHelpers
     def wrap_in_strong(char, fragment)
-      char.match?("\n") ? char : Nokogiri::XML::Node.new("strong", fragment.document).tap { |n| n.content = char }
+      if char.length == 1 && char.match?("\n")
+        char
+      else
+        Nokogiri::XML::Node.new("strong", fragment.document).tap { |n| n.content = char }
+      end
     end
 
     def strong(text_node)

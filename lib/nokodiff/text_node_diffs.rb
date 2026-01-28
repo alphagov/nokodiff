@@ -16,7 +16,7 @@ module Nokodiff
     attr_accessor :before_fragment, :after_fragment
 
     def diff_text_nodes(before_node, after_node)
-      if before_node&.text? || after_node&.text?
+      if meaningful_text(before_node) || meaningful_text(after_node)
         diff_text_node_content(before_node, after_node)
       elsif before_node&.element? || after_node&.element?
         before_children = before_node ? before_node.children.to_a : []
@@ -28,6 +28,10 @@ module Nokodiff
           diff_text_nodes(before_children[i], after_children[i])
         end
       end
+    end
+
+    def meaningful_text(node)
+      node&.text? && !node.text.strip.empty?
     end
 
     def diff_text_node_content(before_text_node, after_text_node)
@@ -46,11 +50,13 @@ module Nokodiff
     end
 
     def text_removed?(before_node, after_node)
-      before_node && after_node.nil?
+      after_node = nil if after_node&.text&.strip&.empty?
+      !before_node.nil? && after_node.nil?
     end
 
     def text_added?(before_node, after_node)
-      before_node.nil? && after_node
+      before_node = nil if before_node&.text&.strip&.empty?
+      before_node.nil? && !after_node.nil?
     end
   end
 end

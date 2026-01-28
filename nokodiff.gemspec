@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = %w[lib]
 
   spec.add_development_dependency "activesupport"
+  spec.add_development_dependency "pry-byebug"
   spec.add_development_dependency "rake", "13.3.1"
   spec.add_development_dependency "rspec-html-matchers", "0.10.0"
   spec.add_development_dependency "rspec-rails"

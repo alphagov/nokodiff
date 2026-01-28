@@ -58,5 +58,33 @@ RSpec.describe Nokodiff::TextNodeDiffs do
         )
       end
     end
+
+    context "whitespace management" do
+      it "should not consider a newline character as a text node" do
+        before_html = <<~HTML
+          <div>
+          </div>
+        HTML
+
+        after_html = <<~HTML
+          <div>
+            T est
+          </div>
+        HTML
+
+        before_element = Nokogiri::XML::Document.parse(before_html).element_children.first
+        after_element = Nokogiri::XML::Document.parse(after_html).element_children.first
+
+        before_output, after_output = Nokodiff::TextNodeDiffs.new(before_element, after_element).call
+
+        expect(before_output.to_xml).to eq(
+          "<div>\n</div>",
+        )
+
+        expect(after_output.to_xml).to eq(
+          "<div>\n  <strong>\n  T est\n</strong>\n</div>",
+        )
+      end
+    end
   end
 end
