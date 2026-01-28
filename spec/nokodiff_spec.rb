@@ -138,6 +138,7 @@ RSpec.describe Nokodiff do
         end
       end
     end
+
     context "links" do
       it "diffs changed link text" do
         before_html = <<~HTML
@@ -217,6 +218,36 @@ RSpec.describe Nokodiff do
 
           expect(result).to include('<div class="diff">')
           expect(result).to include('<ins aria-label="added content"><p> <strong>a </strong>b <strong>c</strong></p></ins>')
+        end
+      end
+    end
+
+    context "whitespace management" do
+      describe "newline characters" do
+        it "should not strong tag newline characters" do
+          before_html = <<~HTML
+            <div>
+                <div>
+                  <dl>
+                  </dl>
+                </div>
+            </div>
+          HTML
+
+          after_html = <<~HTML
+            <div>
+                <div>
+                  <p>Main</p>
+                  <dl>
+                  </dl>
+                </div>
+            </div>
+          HTML
+
+          result = Nokodiff.diff(before_html, after_html)
+
+          expect(result).to include("<p><strong>Main</strong></p>")
+          expect(result).not_to include("<dl><strong> </strong></dl>")
         end
       end
     end
