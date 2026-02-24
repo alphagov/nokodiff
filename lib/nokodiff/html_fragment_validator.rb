@@ -5,16 +5,8 @@ module Nokodiff
     def validate_html!(html)
       document = Nokogiri::HTML::DocumentFragment.parse(html)
 
-      invalid_text_nodes = document.children.select do |node|
-        if node.element?
-          false
-        elsif node.comment?
-          false
-        elsif node.text?
-          !node.text.strip.empty?
-        else
-          true
-        end
+      invalid_text_nodes = document.children.reject do |node|
+        node.element? || node.comment? || (node.text? && node.text.strip.empty?)
       end
 
       unless invalid_text_nodes.empty?
