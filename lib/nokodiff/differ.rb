@@ -1,8 +1,8 @@
 module Nokodiff
   class Differ
-    def initialize(before_html, after_html)
-      @before = Nokogiri::HTML.fragment(before_html)
-      @after = Nokogiri::HTML.fragment(after_html)
+    def initialize(before, after)
+      @before = before
+      @after = after
     end
 
     def to_html

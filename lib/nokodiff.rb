@@ -15,7 +15,10 @@ module Nokodiff
     HTMLFragmentValidator.validate_html!(before_html)
     HTMLFragmentValidator.validate_html!(after_html)
 
-    html = Differ.new(before_html, after_html).to_html
+    before = Nokogiri::HTML.fragment(before_html)
+    after = Nokogiri::HTML.fragment(after_html)
+
+    html = Differ.new(before, after).to_html
     safe_html(html)
   end
 
