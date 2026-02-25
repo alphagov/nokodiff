@@ -39,6 +39,18 @@ RSpec.describe Nokodiff::HTMLFragment do
         Nokodiff::HTMLFragment.new(invalid_html)
       }.to raise_error(ArgumentError)
     end
+
+    it "removes any blank nodes" do
+      html = <<~HTML
+        <p>Hello world!</p>
+
+
+        <p>Goodbye world!</p>
+      HTML
+
+      fragment = Nokodiff::HTMLFragment.new(html)
+      expect(fragment.to_html).to eq("<p>Hello world!</p><p>Goodbye world!</p>")
+    end
   end
 
   describe "forwardable methods" do
