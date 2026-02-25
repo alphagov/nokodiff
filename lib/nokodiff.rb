@@ -9,14 +9,12 @@ require_relative "nokodiff/differ"
 require_relative "nokodiff/engine"
 require_relative "nokodiff/text_node_diffs"
 require_relative "nokodiff/changes_in_fragments"
-require_relative "nokodiff/html_fragment_validator"
+require_relative "nokodiff/html_fragment"
 
 module Nokodiff
   def self.diff(before_html, after_html)
-    validate_html!(before_html, after_html)
-
-    before = Nokogiri::HTML.fragment(before_html)
-    after = Nokogiri::HTML.fragment(after_html)
+    before = Nokodiff::HTMLFragment.new(before_html)
+    after = Nokodiff::HTMLFragment.new(after_html)
 
     before_nodes, after_nodes = nodes(before, after)
     keys = (before_nodes.keys + after_nodes.keys).uniq
@@ -27,11 +25,6 @@ module Nokodiff
 
   def self.safe_html(html)
     html.respond_to?(:html_safe) ? html.html_safe : html
-  end
-
-  private_class_method def self.validate_html!(before_html, after_html)
-    HTMLFragmentValidator.validate_html!(before_html)
-    HTMLFragmentValidator.validate_html!(after_html)
   end
 
   private_class_method def self.nodes(before, after)

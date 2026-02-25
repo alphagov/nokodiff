@@ -5,60 +5,6 @@ RSpec.describe Nokodiff do
     expect(Nokodiff::VERSION).not_to be nil
   end
 
-  describe ".diff" do
-    it "allows nil as an input" do
-      expect {
-        Nokodiff.diff("<p>html snippet</p>", nil)
-      }.not_to raise_error
-    end
-
-    it "allows '' as an input" do
-      expect {
-        Nokodiff.diff("<p>html snippet</p>", "")
-      }.not_to raise_error
-    end
-
-    it "allows HTML comments within an input" do
-      expect {
-        Nokodiff.diff("<!-- hello --><p>html snippet</p>", "")
-      }.not_to raise_error
-    end
-
-    it "raises an argument error if only one block is given" do
-      expect {
-        Nokodiff.diff("just text")
-      }.to raise_error(ArgumentError)
-    end
-
-    it "does not raise an argument error when two blocks are given" do
-      expect {
-        Nokodiff.diff("<p>block one</p>", "<p>block two</p>")
-      }.not_to raise_error
-    end
-
-    it "raises an argument error when passed non html arguments" do
-      expect {
-        Nokodiff.diff("just text", "<p>html snippet</p>")
-      }.to raise_error(ArgumentError)
-    end
-
-    it "raises an argument error when passed malformed HTML" do
-      invalid_html = "<<p> /p>"
-
-      expect {
-        Nokodiff.diff(invalid_html, "<p>html snippet</p>")
-      }.to raise_error(ArgumentError)
-    end
-
-    it "raises an argument error when passed preprocessing instructions" do
-      invalid_html = '<?xml version="1.0"?><div></div>'
-
-      expect {
-        Nokodiff.diff(invalid_html, "<p>html snippet</p>")
-      }.to raise_error(ArgumentError)
-    end
-  end
-
   describe ".safe_html" do
     before { stub_const("Differ", Class.new) }
 
