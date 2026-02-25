@@ -13,17 +13,46 @@ require_relative "nokodiff/html_fragment_validator"
 
 module Nokodiff
   def self.diff(before_html, after_html)
-    HTMLFragmentValidator.validate_html!(before_html)
-    HTMLFragmentValidator.validate_html!(after_html)
+    validate_html!(before_html, after_html)
 
     before = Nokogiri::HTML.fragment(before_html)
     after = Nokogiri::HTML.fragment(after_html)
 
-    html = Differ.new(before, after).to_html
+    before_nodes, after_nodes = nodes(before, after)
+    keys = (before_nodes.keys + after_nodes.keys).uniq
+
+    html = keys.any? ? diff_by_keys(after, keys, before_nodes, after_nodes) : Differ.new(before, after).to_html
     safe_html(html)
   end
 
   def self.safe_html(html)
     html.respond_to?(:html_safe) ? html.html_safe : html
+  end
+
+  private_class_method def self.validate_html!(before_html, after_html)
+    HTMLFragmentValidator.validate_html!(before_html)
+    HTMLFragmentValidator.validate_html!(after_html)
+  end
+
+  private_class_method def self.nodes(before, after)
+    [
+      fetch_diff_nodes(before),
+      fetch_diff_nodes(after),
+    ]
+  end
+
+  private_class_method def self.fetch_diff_nodes(fragment)
+    fragment.css("[data-diff-key]").map { |node| [node["data-diff-key"], node] }.to_h
+  end
+
+  private_class_method def self.diff_by_keys(after, keys, before_nodes, after_nodes)
+    keys.each do |key|
+      diff = Differ.new(
+        before_nodes.fetch(key, Nokogiri::HTML.fragment("")),
+        after_nodes.fetch(key, Nokogiri::HTML.fragment("")),
+      ).to_html
+      after.at("[data-diff-key='#{key}']")&.inner_html = diff
+    end
+    after.to_html
   end
 end

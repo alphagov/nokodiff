@@ -253,4 +253,49 @@ RSpec.describe Nokodiff do
       end
     end
   end
+
+  context "when `data-diff-key` attributes are present" do
+    context "when an element has been added" do
+      let(:before_html) { load_fixture("complex/added/before") }
+      let(:after_html) { load_fixture("complex/added/after") }
+
+      it "adds a diff showing the added content" do
+        result = Nokodiff.diff(before_html, after_html)
+
+        expect(result).to have_tag("div", with: { "data-diff-key" => "description" }) do
+          with_tag("div", class: "diff") do
+            with_tag("ins", with: { "aria-label" => "added content" }) do
+              with_text("Main contact info")
+            end
+            without_tag("del")
+          end
+        end
+
+        expect(result).to have_tag("div", with: { "data-diff-key" => "telephone-1" }) do
+          without_tag("ins")
+          without_tag("del")
+        end
+      end
+    end
+
+    context "when an element has been modified" do
+      let(:before_html) { load_fixture("complex/modified/before") }
+      let(:after_html) { load_fixture("complex/modified/after") }
+
+      it "adds a diff showing the content modifications" do
+        result = Nokodiff.diff(before_html, after_html)
+
+        expect(result).to have_tag("div", with: { "data-diff-key" => "telephone-1" }) do
+          with_tag("div", class: "diff") do
+            with_tag("del", with: { "aria-label" => "removed content" }) do
+              with_tag("span", class: "tel", text: "0300 123 123")
+            end
+            with_tag("ins", with: { "aria-label" => "added content" }) do
+              with_tag("span", class: "tel", text: "0300 345 345")
+            end
+          end
+        end
+      end
+    end
+  end
 end
