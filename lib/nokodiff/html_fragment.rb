@@ -4,6 +4,8 @@ module Nokodiff
   class HTMLFragment
     extend Forwardable
 
+    class InvalidHTMLError < StandardError; end
+
     def initialize(html)
       @fragment = Nokogiri::HTML.fragment(html)
       validate!
@@ -21,7 +23,7 @@ module Nokodiff
       end
 
       unless invalid_text_nodes.empty?
-        raise ArgumentError, "Invalid HTML input"
+        raise InvalidHTMLError, "Invalid HTML input: #{@fragment.to_html}"
       end
     end
 

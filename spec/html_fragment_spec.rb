@@ -21,7 +21,7 @@ RSpec.describe Nokodiff::HTMLFragment do
     it "raises an argument error when passed non html arguments" do
       expect {
         Nokodiff::HTMLFragment.new("just text")
-      }.to raise_error(ArgumentError)
+      }.to raise_error(Nokodiff::HTMLFragment::InvalidHTMLError)
     end
 
     it "raises an argument error when passed malformed HTML" do
@@ -29,7 +29,7 @@ RSpec.describe Nokodiff::HTMLFragment do
 
       expect {
         Nokodiff::HTMLFragment.new(invalid_html)
-      }.to raise_error(ArgumentError)
+      }.to raise_error(Nokodiff::HTMLFragment::InvalidHTMLError)
     end
 
     it "raises an argument error when passed preprocessing instructions" do
@@ -37,7 +37,7 @@ RSpec.describe Nokodiff::HTMLFragment do
 
       expect {
         Nokodiff::HTMLFragment.new(invalid_html)
-      }.to raise_error(ArgumentError)
+      }.to raise_error(Nokodiff::HTMLFragment::InvalidHTMLError)
     end
 
     it "removes any blank nodes" do
