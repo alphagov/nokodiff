@@ -92,10 +92,10 @@ RSpec.describe Nokodiff do
 
           result = Nokodiff.diff(html, html)
 
-          expect(result).to include("<p>Hello world!</p>")
-          expect(result).not_to include('<div class="diff">')
-          expect(result).not_to include('<del aria-label="removed content">')
-          expect(result).not_to include('<ins aria-label="added content">')
+          expect(result).to have_tag("p", text: "Hello world!")
+          expect(result).not_to have_tag("div", with: { class: "diff" })
+          expect(result).not_to have_tag("del", with: { "aria-label" => "removed content" })
+          expect(result).not_to have_tag("ins", with: { "aria-label" => "added content" })
         end
       end
 
@@ -106,9 +106,18 @@ RSpec.describe Nokodiff do
 
           result = Nokodiff.diff(before_html, after_html)
 
-          expect(result).to include('<div class="diff">')
-          expect(result).to include('<del aria-label="removed content"><p><strong>Hell</strong>o world!</p></del>')
-          expect(result).to include('<ins aria-label="added content"><p><strong>G</strong>o<strong>odbye</strong> world!</p></ins>')
+          expect(result).to have_tag("div", with: { class: "diff" })
+          expect(result).to have_tag("del", with: { "aria-label" => "removed content" }) do
+            with_tag("p") do
+              with_tag("strong", text: "Hell")
+            end
+          end
+          expect(result).to have_tag("ins", with: { "aria-label" => "added content" }) do
+            with_tag("p") do
+              with_tag("strong", text: "G")
+              with_tag("strong", text: "odbye")
+            end
+          end
         end
       end
 
@@ -119,9 +128,11 @@ RSpec.describe Nokodiff do
 
           result = Nokodiff.diff(before_html, after_html)
 
-          expect(result).to include('<div class="diff">')
-          expect(result).to include('<del aria-label="removed content"><p>Hello world!</p></del>')
-          expect(result).not_to include('<ins aria-label="added content">')
+          expect(result).to have_tag("div", with: { class: "diff" })
+          expect(result).to have_tag("del", with: { "aria-label" => "removed content" }) do
+            with_tag("p", text: "Hello world!")
+          end
+          expect(result).not_to have_tag("ins", with: { "aria-label" => "added content" })
         end
       end
 
@@ -132,12 +143,15 @@ RSpec.describe Nokodiff do
 
           result = Nokodiff.diff(before_html, after_html)
 
-          expect(result).to include('<div class="diff">')
-          expect(result).not_to include('<del aria-label="removed content">')
-          expect(result).to include('<ins aria-label="added content"><p>Hello world!</p></ins>')
+          expect(result).to have_tag("div", with: { class: "diff" })
+          expect(result).not_to have_tag("del", with: { "aria-label" => "removed content" })
+          expect(result).to have_tag("ins", with: { "aria-label" => "added content" }) do
+            with_tag("p", text: "Hello world!")
+          end
         end
       end
     end
+
     context "links" do
       it "diffs changed link text" do
         before_html = <<~HTML
@@ -160,11 +174,14 @@ RSpec.describe Nokodiff do
 
         output = Nokodiff.diff(before_html, after_html)
 
-        expect(output).to include('<li><a href="https://a.example.com">Link <strong>A</strong></a></li>')
-        expect(output).to include('<li><a href="https://a.example.com">Link <strong>B</strong></a></li>')
-
-        expect(output).to include('<del aria-label="removed content">')
-        expect(output).to include('<ins aria-label="added content">')
+        expect(output).to have_tag("a", with: { href: "https://a.example.com" }) do
+          with_tag("strong", text: "A")
+        end
+        expect(output).to have_tag("a", with: { href: "https://a.example.com" }) do
+          with_tag("strong", text: "B")
+        end
+        expect(output).to have_tag("del", with: { "aria-label" => "removed content" })
+        expect(output).to have_tag("ins", with: { "aria-label" => "added content" })
       end
 
       it "diffs a removed link against the matching line" do
@@ -189,9 +206,15 @@ RSpec.describe Nokodiff do
 
         output = Nokodiff.diff(before_html, after_html)
 
-        expect(output).to include('<li><a href="https://a.example.com">Link <strong>A</strong></a></li>')
-        expect(output).to include('<li><a href="https://b.example.com"><strong>Link B</strong></a></li>')
-        expect(output).to include('<li><a href="https://b.example.com">Link <strong>B</strong></a></li>')
+        expect(output).to have_tag("a", with: { href: "https://a.example.com" }) do
+          with_tag("strong", text: "A")
+        end
+        expect(output).to have_tag("a", with: { href: "https://b.example.com" }) do
+          with_tag("strong", text: "Link B")
+        end
+        expect(output).to have_tag("a", with: { href: "https://b.example.com" }) do
+          with_tag("strong", text: "B")
+        end
       end
     end
 
@@ -203,8 +226,12 @@ RSpec.describe Nokodiff do
 
           result = Nokodiff.diff(before_html, after_html)
 
-          expect(result).to include('<div class="diff">')
-          expect(result).to include('<ins aria-label="added content"><p> a <strong>b c</strong></p></ins>')
+          expect(result).to have_tag("div", with: { class: "diff" })
+          expect(result).to have_tag("ins", with: { "aria-label" => "added content" }) do
+            with_tag("p") do
+              with_tag("strong", text: "b c")
+            end
+          end
         end
       end
 
@@ -215,8 +242,13 @@ RSpec.describe Nokodiff do
 
           result = Nokodiff.diff(before_html, after_html)
 
-          expect(result).to include('<div class="diff">')
-          expect(result).to include('<ins aria-label="added content"><p> <strong>a </strong>b <strong>c</strong></p></ins>')
+          expect(result).to have_tag("div", with: { class: "diff" })
+          expect(result).to have_tag("ins", with: { "aria-label" => "added content" }) do
+            with_tag("p") do
+              with_tag("strong", text: "a ")
+              with_tag("strong", text: "c")
+            end
+          end
         end
       end
     end

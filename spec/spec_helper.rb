@@ -8,6 +8,8 @@ end
 
 require "nokodiff"
 require "active_support/core_ext/string/output_safety"
+require "rspec-html-matchers"
+
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -19,4 +21,6 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  config.include RSpecHtmlMatchers
 end
