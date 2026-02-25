@@ -8,6 +8,7 @@ module Nokodiff
       @fragment = Nokogiri::HTML.fragment(html)
       validate!
       remove_blank_nodes!
+      remove_comments!
     end
 
     def_delegators :@fragment, :children, :css, :at, :to_html
@@ -28,6 +29,10 @@ module Nokodiff
       @fragment.traverse do |node|
         node.remove if node.blank?
       end
+    end
+
+    def remove_comments!
+      @fragment.css("comment()").remove
     end
   end
 end

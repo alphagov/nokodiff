@@ -51,6 +51,17 @@ RSpec.describe Nokodiff::HTMLFragment do
       fragment = Nokodiff::HTMLFragment.new(html)
       expect(fragment.to_html).to eq("<p>Hello world!</p><p>Goodbye world!</p>")
     end
+
+    it "removes any comments" do
+      html = <<~HTML
+        <p>Hello world!</p>
+        <!-- comment -->
+        <p>Goodbye world!</p>
+      HTML
+
+      fragment = Nokodiff::HTMLFragment.new(html)
+      expect(fragment.to_html).to eq("<p>Hello world!</p><p>Goodbye world!</p>")
+    end
   end
 
   describe "forwardable methods" do
