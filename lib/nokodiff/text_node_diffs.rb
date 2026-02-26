@@ -31,8 +31,8 @@ module Nokodiff
     end
 
     def diff_text_node_content(before_text_node, after_text_node)
-      return strong(before_text_node) if text_removed?(before_text_node, after_text_node)
-      return strong(after_text_node) if text_added?(before_text_node, after_text_node)
+      return highlighted_change(before_text_node) if text_removed?(before_text_node, after_text_node)
+      return highlighted_change(after_text_node) if text_added?(before_text_node, after_text_node)
 
       before_chars = before_text_node.text.chars
       after_chars = after_text_node.text.chars

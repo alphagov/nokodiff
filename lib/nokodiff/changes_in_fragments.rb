@@ -43,18 +43,18 @@ module Nokodiff
       append_accumulated_text(before_fragment, accumulated_before_text)
       append_accumulated_text(after_fragment, accumulated_after_text)
 
-      before_fragment.add_child(wrap_in_strong(change.old_element, before_fragment))
-      after_fragment.add_child(wrap_in_strong(change.new_element, after_fragment))
+      before_fragment.add_child(highlight_changes(change.old_element, before_fragment))
+      after_fragment.add_child(highlight_changes(change.new_element, after_fragment))
     end
 
     def emphasise_deletion(change)
       append_accumulated_text(before_fragment, accumulated_before_text)
-      before_fragment.add_child(wrap_in_strong(change.old_element, before_fragment))
+      before_fragment.add_child(highlight_changes(change.old_element, before_fragment))
     end
 
     def emphasise_addition(change)
       append_accumulated_text(after_fragment, accumulated_after_text)
-      after_fragment.add_child(wrap_in_strong(change.new_element, after_fragment))
+      after_fragment.add_child(highlight_changes(change.new_element, after_fragment))
     end
 
     def append_accumulated_text(fragment, accumulated_text)
