@@ -55,13 +55,13 @@ RSpec.describe Nokodiff do
           expect(result).to have_tag("div", with: { class: "diff" })
           expect(result).to have_tag("del", with: { "aria-label" => "removed content" }) do
             with_tag("p") do
-              with_tag("strong", text: "Hell")
+              with_tag("span", class: "diff-marker", text: "Hell")
             end
           end
           expect(result).to have_tag("ins", with: { "aria-label" => "added content" }) do
             with_tag("p") do
-              with_tag("strong", text: "G")
-              with_tag("strong", text: "odbye")
+              with_tag("span", class: "diff-marker", text: "G")
+              with_tag("span", class: "diff-marker", text: "odbye")
             end
           end
         end
@@ -121,10 +121,10 @@ RSpec.describe Nokodiff do
         output = Nokodiff.diff(before_html, after_html)
 
         expect(output).to have_tag("a", with: { href: "https://a.example.com" }) do
-          with_tag("strong", text: "A")
+          with_tag("span", class: "diff-marker", text: "A")
         end
         expect(output).to have_tag("a", with: { href: "https://a.example.com" }) do
-          with_tag("strong", text: "B")
+          with_tag("span", class: "diff-marker", text: "B")
         end
         expect(output).to have_tag("del", with: { "aria-label" => "removed content" })
         expect(output).to have_tag("ins", with: { "aria-label" => "added content" })
@@ -153,20 +153,20 @@ RSpec.describe Nokodiff do
         output = Nokodiff.diff(before_html, after_html)
 
         expect(output).to have_tag("a", with: { href: "https://a.example.com" }) do
-          with_tag("strong", text: "A")
+          with_tag("span", class: "diff-marker", text: "A")
         end
         expect(output).to have_tag("a", with: { href: "https://b.example.com" }) do
-          with_tag("strong", text: "Link B")
+          with_tag("span", class: "diff-marker", text: "Link B")
         end
         expect(output).to have_tag("a", with: { href: "https://b.example.com" }) do
-          with_tag("strong", text: "B")
+          with_tag("span", class: "diff-marker", text: "B")
         end
       end
     end
 
-    context "<strong> tagging" do
+    context "<span> tagging" do
       describe "multiple consecutive added characters" do
-        it "should merge the strong tags" do
+        it "should merge the span tags" do
           before_html = "<p> a </p>"
           after_html = "<p> a b c</p>"
 
@@ -175,14 +175,14 @@ RSpec.describe Nokodiff do
           expect(result).to have_tag("div", with: { class: "diff" })
           expect(result).to have_tag("ins", with: { "aria-label" => "added content" }) do
             with_tag("p") do
-              with_tag("strong", text: "b c")
+              with_tag("span", class: "diff-marker", text: "b c")
             end
           end
         end
       end
 
       describe "multiple non consecutive added characters" do
-        it "should not merge the strong tags" do
+        it "should not merge the span tags" do
           before_html = "<p> b </p>"
           after_html = "<p> a b c</p>"
 
@@ -191,8 +191,8 @@ RSpec.describe Nokodiff do
           expect(result).to have_tag("div", with: { class: "diff" })
           expect(result).to have_tag("ins", with: { "aria-label" => "added content" }) do
             with_tag("p") do
-              with_tag("strong", text: "a ")
-              with_tag("strong", text: "c")
+              with_tag("span", class: "diff-marker", text: "a ")
+              with_tag("span", class: "diff-marker", text: "c")
             end
           end
         end

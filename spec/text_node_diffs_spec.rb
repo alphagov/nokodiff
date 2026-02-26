@@ -10,13 +10,22 @@ RSpec.describe Nokodiff::TextNodeDiffs do
 
         before_output, after_output = Nokodiff::TextNodeDiffs.new(before_element, after_element).call
 
-        expect(before_output.to_xml).to eq(
-          "<p><strong>H</strong><strong>e</strong><strong>l</strong><strong>l</strong>o world!</p>",
-        )
+        expect(before_output.to_xml).to have_tag("p") do
+          with_tag("span", class: "diff-marker", text: "H")
+          with_tag("span", class: "diff-marker", text: "e")
+          with_tag("span", class: "diff-marker", text: "l")
+          without_tag("span", class: "diff-marker", text: "o")
+        end
 
-        expect(after_output.to_xml).to eq(
-          "<p><strong>G</strong>o<strong>o</strong><strong>d</strong><strong>b</strong><strong>y</strong><strong>e</strong> world!</p>",
-        )
+        expect(after_output.to_xml).to have_tag("p") do
+          with_tag("span", class: "diff-marker", text: "G")
+          with_tag("span", class: "diff-marker", text: "o")
+          with_tag("span", class: "diff-marker", text: "d")
+          with_tag("span", class: "diff-marker", text: "b")
+          with_tag("span", class: "diff-marker", text: "y")
+          with_tag("span", class: "diff-marker", text: "e")
+          without_tag("span", class: "diff-marker", text: " ")
+        end
       end
     end
 
@@ -30,13 +39,18 @@ RSpec.describe Nokodiff::TextNodeDiffs do
 
         before_output, after_output = Nokodiff::TextNodeDiffs.new(before_element, after_element).call
 
-        expect(before_output.to_xml).to eq(
-          "<p>Hello<strong> </strong><strong>w</strong><strong>o</strong><strong>r</strong><strong>l</strong><strong>d</strong><strong>!</strong></p>",
-        )
+        expect(before_output.to_xml).to have_tag("p") do
+          without_tag("span", class: "diff-marker", text: "H")
+          with_tag("span", class: "diff-marker", text: " ")
+          with_tag("span", class: "diff-marker", text: "w")
+          with_tag("span", class: "diff-marker", text: "r")
+          with_tag("span", class: "diff-marker", text: "d")
+          with_tag("span", class: "diff-marker", text: "!")
+        end
 
-        expect(after_output.to_xml).to eq(
-          "<p>Hello</p>",
-        )
+        expect(after_output.to_xml).to have_tag("p") do
+          without_tag("span", class: "diff-marker")
+        end
       end
     end
     context "when called with 'elements' with addition" do
@@ -49,13 +63,18 @@ RSpec.describe Nokodiff::TextNodeDiffs do
 
         before_output, after_output = Nokodiff::TextNodeDiffs.new(before_element, after_element).call
 
-        expect(before_output.to_xml).to eq(
-          "<p>Hello</p>",
-        )
+        expect(before_output.to_xml).to have_tag("p") do
+          without_tag("span", class: "diff-marker")
+        end
 
-        expect(after_output.to_xml).to eq(
-          "<p>Hello<strong> </strong><strong>w</strong><strong>o</strong><strong>r</strong><strong>l</strong><strong>d</strong><strong>!</strong></p>",
-        )
+        expect(after_output.to_xml).to have_tag("p") do
+          without_tag("span", class: "diff-marker", text: "H")
+          with_tag("span", class: "diff-marker", text: " ")
+          with_tag("span", class: "diff-marker", text: "w")
+          with_tag("span", class: "diff-marker", text: "r")
+          with_tag("span", class: "diff-marker", text: "d")
+          with_tag("span", class: "diff-marker", text: "!")
+        end
       end
     end
   end

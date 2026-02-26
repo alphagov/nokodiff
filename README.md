@@ -4,7 +4,7 @@ A Ruby Gem to highlight additions, deletions and character level changes while p
 
 It includes functionality to:
 * Compare two HTML fragments and output diffs with semantic HTML
-* Inline character differences highlighting using `<strong>` tagging
+* Inline character differences highlighting using `<span class="diff-marker">` tagging
 * Blocks of added or removed content wrapped in aria labelled `<ins>` and `<del>` tags
 * Optional CSS for styling the visual differences
 
@@ -48,7 +48,7 @@ In your application.scss file include:
 @import "nokodiff";
 ```
 
-This will include the styling for `<del>`, `<ins>` and `<strong>` tags to allow colour coding, highlighting and underlining of changes.
+This will include the styling for `<del>`, `<ins>` and `<span>` tags to allow colour coding, highlighting and underlining of changes.
 
 ### More complex diffing with `data-diff-key`
 
@@ -139,10 +139,10 @@ Output:
   <div data-diff-key="ixn4"><p>First paragraph</p></div>
   <div data-diff-key="zm7q">
     <div class="diff">
-      <del aria-label="removed content"><p><strong>S</strong>e<strong>cond</strong> paragraph</p></del>
+      <del aria-label="removed content"><p><span class="diff-marker">S</span>e<span class="diff-marker">cond</span> paragraph</p></del>
     </div>
     <div class="diff">
-      <ins aria-label="added content"><p><strong>N</strong>e<strong>w</strong> paragraph</p></ins>
+      <ins aria-label="added content"><p><span class="diff-marker">N</span>e<span class="diff-marker">w</span> paragraph</p></ins>
     </div>
   </div>
 </div>

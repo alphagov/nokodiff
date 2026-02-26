@@ -42,8 +42,8 @@ module Nokodiff
 
       before_fragment, after_fragment = Nokodiff::TextNodeDiffs.new(before_dup, after_dup).call
 
-      merge_adjacent_strong_tags(before_fragment)
-      merge_adjacent_strong_tags(after_fragment)
+      merge_adjacent_highlighted_changes(before_fragment)
+      merge_adjacent_highlighted_changes(after_fragment)
 
       [before_fragment.to_html, after_fragment.to_html]
     end
@@ -62,22 +62,26 @@ module Nokodiff
       end
     end
 
-    def merge_adjacent_strong_tags(node)
+    def merge_adjacent_highlighted_changes(node)
       return unless node.element?
 
       node.children.each do |child|
-        merge_adjacent_strong_tags(child) if child.element?
+        merge_adjacent_highlighted_changes(child) if child.element?
       end
 
       node.children.each_cons(2) do |left, right|
-        next unless left.name == "strong" && right.name == "strong"
+        next unless node_is_a_change?(left) && node_is_a_change?(right)
 
         left.content = left.content + right.content
         right.remove
 
-        merge_adjacent_strong_tags(node)
+        merge_adjacent_highlighted_changes(node)
         break
       end
+    end
+
+    def node_is_a_change?(node)
+      node.name == "span" && node["class"] == "diff-marker"
     end
 
     def unchanged_block(html)
