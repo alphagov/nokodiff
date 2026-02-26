@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.1
+
+- Use `span` instead of `strong` for highlighting changes
+
 ## 0.3.0
 
 - Allow for more complex diffing strategies using `data-diff-key` attributes
