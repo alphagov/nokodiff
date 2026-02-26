@@ -8,6 +8,9 @@ end
 
 require "nokodiff"
 require "active_support/core_ext/string/output_safety"
+require "rspec-html-matchers"
+
+Dir[File.join(File.dirname(__FILE__), "support", "**", "*.rb")].sort.each { |f| require f }
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -19,4 +22,6 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  config.include RSpecHtmlMatchers
 end

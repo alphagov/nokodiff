@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.0
+
+- Allow for more complex diffing strategies using `data-diff-key` attributes
+- Remove empty nodes and comments from HTML before diffing
+
 ## 0.2.0
 
 - Generate HTML diffs between two fragments using semantic `<del>` and `<ins>` tags
