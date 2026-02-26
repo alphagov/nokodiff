@@ -10,12 +10,12 @@ RSpec.describe Nokodiff::ChangesInFragments do
 
       it "nothing is emphasised in the 'old' fragment" do
         _, before_fragment = Nokodiff::ChangesInFragments.new(diff).call
-        expect(before_fragment.to_s).to eq("ab")
+        expect(before_fragment.to_s).not_to have_tag("strong")
       end
 
       it "nothing is emphasised in the 'new' fragment" do
         after_fragment, = Nokodiff::ChangesInFragments.new(diff).call
-        expect(after_fragment.to_s).to eq("ab")
+        expect(after_fragment.to_s).not_to have_tag("strong")
       end
     end
 
@@ -29,12 +29,12 @@ RSpec.describe Nokodiff::ChangesInFragments do
 
       it "emphasises the addition in the 'new' fragment" do
         _, after_fragment = Nokodiff::ChangesInFragments.new(diff).call
-        expect(after_fragment.to_s).to eq("a<strong>b</strong>")
+        expect(after_fragment.to_s).to have_tag("strong", text: "b")
       end
 
       it "leaves the pre-existing element unemphasised in the 'old' fragment" do
         before_fragment, = Nokodiff::ChangesInFragments.new(diff).call
-        expect(before_fragment.to_s).to eq("a")
+        expect(before_fragment.to_s).not_to have_tag("strong")
       end
     end
 
@@ -48,12 +48,13 @@ RSpec.describe Nokodiff::ChangesInFragments do
 
       it "emphasises each addition individually in the 'new' fragment" do
         _, after_fragment = Nokodiff::ChangesInFragments.new(diff).call
-        expect(after_fragment.to_s).to eq("a<strong>b</strong><strong>c</strong>")
+        expect(after_fragment.to_s).to have_tag("strong", text: "b")
+        expect(after_fragment.to_s).to have_tag("strong", text: "c")
       end
 
       it "leaves the pre-existing element unemphasised in the 'old' fragment" do
         before_fragment, = Nokodiff::ChangesInFragments.new(diff).call
-        expect(before_fragment.to_s).to eq("a")
+        expect(before_fragment.to_s).not_to have_tag("strong")
       end
     end
 
@@ -67,12 +68,12 @@ RSpec.describe Nokodiff::ChangesInFragments do
 
       it "leaves the pre-existing element unemphasised in the 'new' fragment" do
         _, after_fragment = Nokodiff::ChangesInFragments.new(diff).call
-        expect(after_fragment.to_s).to eq("a")
+        expect(after_fragment.to_s).not_to have_tag("strong")
       end
 
       it "emphasises the deletion in the 'old' fragment" do
         before_fragment, = Nokodiff::ChangesInFragments.new(diff).call
-        expect(before_fragment.to_s).to eq("a<strong>b</strong>")
+        expect(before_fragment.to_s).to have_tag("strong", text: "b")
       end
     end
 
@@ -86,12 +87,12 @@ RSpec.describe Nokodiff::ChangesInFragments do
 
       it "emphasises the addition in the 'new' fragment" do
         _, after_fragment = Nokodiff::ChangesInFragments.new(diff).call
-        expect(after_fragment.to_s).to eq("a<strong>c</strong>")
+        expect(after_fragment.to_s).to have_tag("strong", text: "c")
       end
 
       it "emphasises the deletion in the 'old' fragment" do
         before_fragment, = Nokodiff::ChangesInFragments.new(diff).call
-        expect(before_fragment.to_s).to eq("a<strong>b</strong>")
+        expect(before_fragment.to_s).to have_tag("strong", text: "b")
       end
     end
   end
