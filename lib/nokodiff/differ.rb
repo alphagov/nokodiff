@@ -70,7 +70,7 @@ module Nokodiff
       end
 
       node.children.each_cons(2) do |left, right|
-        next unless left.name == "strong" && right.name == "strong"
+        next unless node_is_a_change?(left) && node_is_a_change?(right)
 
         left.content = left.content + right.content
         right.remove
@@ -78,6 +78,10 @@ module Nokodiff
         merge_adjacent_highlighted_changes(node)
         break
       end
+    end
+
+    def node_is_a_change?(node)
+      node.name == "span" && node["class"] == "diff-marker"
     end
 
     def unchanged_block(html)

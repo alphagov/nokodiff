@@ -1,9 +1,9 @@
 // stylelint-disable selector-no-qualifying-type, max-nesting-depth
 // Diff of two editions
 $added-color: #e6fff3;
-$strong-added-color: #99ffcf;
+$diff-marker-added-color: #99ffcf;
 $removed-color: #fadede;
-$strong-removed-color: #f3aeac;
+$diff-marker-removed-color: #f3aeac;
 $text-colour: #0b0c0c;
 $light-grey: #f3f2f1;
 $black: #0b0c0c;
@@ -33,9 +33,9 @@ $black: #0b0c0c;
     background-color: $removed-color;
     padding-bottom: 2px;
 
-    strong {
+    span.diff-marker {
       font-weight: normal;
-      background-color: $strong-removed-color;
+      background-color: $diff-marker-removed-color;
       border-bottom: 2px dashed $black;
     }
   }
@@ -44,9 +44,9 @@ $black: #0b0c0c;
     background-color: $added-color;
     padding-bottom: 2px;
 
-    strong {
+    span.diff-marker {
       font-weight: normal;
-      background-color: $strong-added-color;
+      background-color: $diff-marker-added-color;
       border-bottom: 2px dashed $black;
     }
   }
@@ -63,13 +63,13 @@ $black: #0b0c0c;
 
   del::before {
     color: $text-colour;
-    background-color: $strong-removed-color;
+    background-color: $diff-marker-removed-color;
     content: "−";
   }
 
   ins::before {
     color: $text-colour;
-    background-color: $strong-added-color;
+    background-color: $diff-marker-added-color;
     content: "+";
   }
 }
