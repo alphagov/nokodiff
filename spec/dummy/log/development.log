@@ -1,0 +1,900 @@
+Started GET "/" for 127.0.0.1 at 2026-03-20 10:40:06 +0000
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY) /*application='Dummy'*/[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL) /*application='Dummy'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Dummy'*/[0m
+Processing by Rails::WelcomeController#index as HTML
+  Rendering /Users/mark/.rbenv/versions/3.2.4/lib/ruby/gems/3.2.0/gems/railties-8.0.4/lib/rails/templates/rails/welcome/index.html.erb
+  Rendered /Users/mark/.rbenv/versions/3.2.4/lib/ruby/gems/3.2.0/gems/railties-8.0.4/lib/rails/templates/rails/welcome/index.html.erb (Duration: 0.5ms | GC: 0.0ms)
+Completed 200 OK in 41ms (Views: 8.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/icon.png" for 127.0.0.1 at 2026-03-20 10:40:06 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/icon.png"):
+  
+Started GET "/diff" for 127.0.0.1 at 2026-03-20 10:40:57 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/diff"):
+  
+Started GET "/favicon.ico" for 127.0.0.1 at 2026-03-20 10:40:57 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 10:41:46 +0000
+Processing by Rails::WelcomeController#index as HTML
+  Rendering /Users/mark/.rbenv/versions/3.2.4/lib/ruby/gems/3.2.0/gems/railties-8.0.4/lib/rails/templates/rails/welcome/index.html.erb
+  Rendered /Users/mark/.rbenv/versions/3.2.4/lib/ruby/gems/3.2.0/gems/railties-8.0.4/lib/rails/templates/rails/welcome/index.html.erb (Duration: 1.7ms | GC: 0.0ms)
+Completed 200 OK in 6ms (Views: 4.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2026-03-20 10:42:27 +0000
+  
+AbstractController::ActionNotFound (The action 'index' could not be found for ApplicationController):
+  
+actionpack (8.0.4) lib/abstract_controller/base.rb:147:in `process'
+actionpack (8.0.4) lib/action_controller/metal.rb:252:in `dispatch'
+actionpack (8.0.4) lib/action_controller/metal.rb:335:in `dispatch'
+actionpack (8.0.4) lib/action_dispatch/routing/route_set.rb:67:in `dispatch'
+actionpack (8.0.4) lib/action_dispatch/routing/route_set.rb:50:in `serve'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:53:in `block in serve'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:133:in `block in find_routes'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:126:in `each'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:126:in `find_routes'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:34:in `serve'
+actionpack (8.0.4) lib/action_dispatch/routing/route_set.rb:908:in `call'
+railties (8.0.4) lib/rails/engine/lazy_route_set.rb:60:in `call'
+rack (3.2.5) lib/rack/etag.rb:29:in `call'
+rack (3.2.5) lib/rack/conditional_get.rb:31:in `call'
+rack (3.2.5) lib/rack/head.rb:15:in `call'
+activerecord (8.0.4) lib/active_record/migration.rb:670:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/callbacks.rb:31:in `block in call'
+activesupport (8.0.4) lib/active_support/callbacks.rb:100:in `run_callbacks'
+actionpack (8.0.4) lib/action_dispatch/middleware/callbacks.rb:30:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/executor.rb:16:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/actionable_exceptions.rb:18:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/debug_exceptions.rb:31:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/show_exceptions.rb:32:in `call'
+railties (8.0.4) lib/rails/rack/logger.rb:41:in `call_app'
+railties (8.0.4) lib/rails/rack/logger.rb:29:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/remote_ip.rb:96:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/request_id.rb:34:in `call'
+rack (3.2.5) lib/rack/runtime.rb:24:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/server_timing.rb:61:in `block in call'
+actionpack (8.0.4) lib/action_dispatch/middleware/server_timing.rb:26:in `collect_events'
+actionpack (8.0.4) lib/action_dispatch/middleware/server_timing.rb:60:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/executor.rb:16:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/static.rb:27:in `call'
+rack (3.2.5) lib/rack/sendfile.rb:131:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/host_authorization.rb:143:in `call'
+railties (8.0.4) lib/rails/engine.rb:535:in `call'
+puma (7.2.0) lib/puma/configuration.rb:296:in `call'
+puma (7.2.0) lib/puma/request.rb:103:in `block in handle_request'
+puma (7.2.0) lib/puma/thread_pool.rb:355:in `with_force_shutdown'
+puma (7.2.0) lib/puma/request.rb:102:in `handle_request'
+puma (7.2.0) lib/puma/server.rb:503:in `process_client'
+puma (7.2.0) lib/puma/server.rb:262:in `block in run'
+puma (7.2.0) lib/puma/thread_pool.rb:182:in `block in spawn_thread'
+Started GET "/" for 127.0.0.1 at 2026-03-20 10:42:47 +0000
+Processing by ApplicationController#index as HTML
+Completed 204 No Content in 0ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2026-03-20 10:42:48 +0000
+Processing by ApplicationController#index as HTML
+Completed 204 No Content in 0ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2026-03-20 10:43:23 +0000
+Processing by ApplicationController#index as HTML
+Completed 200 OK in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2026-03-20 10:43:39 +0000
+Processing by ApplicationController#index as HTML
+Completed 200 OK in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2026-03-20 10:44:02 +0000
+Processing by ApplicationController#index as HTML
+Completed 200 OK in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2026-03-20 10:44:03 +0000
+Processing by ApplicationController#index as HTML
+Completed 200 OK in 0ms (Views: 0.0ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 10:44:07 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 10:45:13 +0000
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Dummy'*/[0m
+Processing by ApplicationController#index as HTML
+Completed 200 OK in 15ms (Views: 0.7ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 10:45:13 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 10:45:14 +0000
+Processing by ApplicationController#index as HTML
+Completed 200 OK in 0ms (Views: 0.0ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 10:45:14 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 10:45:15 +0000
+Processing by ApplicationController#index as HTML
+Completed 200 OK in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 10:45:15 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 10:45:48 +0000
+Processing by ApplicationController#index as HTML
+Completed 200 OK in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 10:45:48 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 10:45:49 +0000
+Processing by ApplicationController#index as HTML
+Completed 200 OK in 0ms (Views: 0.0ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 10:45:49 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 10:47:15 +0000
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Dummy'*/[0m
+Processing by ApplicationController#index as HTML
+Completed 200 OK in 8ms (Views: 1.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/nokodiff" for 127.0.0.1 at 2026-03-20 10:47:19 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/nokodiff"):
+  
+Started GET "/dummy" for 127.0.0.1 at 2026-03-20 10:47:29 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/dummy"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 10:47:31 +0000
+Processing by ApplicationController#index as HTML
+Completed 200 OK in 0ms (Views: 0.0ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2026-03-20 10:48:07 +0000
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Dummy'*/[0m
+  
+ActionController::RoutingError (uninitialized constant Nokodiff::DiffsController)
+Caused by: ActionDispatch::MissingController (uninitialized constant Nokodiff::DiffsController)
+Caused by: NameError (uninitialized constant Nokodiff::DiffsController)
+
+Information for: ActionController::RoutingError (uninitialized constant Nokodiff::DiffsController):
+  
+
+Information for cause: ActionDispatch::MissingController (uninitialized constant Nokodiff::DiffsController):
+  
+actionpack (8.0.4) lib/action_dispatch/http/request.rb:102:in `rescue in controller_class_for'
+actionpack (8.0.4) lib/action_dispatch/http/request.rb:98:in `controller_class_for'
+actionpack (8.0.4) lib/action_dispatch/http/request.rb:91:in `controller_class'
+actionpack (8.0.4) lib/action_dispatch/routing/route_set.rb:61:in `controller'
+actionpack (8.0.4) lib/action_dispatch/routing/route_set.rb:48:in `serve'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:53:in `block in serve'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:133:in `block in find_routes'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:126:in `each'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:126:in `find_routes'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:34:in `serve'
+actionpack (8.0.4) lib/action_dispatch/routing/route_set.rb:908:in `call'
+railties (8.0.4) lib/rails/engine/lazy_route_set.rb:60:in `call'
+rack (3.2.5) lib/rack/etag.rb:29:in `call'
+rack (3.2.5) lib/rack/conditional_get.rb:31:in `call'
+rack (3.2.5) lib/rack/head.rb:15:in `call'
+activerecord (8.0.4) lib/active_record/migration.rb:670:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/callbacks.rb:31:in `block in call'
+activesupport (8.0.4) lib/active_support/callbacks.rb:100:in `run_callbacks'
+actionpack (8.0.4) lib/action_dispatch/middleware/callbacks.rb:30:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/executor.rb:16:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/actionable_exceptions.rb:18:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/debug_exceptions.rb:31:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/show_exceptions.rb:32:in `call'
+railties (8.0.4) lib/rails/rack/logger.rb:41:in `call_app'
+railties (8.0.4) lib/rails/rack/logger.rb:29:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/remote_ip.rb:96:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/request_id.rb:34:in `call'
+rack (3.2.5) lib/rack/runtime.rb:24:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/server_timing.rb:61:in `block in call'
+actionpack (8.0.4) lib/action_dispatch/middleware/server_timing.rb:26:in `collect_events'
+actionpack (8.0.4) lib/action_dispatch/middleware/server_timing.rb:60:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/executor.rb:16:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/static.rb:27:in `call'
+rack (3.2.5) lib/rack/sendfile.rb:131:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/host_authorization.rb:143:in `call'
+railties (8.0.4) lib/rails/engine.rb:535:in `call'
+puma (7.2.0) lib/puma/configuration.rb:296:in `call'
+puma (7.2.0) lib/puma/request.rb:103:in `block in handle_request'
+puma (7.2.0) lib/puma/thread_pool.rb:355:in `with_force_shutdown'
+puma (7.2.0) lib/puma/request.rb:102:in `handle_request'
+puma (7.2.0) lib/puma/server.rb:503:in `process_client'
+puma (7.2.0) lib/puma/server.rb:262:in `block in run'
+puma (7.2.0) lib/puma/thread_pool.rb:182:in `block in spawn_thread'
+
+Information for cause: NameError (uninitialized constant Nokodiff::DiffsController):
+  
+activesupport (8.0.4) lib/active_support/inflector/methods.rb:290:in `constantize'
+activesupport (8.0.4) lib/active_support/core_ext/string/inflections.rb:74:in `constantize'
+actionpack (8.0.4) lib/action_dispatch/http/request.rb:99:in `controller_class_for'
+actionpack (8.0.4) lib/action_dispatch/http/request.rb:91:in `controller_class'
+actionpack (8.0.4) lib/action_dispatch/routing/route_set.rb:61:in `controller'
+actionpack (8.0.4) lib/action_dispatch/routing/route_set.rb:48:in `serve'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:53:in `block in serve'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:133:in `block in find_routes'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:126:in `each'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:126:in `find_routes'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:34:in `serve'
+actionpack (8.0.4) lib/action_dispatch/routing/route_set.rb:908:in `call'
+railties (8.0.4) lib/rails/engine/lazy_route_set.rb:60:in `call'
+rack (3.2.5) lib/rack/etag.rb:29:in `call'
+rack (3.2.5) lib/rack/conditional_get.rb:31:in `call'
+rack (3.2.5) lib/rack/head.rb:15:in `call'
+activerecord (8.0.4) lib/active_record/migration.rb:670:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/callbacks.rb:31:in `block in call'
+activesupport (8.0.4) lib/active_support/callbacks.rb:100:in `run_callbacks'
+actionpack (8.0.4) lib/action_dispatch/middleware/callbacks.rb:30:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/executor.rb:16:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/actionable_exceptions.rb:18:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/debug_exceptions.rb:31:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/show_exceptions.rb:32:in `call'
+railties (8.0.4) lib/rails/rack/logger.rb:41:in `call_app'
+railties (8.0.4) lib/rails/rack/logger.rb:29:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/remote_ip.rb:96:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/request_id.rb:34:in `call'
+rack (3.2.5) lib/rack/runtime.rb:24:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/server_timing.rb:61:in `block in call'
+actionpack (8.0.4) lib/action_dispatch/middleware/server_timing.rb:26:in `collect_events'
+actionpack (8.0.4) lib/action_dispatch/middleware/server_timing.rb:60:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/executor.rb:16:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/static.rb:27:in `call'
+rack (3.2.5) lib/rack/sendfile.rb:131:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/host_authorization.rb:143:in `call'
+railties (8.0.4) lib/rails/engine.rb:535:in `call'
+puma (7.2.0) lib/puma/configuration.rb:296:in `call'
+puma (7.2.0) lib/puma/request.rb:103:in `block in handle_request'
+puma (7.2.0) lib/puma/thread_pool.rb:355:in `with_force_shutdown'
+puma (7.2.0) lib/puma/request.rb:102:in `handle_request'
+puma (7.2.0) lib/puma/server.rb:503:in `process_client'
+puma (7.2.0) lib/puma/server.rb:262:in `block in run'
+puma (7.2.0) lib/puma/thread_pool.rb:182:in `block in spawn_thread'
+Started GET "/" for 127.0.0.1 at 2026-03-20 10:48:29 +0000
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Dummy'*/[0m
+  
+ActionController::RoutingError (uninitialized constant Nokodiff::ApplicationController)
+Caused by: ActionDispatch::MissingController (uninitialized constant Nokodiff::ApplicationController)
+Caused by: NameError (uninitialized constant Nokodiff::ApplicationController)
+
+Information for: ActionController::RoutingError (uninitialized constant Nokodiff::ApplicationController):
+  
+
+Information for cause: ActionDispatch::MissingController (uninitialized constant Nokodiff::ApplicationController):
+  
+actionpack (8.0.4) lib/action_dispatch/http/request.rb:102:in `rescue in controller_class_for'
+actionpack (8.0.4) lib/action_dispatch/http/request.rb:98:in `controller_class_for'
+actionpack (8.0.4) lib/action_dispatch/http/request.rb:91:in `controller_class'
+actionpack (8.0.4) lib/action_dispatch/routing/route_set.rb:61:in `controller'
+actionpack (8.0.4) lib/action_dispatch/routing/route_set.rb:48:in `serve'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:53:in `block in serve'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:133:in `block in find_routes'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:126:in `each'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:126:in `find_routes'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:34:in `serve'
+actionpack (8.0.4) lib/action_dispatch/routing/route_set.rb:908:in `call'
+railties (8.0.4) lib/rails/engine/lazy_route_set.rb:60:in `call'
+rack (3.2.5) lib/rack/etag.rb:29:in `call'
+rack (3.2.5) lib/rack/conditional_get.rb:31:in `call'
+rack (3.2.5) lib/rack/head.rb:15:in `call'
+activerecord (8.0.4) lib/active_record/migration.rb:670:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/callbacks.rb:31:in `block in call'
+activesupport (8.0.4) lib/active_support/callbacks.rb:100:in `run_callbacks'
+actionpack (8.0.4) lib/action_dispatch/middleware/callbacks.rb:30:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/executor.rb:16:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/actionable_exceptions.rb:18:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/debug_exceptions.rb:31:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/show_exceptions.rb:32:in `call'
+railties (8.0.4) lib/rails/rack/logger.rb:41:in `call_app'
+railties (8.0.4) lib/rails/rack/logger.rb:29:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/remote_ip.rb:96:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/request_id.rb:34:in `call'
+rack (3.2.5) lib/rack/runtime.rb:24:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/server_timing.rb:61:in `block in call'
+actionpack (8.0.4) lib/action_dispatch/middleware/server_timing.rb:26:in `collect_events'
+actionpack (8.0.4) lib/action_dispatch/middleware/server_timing.rb:60:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/executor.rb:16:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/static.rb:27:in `call'
+rack (3.2.5) lib/rack/sendfile.rb:131:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/host_authorization.rb:143:in `call'
+railties (8.0.4) lib/rails/engine.rb:535:in `call'
+puma (7.2.0) lib/puma/configuration.rb:296:in `call'
+puma (7.2.0) lib/puma/request.rb:103:in `block in handle_request'
+puma (7.2.0) lib/puma/thread_pool.rb:355:in `with_force_shutdown'
+puma (7.2.0) lib/puma/request.rb:102:in `handle_request'
+puma (7.2.0) lib/puma/server.rb:503:in `process_client'
+puma (7.2.0) lib/puma/server.rb:262:in `block in run'
+puma (7.2.0) lib/puma/thread_pool.rb:182:in `block in spawn_thread'
+
+Information for cause: NameError (uninitialized constant Nokodiff::ApplicationController):
+  
+activesupport (8.0.4) lib/active_support/inflector/methods.rb:290:in `const_get'
+activesupport (8.0.4) lib/active_support/inflector/methods.rb:290:in `constantize'
+activesupport (8.0.4) lib/active_support/core_ext/string/inflections.rb:74:in `constantize'
+actionpack (8.0.4) lib/action_dispatch/http/request.rb:99:in `controller_class_for'
+actionpack (8.0.4) lib/action_dispatch/http/request.rb:91:in `controller_class'
+actionpack (8.0.4) lib/action_dispatch/routing/route_set.rb:61:in `controller'
+actionpack (8.0.4) lib/action_dispatch/routing/route_set.rb:48:in `serve'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:53:in `block in serve'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:133:in `block in find_routes'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:126:in `each'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:126:in `find_routes'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:34:in `serve'
+actionpack (8.0.4) lib/action_dispatch/routing/route_set.rb:908:in `call'
+railties (8.0.4) lib/rails/engine/lazy_route_set.rb:60:in `call'
+rack (3.2.5) lib/rack/etag.rb:29:in `call'
+rack (3.2.5) lib/rack/conditional_get.rb:31:in `call'
+rack (3.2.5) lib/rack/head.rb:15:in `call'
+activerecord (8.0.4) lib/active_record/migration.rb:670:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/callbacks.rb:31:in `block in call'
+activesupport (8.0.4) lib/active_support/callbacks.rb:100:in `run_callbacks'
+actionpack (8.0.4) lib/action_dispatch/middleware/callbacks.rb:30:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/executor.rb:16:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/actionable_exceptions.rb:18:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/debug_exceptions.rb:31:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/show_exceptions.rb:32:in `call'
+railties (8.0.4) lib/rails/rack/logger.rb:41:in `call_app'
+railties (8.0.4) lib/rails/rack/logger.rb:29:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/remote_ip.rb:96:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/request_id.rb:34:in `call'
+rack (3.2.5) lib/rack/runtime.rb:24:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/server_timing.rb:61:in `block in call'
+actionpack (8.0.4) lib/action_dispatch/middleware/server_timing.rb:26:in `collect_events'
+actionpack (8.0.4) lib/action_dispatch/middleware/server_timing.rb:60:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/executor.rb:16:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/static.rb:27:in `call'
+rack (3.2.5) lib/rack/sendfile.rb:131:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/host_authorization.rb:143:in `call'
+railties (8.0.4) lib/rails/engine.rb:535:in `call'
+puma (7.2.0) lib/puma/configuration.rb:296:in `call'
+puma (7.2.0) lib/puma/request.rb:103:in `block in handle_request'
+puma (7.2.0) lib/puma/thread_pool.rb:355:in `with_force_shutdown'
+puma (7.2.0) lib/puma/request.rb:102:in `handle_request'
+puma (7.2.0) lib/puma/server.rb:503:in `process_client'
+puma (7.2.0) lib/puma/server.rb:262:in `block in run'
+puma (7.2.0) lib/puma/thread_pool.rb:182:in `block in spawn_thread'
+Started GET "/" for 127.0.0.1 at 2026-03-20 10:48:34 +0000
+  
+ActionController::RoutingError (uninitialized constant Nokodiff::ApplicationController)
+Caused by: ActionDispatch::MissingController (uninitialized constant Nokodiff::ApplicationController)
+Caused by: NameError (uninitialized constant Nokodiff::ApplicationController)
+
+Information for: ActionController::RoutingError (uninitialized constant Nokodiff::ApplicationController):
+  
+
+Information for cause: ActionDispatch::MissingController (uninitialized constant Nokodiff::ApplicationController):
+  
+actionpack (8.0.4) lib/action_dispatch/http/request.rb:102:in `rescue in controller_class_for'
+actionpack (8.0.4) lib/action_dispatch/http/request.rb:98:in `controller_class_for'
+actionpack (8.0.4) lib/action_dispatch/http/request.rb:91:in `controller_class'
+actionpack (8.0.4) lib/action_dispatch/routing/route_set.rb:61:in `controller'
+actionpack (8.0.4) lib/action_dispatch/routing/route_set.rb:48:in `serve'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:53:in `block in serve'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:133:in `block in find_routes'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:126:in `each'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:126:in `find_routes'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:34:in `serve'
+actionpack (8.0.4) lib/action_dispatch/routing/route_set.rb:908:in `call'
+railties (8.0.4) lib/rails/engine/lazy_route_set.rb:60:in `call'
+rack (3.2.5) lib/rack/etag.rb:29:in `call'
+rack (3.2.5) lib/rack/conditional_get.rb:31:in `call'
+rack (3.2.5) lib/rack/head.rb:15:in `call'
+activerecord (8.0.4) lib/active_record/migration.rb:670:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/callbacks.rb:31:in `block in call'
+activesupport (8.0.4) lib/active_support/callbacks.rb:100:in `run_callbacks'
+actionpack (8.0.4) lib/action_dispatch/middleware/callbacks.rb:30:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/executor.rb:16:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/actionable_exceptions.rb:18:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/debug_exceptions.rb:31:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/show_exceptions.rb:32:in `call'
+railties (8.0.4) lib/rails/rack/logger.rb:41:in `call_app'
+railties (8.0.4) lib/rails/rack/logger.rb:29:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/remote_ip.rb:96:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/request_id.rb:34:in `call'
+rack (3.2.5) lib/rack/runtime.rb:24:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/server_timing.rb:61:in `block in call'
+actionpack (8.0.4) lib/action_dispatch/middleware/server_timing.rb:26:in `collect_events'
+actionpack (8.0.4) lib/action_dispatch/middleware/server_timing.rb:60:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/executor.rb:16:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/static.rb:27:in `call'
+rack (3.2.5) lib/rack/sendfile.rb:131:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/host_authorization.rb:143:in `call'
+railties (8.0.4) lib/rails/engine.rb:535:in `call'
+puma (7.2.0) lib/puma/configuration.rb:296:in `call'
+puma (7.2.0) lib/puma/request.rb:103:in `block in handle_request'
+puma (7.2.0) lib/puma/thread_pool.rb:355:in `with_force_shutdown'
+puma (7.2.0) lib/puma/request.rb:102:in `handle_request'
+puma (7.2.0) lib/puma/server.rb:503:in `process_client'
+puma (7.2.0) lib/puma/server.rb:262:in `block in run'
+puma (7.2.0) lib/puma/thread_pool.rb:182:in `block in spawn_thread'
+
+Information for cause: NameError (uninitialized constant Nokodiff::ApplicationController):
+  
+activesupport (8.0.4) lib/active_support/inflector/methods.rb:290:in `const_get'
+activesupport (8.0.4) lib/active_support/inflector/methods.rb:290:in `constantize'
+activesupport (8.0.4) lib/active_support/core_ext/string/inflections.rb:74:in `constantize'
+actionpack (8.0.4) lib/action_dispatch/http/request.rb:99:in `controller_class_for'
+actionpack (8.0.4) lib/action_dispatch/http/request.rb:91:in `controller_class'
+actionpack (8.0.4) lib/action_dispatch/routing/route_set.rb:61:in `controller'
+actionpack (8.0.4) lib/action_dispatch/routing/route_set.rb:48:in `serve'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:53:in `block in serve'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:133:in `block in find_routes'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:126:in `each'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:126:in `find_routes'
+actionpack (8.0.4) lib/action_dispatch/journey/router.rb:34:in `serve'
+actionpack (8.0.4) lib/action_dispatch/routing/route_set.rb:908:in `call'
+railties (8.0.4) lib/rails/engine/lazy_route_set.rb:60:in `call'
+rack (3.2.5) lib/rack/etag.rb:29:in `call'
+rack (3.2.5) lib/rack/conditional_get.rb:31:in `call'
+rack (3.2.5) lib/rack/head.rb:15:in `call'
+activerecord (8.0.4) lib/active_record/migration.rb:670:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/callbacks.rb:31:in `block in call'
+activesupport (8.0.4) lib/active_support/callbacks.rb:100:in `run_callbacks'
+actionpack (8.0.4) lib/action_dispatch/middleware/callbacks.rb:30:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/executor.rb:16:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/actionable_exceptions.rb:18:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/debug_exceptions.rb:31:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/show_exceptions.rb:32:in `call'
+railties (8.0.4) lib/rails/rack/logger.rb:41:in `call_app'
+railties (8.0.4) lib/rails/rack/logger.rb:29:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/remote_ip.rb:96:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/request_id.rb:34:in `call'
+rack (3.2.5) lib/rack/runtime.rb:24:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/server_timing.rb:61:in `block in call'
+actionpack (8.0.4) lib/action_dispatch/middleware/server_timing.rb:26:in `collect_events'
+actionpack (8.0.4) lib/action_dispatch/middleware/server_timing.rb:60:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/executor.rb:16:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/static.rb:27:in `call'
+rack (3.2.5) lib/rack/sendfile.rb:131:in `call'
+actionpack (8.0.4) lib/action_dispatch/middleware/host_authorization.rb:143:in `call'
+railties (8.0.4) lib/rails/engine.rb:535:in `call'
+puma (7.2.0) lib/puma/configuration.rb:296:in `call'
+puma (7.2.0) lib/puma/request.rb:103:in `block in handle_request'
+puma (7.2.0) lib/puma/thread_pool.rb:355:in `with_force_shutdown'
+puma (7.2.0) lib/puma/request.rb:102:in `handle_request'
+puma (7.2.0) lib/puma/server.rb:503:in `process_client'
+puma (7.2.0) lib/puma/server.rb:262:in `block in run'
+puma (7.2.0) lib/puma/thread_pool.rb:182:in `block in spawn_thread'
+Started GET "/" for 127.0.0.1 at 2026-03-20 10:49:08 +0000
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Dummy'*/[0m
+Processing by ApplicationController#index as HTML
+Completed 200 OK in 10ms (Views: 0.3ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.5ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 10:49:37 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 10:53:01 +0000
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Dummy'*/[0m
+Processing by ApplicationController#index as HTML
+Completed 200 OK in 12ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 10:53:01 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 10:56:06 +0000
+Processing by ApplicationController#index as HTML
+Completed 200 OK in 1ms (Views: 0.1ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 10:56:06 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/nokodiff" for 127.0.0.1 at 2026-03-20 10:56:10 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/nokodiff"):
+  
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 10:56:10 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 10:56:57 +0000
+Processing by ApplicationController#index as HTML
+Completed 200 OK in 7ms (Views: 1.2ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 10:57:03 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 10:59:08 +0000
+  
+NoMethodError (undefined method `layout' for ApplicationController:Class):
+  
+app/controllers/application_controller.rb:2:in `<class:ApplicationController>'
+app/controllers/application_controller.rb:1:in `<main>'
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 10:59:08 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 11:00:51 +0000
+Processing by ApplicationController#index as HTML
+Completed 500 Internal Server Error in 14ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+  
+ActionView::MissingTemplate (Missing template application/index with {:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:raw, :erb, :html, :builder, :ruby]}.
+
+Searched in:
+  * "/Users/mark/projects/current/gds/govuk/nokodiff/spec/dummy/app/views"
+  * "/Users/mark/.rbenv/versions/3.2.4/lib/ruby/gems/3.2.0/gems/actiontext-8.0.4/app/views"
+  * "/Users/mark/.rbenv/versions/3.2.4/lib/ruby/gems/3.2.0/gems/actionmailbox-8.0.4/app/views"
+):
+  
+app/controllers/application_controller.rb:4:in `index'
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 11:00:51 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 11:01:28 +0000
+Processing by ApplicationController#index as HTML
+Completed 500 Internal Server Error in 3ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+  
+ActionView::MissingTemplate (Missing template application/index with {:locale=>[:en], :formats=>[:html], :variants=>[], :handlers=>[:raw, :erb, :html, :builder, :ruby]}.
+
+Searched in:
+  * "/Users/mark/projects/current/gds/govuk/nokodiff/spec/dummy/app/views"
+  * "/Users/mark/.rbenv/versions/3.2.4/lib/ruby/gems/3.2.0/gems/actiontext-8.0.4/app/views"
+  * "/Users/mark/.rbenv/versions/3.2.4/lib/ruby/gems/3.2.0/gems/actionmailbox-8.0.4/app/views"
+):
+  
+app/controllers/application_controller.rb:4:in `index'
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 11:01:28 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 11:01:56 +0000
+Processing by ApplicationController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering application/index.html.erb within layouts/application
+  Rendered application/index.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.5ms | GC: 0.0ms)
+Completed 200 OK in 2ms (Views: 1.8ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 11:01:56 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 11:03:26 +0000
+Processing by ApplicationController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering application/index.html.erb within layouts/application
+  Rendered application/index.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.5ms | GC: 0.0ms)
+Completed 200 OK in 3ms (Views: 3.0ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 11:03:26 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 11:14:57 +0000
+Processing by ApplicationController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering application/index.html.erb within layouts/application
+  Rendered application/index.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.4ms | GC: 0.0ms)
+Completed 200 OK in 12ms (Views: 1.2ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.5ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 11:14:57 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 11:16:03 +0000
+Processing by ApplicationController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering application/index.html.erb within layouts/application
+  Rendered application/index.html.erb within layouts/application (Duration: 3.7ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 4.0ms | GC: 0.0ms)
+Completed 500 Internal Server Error in 12ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.3ms)
+
+
+  
+ActionView::Template::Error (undefined local variable or method `diff' for #<ActionView::Base:0x00000000023f78>)
+Caused by: NameError (undefined local variable or method `diff' for #<ActionView::Base:0x00000000023f78>)
+
+Information for: ActionView::Template::Error (undefined local variable or method `diff' for #<ActionView::Base:0x00000000023f78>):
+    1: <h1>Hello, world!</h1>
+    2: <%= diff %>
+  
+app/views/application/index.html.erb:2
+
+Information for cause: NameError (undefined local variable or method `diff' for #<ActionView::Base:0x00000000023f78>):
+  
+app/views/application/index.html.erb:2
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 11:16:03 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 11:16:10 +0000
+Processing by ApplicationController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering application/index.html.erb within layouts/application
+  Rendered application/index.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.4ms | GC: 0.0ms)
+Completed 200 OK in 3ms (Views: 0.9ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 11:16:10 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 11:18:43 +0000
+Processing by ApplicationController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering application/index.html.erb within layouts/application
+  Rendered application/index.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.3ms | GC: 0.0ms)
+Completed 200 OK in 5ms (Views: 1.0ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.4ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 11:18:43 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 11:19:08 +0000
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Dummy'*/[0m
+Processing by ApplicationController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering application/index.html.erb within layouts/application
+  Rendered application/index.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.7ms | GC: 0.2ms)
+Completed 200 OK in 21ms (Views: 3.6ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.7ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 11:19:08 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 11:20:45 +0000
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Dummy'*/[0m
+Processing by ApplicationController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering application/index.html.erb within layouts/application
+  Rendered application/index.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.6ms | GC: 0.0ms)
+Completed 200 OK in 16ms (Views: 4.0ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.7ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 11:20:46 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 11:26:51 +0000
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Dummy'*/[0m
+Processing by ApplicationController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering application/index.html.erb within layouts/application
+  Rendered application/index.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.5ms | GC: 0.0ms)
+Completed 200 OK in 57ms (Views: 7.9ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 5.4ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 11:26:51 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 11:37:24 +0000
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Dummy'*/[0m
+Processing by ApplicationController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering application/index.html.erb within layouts/application
+  Rendered application/index.html.erb within layouts/application (Duration: 0.4ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.7ms | GC: 0.0ms)
+Completed 200 OK in 38ms (Views: 7.2ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.7ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 11:37:25 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 11:41:07 +0000
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Dummy'*/[0m
+Processing by ApplicationController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering application/index.html.erb within layouts/application
+  Rendered application/index.html.erb within layouts/application (Duration: 0.8ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.5ms | GC: 0.0ms)
+Completed 200 OK in 22ms (Views: 4.8ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.7ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 11:41:07 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 11:44:12 +0000
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Dummy'*/[0m
+Processing by ApplicationController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering application/index.html.erb within layouts/application
+  Rendered application/index.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.6ms | GC: 0.0ms)
+Completed 200 OK in 13ms (Views: 2.6ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.5ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 11:44:12 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 11:44:29 +0000
+  [1m[36mActiveRecord::SchemaMigration Load (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Dummy'*/[0m
+Processing by ApplicationController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering application/index.html.erb within layouts/application
+  Rendered application/index.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.5ms | GC: 0.0ms)
+Completed 200 OK in 10ms (Views: 2.4ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 11:44:29 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 11:44:30 +0000
+Processing by ApplicationController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering application/index.html.erb within layouts/application
+  Rendered application/index.html.erb within layouts/application (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.3ms | GC: 0.0ms)
+Completed 200 OK in 3ms (Views: 0.6ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.5ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 11:44:30 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 11:45:00 +0000
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Dummy'*/[0m
+Processing by ApplicationController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering application/index.html.erb within layouts/application
+  Rendered application/index.html.erb within layouts/application (Duration: 1.0ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.5ms | GC: 0.0ms)
+Completed 200 OK in 12ms (Views: 4.0ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 11:45:00 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 11:49:05 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 11:50:11 +0000
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Dummy'*/[0m
+Processing by ApplicationController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering application/index.html.erb within layouts/application
+  Rendered application/index.html.erb within layouts/application (Duration: 0.4ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.9ms | GC: 0.2ms)
+Completed 200 OK in 14ms (Views: 4.4ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.7ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 11:50:12 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 11:58:40 +0000
+Processing by ApplicationController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering application/index.html.erb within layouts/application
+  Rendered application/index.html.erb within layouts/application (Duration: 0.4ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.7ms | GC: 0.0ms)
+Completed 200 OK in 20ms (Views: 8.4ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.1ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 11:58:40 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 11:59:09 +0000
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Dummy'*/[0m
+Processing by ApplicationController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering application/index.html.erb within layouts/application
+  Rendered application/index.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.5ms | GC: 0.0ms)
+Completed 200 OK in 12ms (Views: 2.9ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 11:59:09 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 12:01:10 +0000
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Dummy'*/[0m
+Processing by ApplicationController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering application/index.html.erb within layouts/application
+  Rendered application/index.html.erb within layouts/application (Duration: 0.4ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 59.3ms | GC: 25.1ms)
+Completed 500 Internal Server Error in 70ms (ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 25.4ms)
+
+
+  
+ActionView::Template::Error (Asset `application.css` was not declared to be precompiled in production.
+Declare links to your assets in `app/assets/config/manifest.js`.
+
+  //= link application.css
+
+and restart your server)
+Caused by: Sprockets::Rails::Helper::AssetNotPrecompiledError (Asset `application.css` was not declared to be precompiled in production.
+Declare links to your assets in `app/assets/config/manifest.js`.
+
+  //= link application.css
+
+and restart your server)
+
+Information for: ActionView::Template::Error (Asset `application.css` was not declared to be precompiled in production.
+Declare links to your assets in `app/assets/config/manifest.js`.
+
+  //= link application.css
+
+and restart your server):
+    1: <%= stylesheet_link_tag "application" %>
+    2: <div class="compare-editions">
+    3:   <%= yield %>
+    4: </div>
+  
+app/views/layouts/application.html.erb:1
+
+Information for cause: Sprockets::Rails::Helper::AssetNotPrecompiledError (Asset `application.css` was not declared to be precompiled in production.
+Declare links to your assets in `app/assets/config/manifest.js`.
+
+  //= link application.css
+
+and restart your server):
+  
+app/views/layouts/application.html.erb:1
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 12:01:10 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  
+Started GET "/" for 127.0.0.1 at 2026-03-20 12:01:32 +0000
+Processing by ApplicationController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering application/index.html.erb within layouts/application
+  Rendered application/index.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 31.9ms | GC: 0.0ms)
+Completed 200 OK in 36ms (Views: 33.4ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/.well-known/appspecific/com.chrome.devtools.json" for 127.0.0.1 at 2026-03-20 12:01:32 +0000
+Started GET "/assets/application-5aac9d354390157fdf5cceeb6d7c0803e9f8cf202e9bcc89a2d56340b4b33f5b.css" for 127.0.0.1 at 2026-03-20 12:01:32 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/.well-known/appspecific/com.chrome.devtools.json"):
+  

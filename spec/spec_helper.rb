@@ -8,6 +8,7 @@ end
 
 require "nokodiff"
 require "active_support/core_ext/string/output_safety"
+require "active_support/core_ext/string"
 require "rspec-html-matchers"
 
 Dir[File.join(File.dirname(__FILE__), "support", "**", "*.rb")].sort.each { |f| require f }
