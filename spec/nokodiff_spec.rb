@@ -95,6 +95,34 @@ RSpec.describe Nokodiff do
             with_tag("p", text: "Hello world!")
           end
         end
+
+        it "handles adding a new node at the start" do
+          before_html = "<p>Existing paragraph</p>"
+          after_html = "<p>New paragraph</p><p>Existing paragraph</p>"
+
+          result = Nokodiff.diff(before_html, after_html)
+
+          expect(result).not_to have_tag("del", with: { "aria-label" => "removed content " })
+          expect(result).to have_tag("ins", with: { "aria-label" => "added content" }) do
+            with_tag("p", text: "New paragraph")
+          end
+          expect(result).to include("Existing paragraph")
+        end
+
+        it "handles adding a new node at the start with multiple existing nodes" do
+          before_html = "<p>First</p><p>Second</p><p>Third</p>"
+          after_html = "<p>New</p><p>First</p><p>Second</p><p>Third</p>"
+
+          result = Nokodiff.diff(before_html, after_html)
+
+          expect(result).not_to have_tag("del", with: { "aria-label" => "removed content" })
+          expect(result).to have_tag("ins", with: { "aria-label" => "added content" }) do
+            with_tag("p", text: "New")
+          end
+          expect(result).to include("First")
+          expect(result).to include("Second")
+          expect(result).to include("Third")
+        end
       end
     end
 

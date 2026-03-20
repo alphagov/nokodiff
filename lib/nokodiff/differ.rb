@@ -40,6 +40,27 @@ module Nokodiff
       end
     end
 
+    class ComparableNode
+      attr_reader :node, :html
+
+      def initialize(node)
+        @node = node
+        @html = node.to_html.strip
+      end
+
+      def ==(other)
+        other.is_a?(ComparableNode) && html == other.html
+      end
+
+      def eql?(other)
+        self == other
+      end
+
+      def hash
+        html.hash
+      end
+    end
+
     # def compared_blocks
     #   before_nodes = @before.children.to_a
     #   after_nodes = @after.children.to_a
@@ -64,20 +85,6 @@ module Nokodiff
       merge_adjacent_highlighted_changes(after_fragment)
 
       [before_fragment.to_html, after_fragment.to_html]
-    end
-
-    def set_change_status(before_node, after_node)
-      if before_node && after_node
-        if before_node.to_html.strip == after_node.to_html.strip
-          { status: :unchanged, before: before_node, after: after_node }
-        else
-          { status: :changed, before: before_node, after: after_node }
-        end
-      elsif before_node
-        { status: :deleted, before: before_node, after: nil }
-      elsif after_node
-        { status: :added, before: nil, after: after_node }
-      end
     end
 
     def merge_adjacent_highlighted_changes(node)
