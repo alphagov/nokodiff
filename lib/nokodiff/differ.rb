@@ -23,18 +23,36 @@ module Nokodiff
   private
 
     def compared_blocks
-      before_nodes = @before.children.to_a
-      after_nodes = @after.children.to_a
+      before_nodes = @before.children.to_a.map { |n| ComparableNode.new(n) }
+      after_nodes = @after.children.to_a.map { |n| ComparableNode.new(n) }
 
-      max = [before_nodes.length, after_nodes.length].max
-
-      max.times.map do |i|
-        before_node = before_nodes[i]
-        after_node = after_nodes[i]
-
-        set_change_status(before_node, after_node)
+      Diff::LCS.sdiff(before_nodes, after_nodes).map do |change|
+        case change.action
+        when "="
+          { status: :unchanged, before: change.old_element.node, after: change.new_element.node }
+        when "!"
+          { status: :changed, before: change.old_element.node, after: change.new_element.node }
+        when "-"
+          { status: :deleted, before: change.old_element.node, after: nil }
+        when "+"
+          { status: :added, before: nil, after: change.new_element.node }
+        end
       end
     end
+
+    # def compared_blocks
+    #   before_nodes = @before.children.to_a
+    #   after_nodes = @after.children.to_a
+    #
+    #   max = [before_nodes.length, after_nodes.length].max
+    #
+    #   max.times.map do |i|
+    #     before_node = before_nodes[i]
+    #     after_node = after_nodes[i]
+    #
+    #     set_change_status(before_node, after_node)
+    #   end
+    # end
 
     def char_diff_html(before_html, after_html)
       before_dup = before_html.dup
@@ -102,6 +120,27 @@ module Nokodiff
            <ins aria-label="added content">#{html}</ins>
         </div>
       )
+    end
+
+    class ComparableNode
+      attr_reader :node, :html
+
+      def initialize(node)
+        @node = node
+        @html = node.to_html.strip
+      end
+
+      def ==(other)
+        other.is_a?(ComparableNode) && html == other.html
+      end
+
+      def eql?(other)
+        self == other
+      end
+
+      def hash
+        html.hash
+      end
     end
   end
 end
