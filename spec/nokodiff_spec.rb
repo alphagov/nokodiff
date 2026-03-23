@@ -158,7 +158,7 @@ RSpec.describe Nokodiff do
         expect(output).to have_tag("ins", with: { "aria-label" => "added content" })
       end
 
-      it "diffs a removed link against the matching line" do
+      it "shows a removed link as deleted without affecting other links" do
         before_html = <<~HTML
           <div>
             <p><strong>Example links:</strong></p>
@@ -180,14 +180,15 @@ RSpec.describe Nokodiff do
 
         output = Nokodiff.diff(before_html, after_html)
 
-        expect(output).to have_tag("a", with: { href: "https://a.example.com" }) do
-          with_tag("span", class: "diff-marker", text: "A")
+        expect(output).to have_tag("del", with: { "aria-label" => "removed content" }) do
+          with_tag("a", with: { href: "https://a.example.com" }) do
+            with_tag("span", class: "diff-marker", text: "Link A")
+          end
         end
-        expect(output).to have_tag("a", with: { href: "https://b.example.com" }) do
-          with_tag("span", class: "diff-marker", text: "Link B")
-        end
-        expect(output).to have_tag("a", with: { href: "https://b.example.com" }) do
-          with_tag("span", class: "diff-marker", text: "B")
+
+        expect(output).to have_tag("ins", with: { "aria-label" => "added content" }) do
+          with_tag("a", with: { href: "https://b.example.com" })
+          without_tag("span", class: "diff-marker")
         end
       end
     end

@@ -11,7 +11,8 @@ module Nokodiff
         when :unchanged
           unchanged_block(diff[:before])
         when :changed
-          deleted_block(char_diff_html(diff[:before], diff[:after]).first) + added_block(char_diff_html(diff[:before], diff[:after]).last)
+          before_diff, after_diff = char_diff_html(diff[:before], diff[:after])
+          deleted_block(before_diff) + added_block(after_diff)
         when :deleted
           deleted_block(diff[:before])
         when :added

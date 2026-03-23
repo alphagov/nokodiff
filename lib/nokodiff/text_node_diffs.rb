@@ -22,11 +22,27 @@ module Nokodiff
         before_children = before_node ? before_node.children.to_a : []
         after_children = after_node ? after_node.children.to_a : []
 
-        max_child_count = [before_children.length, after_children.length].max
+        before_wrapped = before_children.map { |n| Differ::ComparableNode.new(n) }
+        after_wrapped = after_children.map { |n| Differ::ComparableNode.new(n) }
 
-        (0..max_child_count).each do |i|
-          diff_text_nodes(before_children[i], after_children[i])
+        Diff::LCS.sdiff(before_wrapped, after_wrapped).each do |change|
+          case change.action
+          when "!"
+            diff_text_nodes(change.old_element.node, change.new_element.node)
+          when "-"
+            highlight_all_text(change.old_element.node)
+          when "+"
+            highlight_all_text(change.new_element.node)
+          end
         end
+      end
+    end
+
+    def highlight_all_text(node)
+      if node.text?
+        highlighted_change(node)
+      elsif node.element?
+        node.children.each { |child| highlight_all_text(child) }
       end
     end
 
