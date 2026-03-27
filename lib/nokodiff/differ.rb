@@ -23,20 +23,79 @@ module Nokodiff
   private
 
     def compared_blocks
-      before_nodes = @before.children.to_a.map { |n| ComparableNode.new(n) }
-      after_nodes = @after.children.to_a.map { |n| ComparableNode.new(n) }
+      before_nodes = @before.children.to_a
+      after_nodes = @after.children.to_a
+      align_nodes(before_nodes, after_nodes)
+    end
 
-      Diff::LCS.sdiff(before_nodes, after_nodes).map do |change|
-        case change.action
-        when "="
-          { status: :unchanged, before: change.old_element.node, after: change.new_element.node }
-        when "!"
-          { status: :changed, before: change.old_element.node, after: change.new_element.node }
-        when "-"
-          { status: :deleted, before: change.old_element.node, after: nil }
-        when "+"
-          { status: :added, before: nil, after: change.new_element.node }
+    SIMILARITY_THRESHOLD = 0.3
+
+    def align_nodes(before_nodes, after_nodes)
+      n = before_nodes.length
+      m = after_nodes.length
+
+      sim = Array.new(n) { |i| Array.new(m) { |j| node_similarity(before_nodes[i], after_nodes[j]) } }
+
+      dp = Array.new(n + 1) { Array.new(m + 1, 0.0) }
+      (1..n).each do |i|
+        (1..m).each do |j|
+          dp[i][j] = [
+            dp[i - 1][j - 1] + sim[i - 1][j - 1],
+            dp[i - 1][j],
+            dp[i][j - 1],
+          ].max
         end
+      end
+
+      result = []
+      i, j = n, m
+      while i > 0 || j > 0
+        if i > 0 && j > 0 && sim[i - 1][j - 1] > 0 &&
+            (dp[i][j] - (dp[i - 1][j - 1] + sim[i - 1][j - 1])).abs < 1e-9
+          bn, an = before_nodes[i - 1], after_nodes[j - 1]
+          status = bn.to_html.strip == an.to_html.strip ? :unchanged : :changed
+          result.unshift({ status: status, before: bn, after: an })
+          i -= 1
+          j -= 1
+        elsif i > 0 && (dp[i][j] - dp[i - 1][j]).abs < 1e-9
+          result.unshift({ status: :deleted, before: before_nodes[i - 1], after: nil })
+          i -= 1
+        else
+          result.unshift({ status: :added, before: nil, after: after_nodes[j - 1] })
+          j -= 1
+        end
+      end
+
+      result
+    end
+
+    def node_similarity(before_node, after_node)
+      before_html = before_node.to_html.strip
+      after_html = after_node.to_html.strip
+
+      return 1.0 if before_html == after_html
+
+      if before_node.element? && after_node.element?
+        return 0.0 unless before_node.name == after_node.name
+
+        before_text = before_node.text.strip
+        after_text = after_node.text.strip
+        max_len = [before_text.length, after_text.length].max
+        return 0.1 if max_len == 0
+
+        lcs_len = Diff::LCS.lcs(before_text.chars, after_text.chars).length
+        [lcs_len.to_f / max_len, 0.1].max
+      elsif before_node.text? && after_node.text?
+        before_text = before_node.text.strip
+        after_text = after_node.text.strip
+        max_len = [before_text.length, after_text.length].max
+        return 1.0 if max_len == 0
+        return 0.0 if before_text.empty? || after_text.empty?
+
+        lcs_len = Diff::LCS.lcs(before_text.chars, after_text.chars).length
+        [lcs_len.to_f / max_len, 0.1].max
+      else
+        0.0
       end
     end
 
