@@ -11,8 +11,7 @@ module Nokodiff
         when :unchanged
           unchanged_block(diff[:before])
         when :changed
-          before_diff, after_diff = char_diff_html(diff[:before], diff[:after])
-          deleted_block(before_diff) + added_block(after_diff)
+          changed_block(diff[:before], diff[:after])
         when :deleted
           deleted_block(diff[:before])
         when :added
@@ -62,19 +61,42 @@ module Nokodiff
       end
     end
 
-    # def compared_blocks
-    #   before_nodes = @before.children.to_a
-    #   after_nodes = @after.children.to_a
-    #
-    #   max = [before_nodes.length, after_nodes.length].max
-    #
-    #   max.times.map do |i|
-    #     before_node = before_nodes[i]
-    #     after_node = after_nodes[i]
-    #
-    #     set_change_status(before_node, after_node)
-    #   end
-    # end
+    def changed_block(before_node, after_node)
+      if structurally_similar?(before_node, after_node)
+        inner_diff = Differ.new(before_node, after_node).to_html
+        rebuild_element(after_node, inner_diff)
+      elsif before_node.text? && after_node.text?
+        before_diff, after_diff = text_node_char_diff(before_node, after_node)
+        deleted_inline(before_diff) + added_inline(after_diff)
+      else
+        before_diff, after_diff = char_diff_html(before_node, after_node)
+        deleted_block(before_diff) + added_block(after_diff)
+      end
+    end
+
+    def structurally_similar?(before_node, after_node)
+      before_node.element? && after_node.element? && before_node.name == after_node.name
+    end
+
+    def rebuild_element(template_node, inner_html)
+      result = template_node.dup
+      result.inner_html = inner_html
+      result.to_html
+    end
+
+    def text_node_char_diff(before_text, after_text)
+      diff = Diff::LCS.sdiff(before_text.text.chars, after_text.text.chars)
+      before_fragment, after_fragment = Nokodiff::ChangesInFragments.new(diff).call
+      [merge_fragment_spans(before_fragment), merge_fragment_spans(after_fragment)]
+    end
+
+    def merge_fragment_spans(fragment)
+      doc = fragment.document
+      wrapper = Nokogiri::XML::Node.new("span", doc)
+      wrapper.inner_html = fragment.to_html
+      merge_adjacent_highlighted_changes(wrapper)
+      wrapper.inner_html
+    end
 
     def char_diff_html(before_html, after_html)
       before_dup = before_html.dup
@@ -130,25 +152,13 @@ module Nokodiff
       )
     end
 
-    class ComparableNode
-      attr_reader :node, :html
-
-      def initialize(node)
-        @node = node
-        @html = node.to_html.strip
-      end
-
-      def ==(other)
-        other.is_a?(ComparableNode) && html == other.html
-      end
-
-      def eql?(other)
-        self == other
-      end
-
-      def hash
-        html.hash
-      end
+    def deleted_inline(html)
+      %(<del aria-label="removed content">#{html}</del>)
     end
+
+    def added_inline(html)
+      %(<ins aria-label="added content">#{html}</ins>)
+    end
+
   end
 end
