@@ -11,7 +11,7 @@ module Nokodiff
         when :unchanged
           unchanged_block(diff[:before])
         when :changed
-          deleted_block(char_diff_html(diff[:before], diff[:after]).first) + added_block(char_diff_html(diff[:before], diff[:after]).last)
+          changed_block(diff[:before], diff[:after])
         when :deleted
           deleted_block(diff[:before])
         when :added
@@ -59,7 +59,47 @@ module Nokodiff
       end
     end
 
-    def char_diff_html(before_html, after_html)
+    def changed_block(before_node, after_node)
+      if structurally_similar?(before_node, after_node)
+        inner_diff = Differ.new(before_node, after_node).to_html
+        rebuild_element(after_node, inner_diff)
+      elsif before_node.text? && after_node.text?
+        before_diff, after_diff = diff_raw_text(before_node, after_node)
+        deleted_block(before_diff) + added_block(after_diff)
+      else
+        before_diff, after_diff = diff_sub_elements(before_node, after_node)
+        deleted_block(before_diff) + added_block(after_diff)
+      end
+    end
+
+    def structurally_similar?(before_node, after_node)
+      before_node.element? &&
+        after_node.element? &&
+        before_node.name == after_node.name &&
+        before_node.name != "p"
+    end
+
+    def rebuild_element(template_node, inner_html)
+      result = template_node.dup
+      result.inner_html = inner_html
+      result.to_html
+    end
+
+    def diff_raw_text(before_text, after_text)
+      diff = Diff::LCS.sdiff(before_text.text.chars, after_text.text.chars)
+      before_fragment, after_fragment = Nokodiff::ChangesInFragments.new(diff).call
+      [merge_fragment_spans(before_fragment), merge_fragment_spans(after_fragment)]
+    end
+
+    def merge_fragment_spans(fragment)
+      doc = fragment.document
+      wrapper = Nokogiri::XML::Node.new("span", doc)
+      wrapper.inner_html = fragment.to_html
+      merge_adjacent_highlighted_changes(wrapper)
+      wrapper.inner_html
+    end
+
+    def diff_sub_elements(before_html, after_html)
       before_dup = before_html.dup
       after_dup = after_html.dup
 
