@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.0
+
+- Corrects functionality to identify added or deleted nodes (e.g entirely new paragraph)
+
 ## 0.3.1
 
 - Use `span` instead of `strong` for highlighting changes

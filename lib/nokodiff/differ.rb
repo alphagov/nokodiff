@@ -26,13 +26,36 @@ module Nokodiff
       before_nodes = @before.children.to_a
       after_nodes = @after.children.to_a
 
-      max = [before_nodes.length, after_nodes.length].max
+      before_html_strings = before_nodes.map { |n| n.to_html.strip }
+      after_html_strings  = after_nodes.map { |n| n.to_html.strip }
 
-      max.times.map do |i|
-        before_node = before_nodes[i]
-        after_node = after_nodes[i]
-
-        set_change_status(before_node, after_node)
+      Diff::LCS.sdiff(before_html_strings, after_html_strings).map do |change|
+        case change.action
+        when "="
+          {
+            status: :unchanged,
+            before: before_nodes[change.old_position],
+            after: after_nodes[change.new_position],
+          }
+        when "!"
+          {
+            status: :changed,
+            before: before_nodes[change.old_position],
+            after: after_nodes[change.new_position],
+          }
+        when "-"
+          {
+            status: :deleted,
+            before: before_nodes[change.old_position],
+            after: nil,
+          }
+        when "+"
+          {
+            status: :added,
+            before: nil,
+            after: after_nodes[change.new_position],
+          }
+        end
       end
     end
 
@@ -46,20 +69,6 @@ module Nokodiff
       merge_adjacent_highlighted_changes(after_fragment)
 
       [before_fragment.to_html, after_fragment.to_html]
-    end
-
-    def set_change_status(before_node, after_node)
-      if before_node && after_node
-        if before_node.to_html.strip == after_node.to_html.strip
-          { status: :unchanged, before: before_node, after: after_node }
-        else
-          { status: :changed, before: before_node, after: after_node }
-        end
-      elsif before_node
-        { status: :deleted, before: before_node, after: nil }
-      elsif after_node
-        { status: :added, before: nil, after: after_node }
-      end
     end
 
     def merge_adjacent_highlighted_changes(node)
@@ -84,8 +93,8 @@ module Nokodiff
       node.name == "span" && node["class"] == "diff-marker"
     end
 
-    def unchanged_block(html)
-      html.to_s
+    def unchanged_block(node)
+      node.to_html
     end
 
     def deleted_block(html)
