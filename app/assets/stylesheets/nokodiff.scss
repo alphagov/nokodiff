@@ -9,56 +9,53 @@ $light-grey: #f3f2f1;
 $black: #0b0c0c;
 
 .compare-editions {
-  border: 1px solid $light-grey;
+  position: relative;
   border-left: 40px solid $light-grey;
   padding: 15px;
 
   .diff {
-    margin: 0 -15px;
-    padding: 0 15px;
-    word-wrap: break-word;
+    position: static;
     margin-bottom: 10px;
-    position: relative;
 
-    del,
-    ins {
-      text-decoration: none;
+    del, ins, ul, li {
+      position: static !important;
       display: block;
-      padding: 2px 4px;
+      text-decoration: none;
       border-radius: 3px;
     }
-  }
 
-  del {
-    background-color: $removed-color;
-    padding-bottom: 2px;
+    del {
+      background-color: $removed-color;
+      padding-bottom: 2px;
 
-    span.diff-marker {
-      font-weight: normal;
-      background-color: $diff-marker-removed-color;
-      border-bottom: 2px dashed $black;
+      span.diff-marker {
+        font-weight: normal;
+        background-color: $diff-marker-removed-color;
+        border-bottom: 2px dashed $black;
+      }
     }
-  }
 
-  ins {
-    background-color: $added-color;
-    padding-bottom: 2px;
+    ins {
+      background-color: $added-color;
+      padding-bottom: 2px;
 
-    span.diff-marker {
-      font-weight: normal;
-      background-color: $diff-marker-added-color;
-      border-bottom: 2px dashed $black;
+      span.diff-marker {
+        font-weight: normal;
+        background-color: $diff-marker-added-color;
+        border-bottom: 2px dashed $black;
+      }
     }
-  }
 
-  del::before,
-  ins::before {
-    position: absolute;
-    margin-left: -59px;
-    width: 40px;
-    text-align: center;
-    top: 0;
-    bottom: 0;
+    del::before,
+    ins::before {
+      position: absolute;
+      left: -40px;
+      width: 40px;
+      height: 1.5em;
+      line-height: 1.5em;
+      text-align: center;
+      z-index: 10;
+    }
   }
 
   del::before {
