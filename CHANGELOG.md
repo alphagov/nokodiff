@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.0
+
+- Corrects functionality to identify added or deleted nodes (e.g entirely new paragraph)
+- Adds recursion to step into embedded HTML structures to ensure only highlighting changes at the most granular level
+
 ## 0.3.1
 
 - Use `span` instead of `strong` for highlighting changes

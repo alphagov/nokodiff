@@ -152,15 +152,10 @@ RSpec.describe Nokodiff do
 
         output = Nokodiff.diff(before_html, after_html)
 
-        expect(output).to have_tag("a", with: { href: "https://a.example.com" }) do
-          with_tag("span", class: "diff-marker", text: "A")
+        expect(output).to have_tag("del", with: { "aria-label" => "removed content" }) do
+          with_tag("a", with: { href: "https://a.example.com" }, text: "Link A")
         end
-        expect(output).to have_tag("a", with: { href: "https://b.example.com" }) do
-          with_tag("span", class: "diff-marker", text: "Link B")
-        end
-        expect(output).to have_tag("a", with: { href: "https://b.example.com" }) do
-          with_tag("span", class: "diff-marker", text: "B")
-        end
+        expect(output).to have_tag("a", with: { href: "https://b.example.com" }, text: "Link B")
       end
     end
 
@@ -233,11 +228,11 @@ RSpec.describe Nokodiff do
 
         expect(result).to have_tag("div", with: { "data-diff-key" => "telephone-1" }) do
           with_tag("div", class: "diff") do
-            with_tag("del", with: { "aria-label" => "removed content" }) do
-              with_tag("span", class: "tel", text: "0300 123 123")
+            with_tag("span", class: "tel", text: "0300 123 123") do
+              with_tag("del", with: { "aria-label" => "removed content" })
             end
-            with_tag("ins", with: { "aria-label" => "added content" }) do
-              with_tag("span", class: "tel", text: "0300 345 345")
+            with_tag("span", class: "tel", text: "0300 345 345") do
+              with_tag("ins", with: { "aria-label" => "added content" })
             end
           end
         end
