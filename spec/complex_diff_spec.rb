@@ -267,5 +267,34 @@ RSpec.describe "complex diff" do
         end
       end
     end
+
+    context "when text nodes are added with line breaks" do
+      let(:before_html) do
+        <<~HTML
+          <p>123 Real Street<br>
+          Springfield<br>
+          England</p>
+        HTML
+      end
+
+      let(:after_html) do
+        <<~HTML
+          <p>123 Real Street<br>
+          Springfield<br>
+          England<br>
+          TEST 123</p>
+        HTML
+      end
+
+      it "wraps the changed node in an ins tag with the added text node highlighted" do
+        result = Nokodiff.diff(before_html, after_html)
+
+        expect(result).to have_tag("div", class: "diff") do
+          with_tag("ins", with: { "aria-label" => "added content" }) do
+            with_tag("span", with: { "class" => "diff-marker" }, text: /TEST 123/)
+          end
+        end
+      end
+    end
   end
 end
