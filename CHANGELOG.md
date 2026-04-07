@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.1
+
+- Fix text node diffs when nodes contain line breaks
+
 ## 0.4.0
 
 - Corrects functionality to identify added or deleted nodes (e.g entirely new paragraph)
