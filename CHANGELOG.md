@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.2
+
+- Ensure changes to headings and lists are treated as a single change
+
 ## 0.4.1
 
 - Fix text node diffs when nodes contain line breaks
