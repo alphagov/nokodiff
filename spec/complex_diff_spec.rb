@@ -268,6 +268,74 @@ RSpec.describe "complex diff" do
       end
     end
 
+    describe "when a node is changed within a heading" do
+      (1..6).each do |level|
+        context "when changes are made within a h#{level}" do
+          let(:before_html) do
+            <<~HTML
+              <h#{level}>Test heading</h#{level}>
+            HTML
+          end
+
+          let(:after_html) do
+            <<~HTML
+              <h#{level}>Testing heading</h#{level}>
+            HTML
+          end
+
+          it "highlights the entire heading as a change" do
+            result = Nokodiff.diff(before_html, after_html)
+
+            expect(result).to have_tag("div", class: "diff") do
+              with_tag("del", with: { "aria-label" => "removed content" }) do
+                with_tag("h#{level}", text: "Test heading")
+              end
+            end
+
+            expect(result).to have_tag("div", class: "diff") do
+              with_tag("ins", with: { "aria-label" => "added content" }) do
+                with_tag("h#{level}", text: "Testing heading")
+              end
+            end
+          end
+        end
+
+        context "when changes are made within a h#{level} with a nested element" do
+          let(:before_html) do
+            <<~HTML
+              <h#{level}><span>Test</span> heading</h#{level}>
+            HTML
+          end
+
+          let(:after_html) do
+            <<~HTML
+              <h#{level}><span>Testing</span> heading</h#{level}>
+            HTML
+          end
+
+          it "highlights the entire heading as a change" do
+            result = Nokodiff.diff(before_html, after_html)
+
+            expect(result).to have_tag("div", class: "diff") do
+              with_tag("del", with: { "aria-label" => "removed content" }) do
+                with_tag("h#{level}", seen: "Test heading") do
+                  with_tag("span", text: "Test")
+                end
+              end
+            end
+
+            expect(result).to have_tag("div", class: "diff") do
+              with_tag("ins", with: { "aria-label" => "added content" }) do
+                with_tag("h#{level}", seen: "Testing heading") do
+                  with_tag("span", text: "Testing")
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+
     context "when text nodes are added with line breaks" do
       let(:before_html) do
         <<~HTML

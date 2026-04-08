@@ -60,7 +60,7 @@ module Nokodiff
     end
 
     def changed_block(before_node, after_node)
-      if structurally_similar?(before_node, after_node)
+      if structurally_similar?(before_node, after_node) && not_paragraph_or_heading?(before_node)
         inner_diff = Differ.new(before_node, after_node).to_html
         rebuild_element(after_node, inner_diff)
       elsif before_node.text? && after_node.text?
@@ -75,8 +75,14 @@ module Nokodiff
     def structurally_similar?(before_node, after_node)
       before_node.element? &&
         after_node.element? &&
-        before_node.name == after_node.name &&
-        before_node.name != "p"
+        before_node.name == after_node.name
+    end
+
+    # We want all changes within a paragraph or heading to be treated as a single change, even if they are structurally
+    # different, to avoid overwhelming the user with changes.
+    def not_paragraph_or_heading?(before_node)
+      before_node.name != "p" &&
+        !before_node.name.match(/^h[1-6]$/)
     end
 
     def rebuild_element(template_node, inner_html)
