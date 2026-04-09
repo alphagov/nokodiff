@@ -13,9 +13,9 @@ module Nokodiff
         when :changed
           changed_block(diff[:before], diff[:after])
         when :deleted
-          deleted_block(diff[:before])
+          diff[:before].name == "li" ? deleted_li(diff[:before]) : deleted_block(diff[:before])
         when :added
-          added_block(diff[:after])
+          diff[:after].name == "li" ? added_li(diff[:after]) : added_block(diff[:after])
         end
       }.join("\n")
     end
@@ -69,7 +69,12 @@ module Nokodiff
                                   else
                                     diff_sub_elements(before_node, after_node)
                                   end
-        deleted_block(before_diff) + added_block(after_diff)
+
+        if before_node.name == "li"
+          deleted_li(before_diff) + added_li(after_diff)
+        else
+          deleted_block(before_diff) + added_block(after_diff)
+        end
       end
     end
 
@@ -83,11 +88,13 @@ module Nokodiff
         before_node.name == after_node.name
     end
 
-    # We want all changes within a paragraph or heading to be treated as a single change, even if they are structurally
-    # different, to avoid overwhelming the user with changes.
+    # We want all changes within a paragraph, heading, or list item to be treated as a single change, even if they are
+    # structurally different, to avoid overwhelming the user with changes, and ensure any nested elements are included
+    # within the diff, rather than being treated as added or removed content on their own.
     def should_not_be_treated_as_single_change?(before_node)
       before_node.name != "p" &&
-        !before_node.name.match(/^h[1-6]$/)
+        !before_node.name.match(/^h[1-6]$/) &&
+        before_node.name != "li"
     end
 
     def rebuild_element(template_node, inner_html)
@@ -119,7 +126,11 @@ module Nokodiff
       merge_adjacent_highlighted_changes(before_fragment)
       merge_adjacent_highlighted_changes(after_fragment)
 
-      [before_fragment.to_html, after_fragment.to_html]
+      if before_html.name == "li"
+        [before_fragment.inner_html, after_fragment.inner_html]
+      else
+        [before_fragment.to_html, after_fragment.to_html]
+      end
     end
 
     def merge_adjacent_highlighted_changes(node)
@@ -148,6 +159,16 @@ module Nokodiff
       node.to_html
     end
 
+    def deleted_li(html)
+      %(
+        <li>
+          <div class="diff">
+            <del aria-label="removed content">#{html}</del>
+          </div>
+        </li>
+      )
+    end
+
     def deleted_block(html)
       %(
         <div class="diff">
@@ -161,6 +182,16 @@ module Nokodiff
         <div class="diff">
            <ins aria-label="added content">#{html}</ins>
         </div>
+      )
+    end
+
+    def added_li(html)
+      %(
+        <li>
+          <div class="diff">
+            <ins aria-label="added content">#{html}</ins>
+          </div>
+        </li>
       )
     end
   end

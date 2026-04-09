@@ -227,12 +227,20 @@ RSpec.describe Nokodiff do
         result = Nokodiff.diff(before_html, after_html)
 
         expect(result).to have_tag("div", with: { "data-diff-key" => "telephone-1" }) do
-          with_tag("div", class: "diff") do
-            with_tag("span", class: "tel", text: "0300 123 123") do
-              with_tag("del", with: { "aria-label" => "removed content" })
+          with_tag("li") do
+            with_tag("div", class: "diff") do
+              with_tag("del", with: { "aria-label" => "removed content" }) do
+                with_tag("span", seen: "General enquiries:")
+                with_tag("span", seen: "0300 123 123")
+              end
             end
-            with_tag("span", class: "tel", text: "0300 345 345") do
-              with_tag("ins", with: { "aria-label" => "added content" })
+          end
+          with_tag("li") do
+            with_tag("div", class: "diff") do
+              with_tag("ins", with: { "aria-label" => "added content" }) do
+                with_tag("span", seen: "General enquiries:")
+                with_tag("span", seen: "0300 345 345")
+              end
             end
           end
         end

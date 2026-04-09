@@ -139,16 +139,67 @@ RSpec.describe "complex diff" do
         HTML
       end
 
-      it "correctly highlights the added, changed and removed nodes in a list" do
+      it "correctly highlights the added, changed and removed nodes in a list with the divs inside each list item" do
         result = Nokodiff.diff(before_html, after_html)
 
         expect(result).to have_tag("ul") do
-          with_tag("div", class: "diff") do
-            with_tag("del", with: { "aria-label" => "removed content" }, text: "Item 1")
-            with_tag("ins", with: { "aria-label" => "added content" }, text: "Item One")
+          with_tag("li") do
+            with_tag("div", class: "diff") do
+              with_tag("del", with: { "aria-label" => "removed content" }, text: "Item 1")
+              with_tag("ins", with: { "aria-label" => "added content" }, text: "Item One")
+            end
           end
-          with_tag("ins", with: { "aria-label" => "added content" }, text: "Item 1.5")
-          with_tag("del", with: { "aria-label" => "removed content" }, text: "Item 3")
+
+          with_tag("li") do
+            with_tag("div", class: "diff") do
+              with_tag("ins", with: { "aria-label" => "added content" }, text: "Item 1.5")
+            end
+          end
+
+          with_tag("li") do
+            with_tag("div", class: "diff") do
+              with_tag("del", with: { "aria-label" => "removed content" }, text: "Item 3")
+            end
+          end
+        end
+      end
+
+      context "when list items contain nested elements" do
+        let(:before_html) do
+          <<~HTML
+            <ul>
+              <li>Item <span>1</span></li>
+              <li>Item 2</li>
+              <li>Item 3</li>
+            </ul>
+          HTML
+        end
+
+        let(:after_html) do
+          <<~HTML
+            <ul>
+              <li>Item <span>one</span></li>
+              <li>Item 2</li>
+              <li>Item 3</li>
+            </ul>
+          HTML
+        end
+
+        it "correctly highlights the added, changed and removed nodes in a list with the divs inside each list item and the spans included" do
+          result = Nokodiff.diff(before_html, after_html)
+
+          expect(result).to have_tag("ul") do
+            with_tag("li") do
+              with_tag("div", class: "diff") do
+                with_tag("del", with: { "aria-label" => "removed content" }, seen: "Item 1") do
+                  with_tag("span", text: "1")
+                end
+                with_tag("ins", with: { "aria-label" => "added content" }, seen: "Item one") do
+                  with_tag("span", text: "one")
+                end
+              end
+            end
+          end
         end
       end
     end
