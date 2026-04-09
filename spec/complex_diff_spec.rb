@@ -54,6 +54,35 @@ RSpec.describe "complex diff" do
       end
     end
 
+    context "when content is changed inside a div" do
+      let(:before_html) do
+        <<~HTML
+          <div>
+            test content
+          </div>
+        HTML
+      end
+
+      let(:after_html) do
+        <<~HTML
+          <div>
+            Test content
+          </div>
+        HTML
+      end
+
+      it "highlights the changes" do
+        result = Nokodiff.diff(before_html, after_html)
+
+        expect(result).to have_tag("div") do
+          with_tag("div", class: "diff") do
+            with_tag("del", with: { "aria-label" => "removed content" }, seen: "test content")
+            with_tag("ins", with: { "aria-label" => "added content" }, seen: "Test content")
+          end
+        end
+      end
+    end
+
     context "when a node is added inside a parent node" do
       let(:before_html) do
         <<~HTML
