@@ -54,6 +54,35 @@ RSpec.describe "complex diff" do
       end
     end
 
+    context "when content is changed inside a div" do
+      let(:before_html) do
+        <<~HTML
+          <div>
+            test content
+          </div>
+        HTML
+      end
+
+      let(:after_html) do
+        <<~HTML
+          <div>
+            Test content
+          </div>
+        HTML
+      end
+
+      it "highlights the changes" do
+        result = Nokodiff.diff(before_html, after_html)
+
+        expect(result).to have_tag("div") do
+          with_tag("div", class: "diff") do
+            with_tag("del", with: { "aria-label" => "removed content" }, seen: "test content")
+            with_tag("ins", with: { "aria-label" => "added content" }, seen: "Test content")
+          end
+        end
+      end
+    end
+
     context "when a node is added inside a parent node" do
       let(:before_html) do
         <<~HTML
@@ -139,16 +168,67 @@ RSpec.describe "complex diff" do
         HTML
       end
 
-      it "correctly highlights the added, changed and removed nodes in a list" do
+      it "correctly highlights the added, changed and removed nodes in a list with the divs inside each list item" do
         result = Nokodiff.diff(before_html, after_html)
 
         expect(result).to have_tag("ul") do
-          with_tag("div", class: "diff") do
-            with_tag("del", with: { "aria-label" => "removed content" }, text: "Item 1")
-            with_tag("ins", with: { "aria-label" => "added content" }, text: "Item One")
+          with_tag("li") do
+            with_tag("div", class: "diff") do
+              with_tag("del", with: { "aria-label" => "removed content" }, text: "Item 1")
+              with_tag("ins", with: { "aria-label" => "added content" }, text: "Item One")
+            end
           end
-          with_tag("ins", with: { "aria-label" => "added content" }, text: "Item 1.5")
-          with_tag("del", with: { "aria-label" => "removed content" }, text: "Item 3")
+
+          with_tag("li") do
+            with_tag("div", class: "diff") do
+              with_tag("ins", with: { "aria-label" => "added content" }, text: "Item 1.5")
+            end
+          end
+
+          with_tag("li") do
+            with_tag("div", class: "diff") do
+              with_tag("del", with: { "aria-label" => "removed content" }, text: "Item 3")
+            end
+          end
+        end
+      end
+
+      context "when list items contain nested elements" do
+        let(:before_html) do
+          <<~HTML
+            <ul>
+              <li>Item <span>1</span></li>
+              <li>Item 2</li>
+              <li>Item 3</li>
+            </ul>
+          HTML
+        end
+
+        let(:after_html) do
+          <<~HTML
+            <ul>
+              <li>Item <span>one</span></li>
+              <li>Item 2</li>
+              <li>Item 3</li>
+            </ul>
+          HTML
+        end
+
+        it "correctly highlights the added, changed and removed nodes in a list with the divs inside each list item and the spans included" do
+          result = Nokodiff.diff(before_html, after_html)
+
+          expect(result).to have_tag("ul") do
+            with_tag("li") do
+              with_tag("div", class: "diff") do
+                with_tag("del", with: { "aria-label" => "removed content" }, seen: "Item 1") do
+                  with_tag("span", text: "1")
+                end
+                with_tag("ins", with: { "aria-label" => "added content" }, seen: "Item one") do
+                  with_tag("span", text: "one")
+                end
+              end
+            end
+          end
         end
       end
     end
@@ -261,6 +341,74 @@ RSpec.describe "complex diff" do
             with_tag("div", class: "diff") do
               with_tag("ins", with: { "aria-label" => "added content" }) do
                 with_tag("p", text: "New line")
+              end
+            end
+          end
+        end
+      end
+    end
+
+    describe "when a node is changed within a heading" do
+      (1..6).each do |level|
+        context "when changes are made within a h#{level}" do
+          let(:before_html) do
+            <<~HTML
+              <h#{level}>Test heading</h#{level}>
+            HTML
+          end
+
+          let(:after_html) do
+            <<~HTML
+              <h#{level}>Testing heading</h#{level}>
+            HTML
+          end
+
+          it "highlights the entire heading as a change" do
+            result = Nokodiff.diff(before_html, after_html)
+
+            expect(result).to have_tag("div", class: "diff") do
+              with_tag("del", with: { "aria-label" => "removed content" }) do
+                with_tag("h#{level}", text: "Test heading")
+              end
+            end
+
+            expect(result).to have_tag("div", class: "diff") do
+              with_tag("ins", with: { "aria-label" => "added content" }) do
+                with_tag("h#{level}", text: "Testing heading")
+              end
+            end
+          end
+        end
+
+        context "when changes are made within a h#{level} with a nested element" do
+          let(:before_html) do
+            <<~HTML
+              <h#{level}><span>Test</span> heading</h#{level}>
+            HTML
+          end
+
+          let(:after_html) do
+            <<~HTML
+              <h#{level}><span>Testing</span> heading</h#{level}>
+            HTML
+          end
+
+          it "highlights the entire heading as a change" do
+            result = Nokodiff.diff(before_html, after_html)
+
+            expect(result).to have_tag("div", class: "diff") do
+              with_tag("del", with: { "aria-label" => "removed content" }) do
+                with_tag("h#{level}", seen: "Test heading") do
+                  with_tag("span", text: "Test")
+                end
+              end
+            end
+
+            expect(result).to have_tag("div", class: "diff") do
+              with_tag("ins", with: { "aria-label" => "added content" }) do
+                with_tag("h#{level}", seen: "Testing heading") do
+                  with_tag("span", text: "Testing")
+                end
               end
             end
           end

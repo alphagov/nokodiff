@@ -17,7 +17,7 @@ $black: #0b0c0c;
     position: static;
     margin-bottom: 10px;
 
-    del, ins, ul, li {
+    del, ins {
       position: static !important;
       display: block;
       text-decoration: none;
