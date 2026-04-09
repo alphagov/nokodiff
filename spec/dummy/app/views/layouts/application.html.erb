@@ -1,4 +1,19 @@
-<%= stylesheet_link_tag "application" %>
-<div class="compare-editions">
-  <%= yield %>
-</div>
+<%= render "govuk_publishing_components/components/layout_for_public", {
+  title: "GOV.UK",
+  title_lang: I18n.locale,
+  omit_feedback_form: true
+} do %>
+  <%= yield :before_content %>
+
+  <div class="govuk-width-container">
+
+    <%= yield :before_main %>
+
+    <main role="main" id="content" class="govuk-main-wrapper">
+      <span id="Top"></span>
+      <%= yield %>
+    </main>
+  </div>
+
+  <%= yield :after_content %>
+<% end %>

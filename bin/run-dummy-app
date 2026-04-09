@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+cd spec/dummy || exit
+bundle install
+bin/rails dartsass:build && bin/rails server

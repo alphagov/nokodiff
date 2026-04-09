@@ -36,6 +36,7 @@ gem "thruster", require: false
 # gem "rack-cors"
 
 gem "dartsass-rails"
+gem "govuk_publishing_components"
 gem "sprockets-rails"
 
 group :development, :test do

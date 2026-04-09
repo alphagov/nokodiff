@@ -1,6 +1,6 @@
 # Nokodiff
 
-A Ruby Gem to highlight additions, deletions and character level changes while preserving original HTML.
+A Ruby Gem to highlight additions, deletions, and character level changes while preserving original HTML.
 
 It includes functionality to:
 * Compare two HTML fragments and output diffs with semantic HTML
@@ -24,31 +24,21 @@ gem "nokodiff"
 
 ## Local Development
 
-The gem includes a dummy Rails application located in `spec/dummy`. It can be used to preview `Nokodiff` in a real browser environment without needing to integrate with an external host app.
+The gem includes a dummy Rails application located in `spec/dummy`. It can be used to preview `Nokodiff` in a real 
+browser environment without needing to integrate with an external host app.
 
-To get the dummy app running you need to:
-
-### Install dependencies
-
-```bash
-bundle install
-```
-
-### Navigate to the app and install dependencies
+You can run the dummy app with the following command:
 
 ```bash
-cd spec/dummy
-bundle install
+bin/run-dummy-app
 ```
 
-### Start the server
+This installs the dependencies, builds the assets, and starts the server.
 
-```bash
-bin/rails server
-```
+The dummy app will now be running on `localhost:3000`.
 
-The dummy app will now be running on `localhost:3000`
-If you want to edit the content you are testing it is located in `spec/dummy/app/controllers/application_controller.rb`, alongside the code calling `Nokodiff.diff(@before, @after)`
+If you want to edit the content you are testing it is located in `spec/dummy/fixtures/before.html`, and
+`spec/dummy/fixtures/after.html`.
 
 ## Usage
 
@@ -76,7 +66,7 @@ In your application.scss file include:
 @import "nokodiff";
 ```
 
-This will include the styling for `<del>`, `<ins>` and `<span>` tags to allow colour coding, highlighting and underlining of changes.
+This will include the styling for `<del>`, `<ins>` and `<span>` tags to allow colour coding, highlighting, and underlining of changes.
 
 ### More complex diffing with `data-diff-key`
 
