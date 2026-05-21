@@ -37,7 +37,7 @@ jobs:
           repository: alphagov/publishing-api
           ref: main
           path: vendor/publishing-api
-      - uses: ruby/setup-ruby@6aaa311d81eba98ae12eaffbcb63296ace0efcde # v1.307.0
+      - uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f # v1.310.0
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
@@ -60,7 +60,7 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v6
-      - uses: ruby/setup-ruby@6aaa311d81eba98ae12eaffbcb63296ace0efcde # v1.307.0
+      - uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f # v1.310.0
         with:
           rubygems: latest
       - uses: alphagov/govuk-infrastructure/.github/actions/setup-node@main
