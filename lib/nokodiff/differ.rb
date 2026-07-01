@@ -13,9 +13,9 @@ module Nokodiff
         when :changed
           changed_block(diff[:before], diff[:after])
         when :deleted
-          diff[:before].name == "li" ? deleted_li(diff[:before]) : deleted_block(diff[:before])
+          diff[:before].text? ? deleted_block(diff[:before]) : deleted_element(diff[:before])
         when :added
-          diff[:after].name == "li" ? added_li(diff[:after]) : added_block(diff[:after])
+          diff[:after].text? ? added_block(diff[:after]) : added_element(diff[:after])
         end
       }.join("\n")
     end
@@ -63,18 +63,12 @@ module Nokodiff
       if structurally_similar?(before_node, after_node) && should_not_be_treated_as_single_change?(before_node)
         inner_diff = Differ.new(before_node, after_node).to_html
         rebuild_element(after_node, inner_diff)
+      elsif both_text_nodes?(before_node, after_node)
+        before_node, after_node = diff_raw_text(before_node, after_node)
+        deleted_block(before_node) + added_block(after_node)
       else
-        before_diff, after_diff = if both_text_nodes?(before_node, after_node)
-                                    diff_raw_text(before_node, after_node)
-                                  else
-                                    diff_sub_elements(before_node, after_node)
-                                  end
-
-        if before_node.name == "li"
-          deleted_li(before_diff) + added_li(after_diff)
-        else
-          deleted_block(before_diff) + added_block(after_diff)
-        end
+        before_node, after_node = diff_sub_elements(before_node, after_node)
+        deleted_element(before_node) + added_element(after_node)
       end
     end
 
@@ -92,9 +86,8 @@ module Nokodiff
     # structurally different, to avoid overwhelming the user with changes, and ensure any nested elements are included
     # within the diff, rather than being treated as added or removed content on their own.
     def should_not_be_treated_as_single_change?(before_node)
-      before_node.name != "p" &&
-        !before_node.name.match(/^h[1-6]$/) &&
-        before_node.name != "li"
+      !%w[p li tr th].include?(before_node.name) &&
+        !before_node.name.match(/^h[1-6]$/)
     end
 
     def rebuild_element(template_node, inner_html)
@@ -126,11 +119,7 @@ module Nokodiff
       merge_adjacent_highlighted_changes(before_fragment)
       merge_adjacent_highlighted_changes(after_fragment)
 
-      if before_html.name == "li"
-        [before_fragment.inner_html, after_fragment.inner_html]
-      else
-        [before_fragment.to_html, after_fragment.to_html]
-      end
+      [before_fragment, after_fragment]
     end
 
     def merge_adjacent_highlighted_changes(node)
@@ -159,40 +148,36 @@ module Nokodiff
       node.to_html
     end
 
-    def deleted_li(html)
-      %(
-        <li>
-          <div class="diff">
-            <del aria-label="removed content">#{html}</del>
-          </div>
-        </li>
-      )
-    end
-
     def deleted_block(html)
-      %(
-        <div class="diff">
-           <del aria-label="removed content">#{html}</del>
-        </div>
-      )
+      <<~HTML
+      <span class="diff del">
+        #{html}
+      </span>
+     HTML
     end
 
     def added_block(html)
-      %(
-        <div class="diff">
-           <ins aria-label="added content">#{html}</ins>
-        </div>
-      )
+     <<~HTML
+      <span class="diff ins">
+        #{html}
+      </span>
+     HTML
     end
 
-    def added_li(html)
-      %(
-        <li>
-          <div class="diff">
-            <ins aria-label="added content">#{html}</ins>
-          </div>
-        </li>
-      )
+    def added_element(element)
+      <<~HTML
+        <#{element.name} class="diff ins">
+           #{element.inner_html}
+        </#{element.name}>
+      HTML
+    end
+
+    def deleted_element(element)
+      <<~HTML
+        <#{element.name} class="diff del">
+           #{element.inner_html}
+        </#{element.name}>
+      HTML
     end
   end
 end
