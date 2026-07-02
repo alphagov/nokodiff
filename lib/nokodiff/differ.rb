@@ -13,6 +13,7 @@ module Nokodiff
         when :changed
           changed_block(diff[:before], diff[:after])
         when :deleted
+          byebug
           diff[:before].name == "li" ? deleted_li(diff[:before]) : deleted_block(diff[:before])
         when :added
           diff[:after].name == "li" ? added_li(diff[:after]) : added_block(diff[:after])
@@ -71,6 +72,7 @@ module Nokodiff
                                   end
 
         if before_node.name == "li"
+          byebug
           deleted_li(before_diff) + added_li(after_diff)
         else
           deleted_block(before_diff) + added_block(after_diff)
@@ -163,7 +165,7 @@ module Nokodiff
       %(
         <li>
           <div class="diff">
-            <del aria-label="removed content">#{html}</del>
+            <del aria-label="removed content">#{html.children.to_html}</del>
           </div>
         </li>
       )
@@ -186,6 +188,7 @@ module Nokodiff
     end
 
     def added_li(html)
+      byebug
       %(
         <li>
           <div class="diff">
