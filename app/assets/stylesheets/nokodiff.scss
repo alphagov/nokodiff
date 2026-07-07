@@ -1,5 +1,3 @@
-// stylelint-disable selector-no-qualifying-type, max-nesting-depth
-// Diff of two editions
 $added-color: #e6fff3;
 $diff-marker-added-color: #99ffcf;
 $removed-color: #fadede;
@@ -7,26 +5,69 @@ $diff-marker-removed-color: #f3aeac;
 $text-colour: #0b0c0c;
 $light-grey: #f3f2f1;
 $black: #0b0c0c;
+$comparison-sidebar-width: 40px;
+$comparison-sidebar-padding: 15px;
+$comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padding;
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  // If margin is set to a negative value it can cause text to be announced in
+  // the wrong order in VoiceOver for OSX
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+
+  clip: rect(0 0 0 0) !important;
+  clip-path: inset(50%) !important;
+
+  border: 0 !important;
+
+  // For long content, line feeds are not interpreted as spaces and small width
+  // causes content to wrap 1 word per line:
+  // https://medium.com/@jessebeach/beware-smushed-off-screen-accessible-text-5952a4c2cbfe
+  white-space: nowrap !important;
+
+  // Prevent users from selecting or copying visually-hidden text. This prevents
+  // a user unintentionally copying more text than they intended and needing to
+  // manually trim it down again.
+  user-select: none !important;
+}
 
 .compare-editions {
   position: relative;
-  border-left: 40px solid $light-grey;
-  padding: 15px;
+  border-left: $comparison-sidebar-width solid $light-grey;
+  padding: $comparison-sidebar-padding;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
 
   .diff {
     position: static;
     margin-bottom: 10px;
 
-    del, ins {
-      position: static !important;
+    &.del, &.ins {
+      &:is(li){ display: list-item; }
+
+      position: relative;
       display: block;
       text-decoration: none;
-      border-radius: 3px;
+      background-color: transparent;
     }
 
-    del {
-      background-color: $removed-color;
-      padding-bottom: 2px;
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -$comparison-sidebar-padding;
+      min-height: 1.5em;
+      width: 100vw;
+      display: block;
+      z-index: -1;
+    }
+
+    &.del {
+      &::after { background-color: $removed-color; }
 
       span.diff-marker {
         font-weight: normal;
@@ -35,9 +76,8 @@ $black: #0b0c0c;
       }
     }
 
-    ins {
-      background-color: $added-color;
-      padding-bottom: 2px;
+    &.ins {
+      &::after { background-color: $added-color; }
 
       span.diff-marker {
         font-weight: normal;
@@ -46,27 +86,209 @@ $black: #0b0c0c;
       }
     }
 
-    del::before,
-    ins::before {
+    &::before {
+      // Some govuk styles use ::before in ways we need to override to make this work
+      border-radius: unset !important;
+      border: unset !important;
+
       position: absolute;
-      left: -40px;
-      width: 40px;
-      height: 1.5em;
+      top: 0;
+      left: -$comparison-sidebar-offset;
+      width: $comparison-sidebar-width;
+      height: 100%;
+      min-height: 1.5em;
+      line-height: 1.5em;
+      text-align: center;
+      font-weight: normal;
+      z-index: 10;
+    }
+
+    &.del::before {
+      color: $text-colour;
+      background-color: $diff-marker-removed-color;
+      content: "−" !important;
+    }
+
+    &.ins::before {
+      color: $text-colour;
+      background-color: $diff-marker-added-color;
+      content: "+" !important;
+    }
+  }
+
+  // Global govspeak-specific overrides
+  .gem-c-govspeak & {
+    &::before { min-height: 1.3157894737em; }
+  }
+
+  // Inset/callout elements overrides
+
+  .address {
+    .diff{
+      $address-offset: -16px;
+
+      &::after {
+        left: -$comparison-sidebar-padding + $address-offset;
+      }
+
+      &::before {
+        left: -$comparison-sidebar-offset + $address-offset;
+      }
+    }
+  }
+
+  .help-notice {
+    &.diff {
+      &::before {
+        top: 5px;
+        min-height: 1.3157894737em;
+      }
+    }
+  }
+
+ .example, .info-notice {
+   $callout-parent-offset: -10px;
+   $callout-child-offset: -30px;
+
+   &.diff {
+     &::after {
+       left: -$comparison-sidebar-padding + $callout-parent-offset;
+     }
+
+     &::before {
+       left: -$comparison-sidebar-offset + $callout-parent-offset;
+     }
+   }
+
+   .diff {
+     &::after {
+       left: -$comparison-sidebar-padding + $callout-child-offset;
+     }
+
+     &::before {
+       left: -$comparison-sidebar-offset + $callout-child-offset;
+     }
+    }
+  }
+
+  // List-specific overrides for non-govuk lists
+  $non-govuk-list-offset: -40px;
+
+  li.diff {
+    &::after {
+      left: -$comparison-sidebar-padding + $non-govuk-list-offset;
+    }
+
+    &::before {
+      left: -$comparison-sidebar-offset + $non-govuk-list-offset;
+    }
+  }
+
+  // List-specific overrides for govuk lists as we apply a non-standard offset to lists
+  $govuk-list-offset: -20px;
+
+  .gem-c-govspeak & {
+    ul li.diff, ul.diff {
+      &::after {
+        left: -$comparison-sidebar-padding + $govuk-list-offset;
+      }
+
+      &::before {
+        left: -$comparison-sidebar-offset + $govuk-list-offset;
+      }
+    }
+
+    ol li.diff {
+      list-style-type: decimal;
+
+      &::marker {
+        background-color: #0b0c0c;
+        border-radius: 50%;
+      }
+
+      &::after {
+        left: $comparison-sidebar-padding;
+      }
+
+      &::before {
+        left: $comparison-sidebar-offset;
+      }
+    }
+
+    // Steps are causing problems as they also make use of the ::before element. The best compromise we can achieve for now is
+    // setting them back to list style, and having visible markers for elements where we've overridden the ::before
+    $steps-list-offset: -34px;
+
+    ol.steps {
+      li {
+        display: list-item;
+        list-style-type: decimal;
+        &::marker { content: "" }
+      }
+
+      li.diff {
+        margin-left: 1.8em;
+        padding-left: 0.7em;
+        &::marker { content: unset; }
+        &::before {
+          top: 0;
+          left: -$comparison-sidebar-offset + $steps-list-offset;
+          height: 100%;
+          width: $comparison-sidebar-width;
+          min-height: 1.5em;
+        }
+        &::after { left: -$comparison-sidebar-padding + $steps-list-offset;}
+      }
+    }
+  }
+
+  // Table-specific overrides
+    $table-row-offset: -2px;
+
+  table {
+    overflow-x: visible;
+  }
+
+  tr.diff {
+    position: static;
+    display: table-row;
+    transform: scale(1);
+
+    &.del::after, &.ins::after {
+      left: -$comparison-sidebar-padding + $table-row-offset;
+      // Need to account for border in row element
+      height: 100%;
+      top: 1px;
+    }
+
+    // Attaching a ::before psuedoelement to a <tr> creates a phantom column so we need to hide it
+    // and instead attach one to the first-child <td>
+    &::before {
+      display: none;
+    }
+
+    td:first-child::before, th:first-child::before {
+      position: absolute;
+      left: -$comparison-sidebar-offset;
+      width: $comparison-sidebar-width;
+      height: 100%;
+      min-height: 1.5em;
+      top: 1px;
       line-height: 1.5em;
       text-align: center;
       z-index: 10;
     }
-  }
 
-  del::before {
-    color: $text-colour;
-    background-color: $diff-marker-removed-color;
-    content: "−";
-  }
+    &.del td:first-child::before, &.del th:first-child::before {
+      color: $text-colour;
+      background-color: $diff-marker-removed-color;
+      content: "−";
+    }
 
-  ins::before {
-    color: $text-colour;
-    background-color: $diff-marker-added-color;
-    content: "+";
+    &.ins td:first-child::before, &.ins th:first-child::before {
+      color: $text-colour;
+      background-color: $diff-marker-added-color;
+      content: "+";
+    }
   }
 }
