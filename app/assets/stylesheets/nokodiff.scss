@@ -70,7 +70,6 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
       &::after { background-color: $removed-color; }
 
       span.diff-marker {
-        font-weight: normal;
         background-color: $diff-marker-removed-color;
         border-bottom: 2px dashed $black;
       }
@@ -80,7 +79,6 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
       &::after { background-color: $added-color; }
 
       span.diff-marker {
-        font-weight: normal;
         background-color: $diff-marker-added-color;
         border-bottom: 2px dashed $black;
       }
