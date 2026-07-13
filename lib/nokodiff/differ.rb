@@ -111,15 +111,10 @@ module Nokodiff
     end
 
     def diff_sub_elements(before_html, after_html)
+      before_fragment = before_html.dup
+      after_fragment = after_html.dup
 
-      # TODO: Currently before_dup and before_fragment end up as two variables pointing to literally the same object getting modified in place
-      # Refactor to just use the before_fragment name when you can get it in a neat commit
-      # (Same with after_)
-
-      before_dup = before_html.dup
-      after_dup = after_html.dup
-
-      before_fragment, after_fragment = Nokodiff::TextNodeDiffs.new(before_dup, after_dup).call
+      Nokodiff::TextNodeDiffs.new(before_fragment, after_fragment).call
 
       merge_adjacent_highlighted_changes(before_fragment)
       merge_adjacent_highlighted_changes(after_fragment)
