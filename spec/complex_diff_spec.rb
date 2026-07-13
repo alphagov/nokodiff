@@ -366,11 +366,11 @@ RSpec.describe "complex diff" do
         <<~HTML
           <div class="level-1">
              <div class="level-2a">
-             <p>Retain me</p>
+               <p>Retain me</p>
 
-             <p class="diff del">
-                <span class="visually-hidden"> Removed content </span>Delete me
-             </p>
+               <p class="diff del">
+                  <span class="visually-hidden"> Removed content </span>Delete me
+               </p>
              </div>
              <div class="level-2b"><p>Retain me</p></div>
 
@@ -477,16 +477,16 @@ RSpec.describe "complex diff" do
 
       let(:expected_html) do
         <<~HTML
-           <p class="diff del">
-               <span class="visually-hidden"> Removed content </span>123 Real Street<br>
-            Springfield<br>
-            England
-            </p>
-            <p class="diff ins">
-               <span class="visually-hidden"> Added content </span>123 Real Street<br>
-            Springfield<br>
-            England<br><span class="diff-marker">
-            TEST 123</span>
+          <p class="diff del">
+             <span class="visually-hidden"> Removed content </span>123 Real Street<br>
+             Springfield<br>
+             England
+          </p>
+          <p class="diff ins">
+             <span class="visually-hidden"> Added content </span>123 Real Street<br>
+             Springfield<br>
+             England<br><span class="diff-marker">
+             TEST 123</span>
           </p>
         HTML
       end
@@ -495,6 +495,587 @@ RSpec.describe "complex diff" do
         result = Nokodiff.diff(before_html, after_html)
 
         expect(normalise_html(result)).to eq(normalise_html(expected_html))
+      end
+    end
+
+    context "when a sub-element of a" do
+      # This is split between Paragraph and Table as when this issuse was first investigated, Table was affected slightly differently and caused an exception rather than just a malformed diff
+      context "paragraph" do
+        context "is added" do
+          let(:before_html) do
+            <<~HTML
+              <p>Unbolded other/p>
+            HTML
+          end
+
+          let(:after_html) do
+            <<~HTML
+              <p><b>Bolded</b> other</p>
+            HTML
+          end
+
+          let(:expected_html) do
+            <<~HTML
+              <p class="diff del">
+                  <span class="visually-hidden"> Removed content </span><span class="diff-marker">Unbolded</span> other
+              </p>
+              <p class="diff ins">
+                  <span class="visually-hidden"> Added content </span><span class="diff-marker"<b>Bolded</b></span> other
+              </p>
+            HTML
+          end
+
+          it "is not able to correctly highlight the diff, and the sub-element tag is lost" do
+            pending("Known issue: https://github.com/alphagov/nokodiff/issues/43")
+            result = Nokodiff.diff(before_html, after_html)
+
+            expect(normalise_html(result)).to eq(normalise_html(expected_html))
+          end
+
+          it "does not crash" do
+            expect { Nokodiff.diff(before_html, after_html) }.not_to raise_error
+          end
+        end
+
+        context "is removed" do
+          let(:before_html) do
+            <<~HTML
+              <p><b>Bolded</b> other/p>
+            HTML
+          end
+
+          let(:after_html) do
+            <<~HTML
+              <p>Unbolded other</p>
+            HTML
+          end
+
+          let(:expected_html) do
+            <<~HTML
+              <p class="diff del">
+                  <span class="visually-hidden"> Removed content </span><span class="diff-marker"<b>Bolded</b></span> other
+              </p>
+              <p class="diff ins">
+                  <span class="visually-hidden"> Added content </span><span class="diff-marker">Unbolded</span> other
+              </p>
+            HTML
+          end
+
+          it "is not able to correctly highlight the diff, and the sub-element tag is lost" do
+            pending("Known issue: https://github.com/alphagov/nokodiff/issues/43")
+            result = Nokodiff.diff(before_html, after_html)
+
+            expect(normalise_html(result)).to eq(normalise_html(expected_html))
+          end
+
+          it "does not crash" do
+            expect { Nokodiff.diff(before_html, after_html) }.not_to raise_error
+          end
+        end
+      end
+
+      context "table cell" do
+        context "is added" do
+          let(:before_html) do
+            <<~HTML
+              <table>
+                <tbody>
+                    <tr>
+                        <td>Unbolded other</td>
+                    </tr>
+                </tbody>
+              </table>
+            HTML
+          end
+
+          let(:after_html) do
+            <<~HTML
+              <table>
+                <tbody>
+                    <tr>
+                        <td><b>Bolded</b> other</td>
+                    </tr>
+                </tbody>
+              </table>
+            HTML
+          end
+
+          let(:expected_html) do
+            <<~HTML
+              <table><tbody>
+                    <tr class="diff del">
+                        <td>
+                            <span class="visually-hidden"> Removed row </span><span class="diff-marker">Unbolded</span> other
+                            </td>
+                    </tr>
+                    <tr class="diff ins">
+                        <td>
+                            <span class="visually-hidden"> Added row </span><span class="diff-marker"><b>Bolded</b></span> other
+                            </td>
+                    </tr>
+              </tbody></table>
+            HTML
+          end
+
+          it "is not able to correctly highlight the diff, and the sub-element tag is lost" do
+            pending("Known issue: https://github.com/alphagov/nokodiff/issues/43")
+            result = Nokodiff.diff(before_html, after_html)
+
+            expect(normalise_html(result)).to eq(normalise_html(expected_html))
+          end
+
+          it "does not crash" do
+            expect { Nokodiff.diff(before_html, after_html) }.not_to raise_error
+          end
+        end
+
+        context "is removed" do
+          let(:before_html) do
+            <<~HTML
+              <table>
+                <tbody>
+                    <tr>
+                        <td><b>Bolded</b> other</td>
+                    </tr>
+                </tbody>
+              </table>
+            HTML
+          end
+
+          let(:after_html) do
+            <<~HTML
+              <table>
+                <tbody>
+                    <tr>
+                        <td>Unbolded other</td>
+                    </tr>
+                </tbody>
+              </table>
+            HTML
+          end
+
+          let(:expected_html) do
+            <<~HTML
+              <table><tbody>
+                    <tr class="diff del">
+                        <td>
+                        <span class="visually-hidden"> Removed row </span><span class="diff-marker"><b>Bolded</b></span> other
+                        </td>
+                    </tr>
+                    <tr class="diff ins">
+                        <td>
+                        <span class="visually-hidden"> Added row </span><span class="diff-marker">Unbolded</span> other
+                        </td>
+                    </tr>
+              </tbody></table>
+            HTML
+          end
+
+          it "is not able to correctly highlight the diff, and the sub-element tag is lost" do
+            pending("Known issue: https://github.com/alphagov/nokodiff/issues/43")
+            result = Nokodiff.diff(before_html, after_html)
+
+            expect(normalise_html(result)).to eq(normalise_html(expected_html))
+          end
+
+          it "does not crash" do
+            expect { Nokodiff.diff(before_html, after_html) }.not_to raise_error
+          end
+        end
+      end
+    end
+
+    context "when a node is changed within a table" do
+      let(:before_html) do
+        <<~HTML
+          <table>
+            <thead><tr>
+                <th scope="col">col1</th>
+                <th scope="col">col2</th>
+            </tr></thead>
+            <tbody><tr>
+                <td>r1c1</td>
+                <td>r1c2</td>
+            </tr></tbody>
+          </table>
+        HTML
+      end
+
+      context "when an entire table row is added to a table" do
+        let(:after_html) do
+          <<~HTML
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">col1</th>
+                  <th scope="col">col2</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>r1c1</td>
+                  <td>r1c2</td>
+                </tr>
+                <tr>
+                  <td>r2c1</td>
+                  <td>r2c2</td>
+                </tr>
+              </tbody>
+            </table>
+          HTML
+        end
+
+        let(:expected_html) do
+          <<~HTML
+            <table>
+              <thead><tr>
+                <th scope="col">col1</th>
+                <th scope="col">col2</th>
+              </tr></thead>
+
+              <tbody>
+                <tr>
+                  <td>r1c1</td>
+                  <td>r1c2</td>
+                </tr>
+                <tr class="diff ins">
+                  <td>
+                      <span class="visually-hidden"> Added row </span>r2c1</td>
+                  <td>r2c2</td>
+                </tr>
+              </tbody>
+            </table>
+          HTML
+        end
+
+        it "correctly highlights the change, using the Added Row accessible callout" do
+          result = Nokodiff.diff(before_html, after_html)
+
+          expect(normalise_html(result)).to eq(normalise_html(expected_html))
+        end
+      end
+
+      context "when an entire table row is removed from a table" do
+        let(:after_html) do
+          <<~HTML
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">col1</th>
+                  <th scope="col">col2</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          HTML
+        end
+
+        let(:expected_html) do
+          <<~HTML
+            <table>
+              <thead><tr>
+                <th scope="col">col1</th>
+                <th scope="col">col2</th>
+              </tr></thead>
+
+              <tbody>
+                <tr class="diff del">
+                  <td>
+                      <span class="visually-hidden"> Removed row </span>r1c1</td>
+                  <td>r1c2</td>
+                </tr>
+              </tbody>
+            </table>
+          HTML
+        end
+
+        it "correctly highlights the change, with the row as the lowest level element" do
+          result = Nokodiff.diff(before_html, after_html)
+
+          expect(normalise_html(result)).to eq(normalise_html(expected_html))
+        end
+      end
+
+      context "when a cell is removed from a table row" do
+        let(:after_html) do
+          <<~HTML
+            <table>
+              <thead><tr>
+                  <th scope="col">col1</th>
+                  <th scope="col">col2</th>
+              </tr></thead>
+              <tbody><tr>
+                  <td>r1c1</td>
+              </tr></tbody>
+            </table>
+          HTML
+        end
+
+        let(:expected_html) do
+          <<~HTML
+            <table>
+              <thead><tr>
+                  <th scope="col">col1</th>
+                  <th scope="col">col2</th>
+              </tr></thead>
+
+              <tbody>
+                  <tr class="diff del">
+                    <td>
+                        <span class="visually-hidden"> Removed row </span>r1c1</td>
+                    <td><span class="diff-marker">r1c2</span></td>
+              </tr>
+              <tr class="diff ins">
+                  <td>
+                    <span class="visually-hidden"> Added row </span>r1c1</td>
+              </tr>
+              </tbody>
+            </table>
+          HTML
+        end
+
+        it "correctly highlights the removed cell, with the row as the lowest level element" do
+          result = Nokodiff.diff(before_html, after_html)
+
+          expect(normalise_html(result)).to eq(normalise_html(expected_html))
+        end
+      end
+
+      context "when a cell is added to a table row" do
+        let(:after_html) do
+          <<~HTML
+            <table>
+              <thead><tr>
+                  <th scope="col">col1</th>
+                  <th scope="col">col2</th>
+              </tr></thead>
+              <tbody><tr>
+                  <td>r1c1</td>
+                  <td>r1c2</td>
+                  <td>r1c3</td>
+              </tr></tbody>
+            </table>
+          HTML
+        end
+
+        let(:expected_html) do
+          <<~HTML
+            <table>
+              <thead><tr>
+                  <th scope="col">col1</th>
+                  <th scope="col">col2</th>
+              </tr></thead>
+
+              <tbody>
+                  <tr class="diff del">
+                    <td>
+                        <span class="visually-hidden"> Removed row </span>r1c1</td>
+                    <td>r1c2</td>
+              </tr>
+              <tr class="diff ins">
+                  <td>
+                    <span class="visually-hidden"> Added row </span>r1c1</td>
+                  <td>r1c2</td>
+                  <td><span class="diff-marker">r1c3</span></td>
+              </tr>
+              </tbody>
+            </table>
+          HTML
+        end
+
+        it "correctly highlights the added cell, with the row as the lowest level element" do
+          result = Nokodiff.diff(before_html, after_html)
+
+          expect(normalise_html(result)).to eq(normalise_html(expected_html))
+        end
+      end
+
+      context "when a cell is modified within a table row" do
+        let(:after_html) do
+          <<~HTML
+            <table>
+              <thead><tr>
+                  <th scope="col">col1</th>
+                  <th scope="col">col2</th>
+              </tr></thead>
+              <tbody><tr>
+                  <td>r1c1</td>
+                  <td>Changed</td>
+              </tr></tbody>
+            </table>
+          HTML
+        end
+
+        let(:expected_html) do
+          <<~HTML
+            <table>
+              <thead><tr>
+                  <th scope="col">col1</th>
+                  <th scope="col">col2</th>
+              </tr></thead>
+
+              <tbody>
+                  <tr class="diff del">
+                    <td>
+                    <span class="visually-hidden"> Removed row </span>r1c1</td>
+                  <td><span class="diff-marker">r1c2</span></td>
+              </tr>
+              <tr class="diff ins">
+                  <td>
+                    <span class="visually-hidden"> Added row </span>r1c1</td>
+                  <td><span class="diff-marker">Changed</span></td>
+              </tr>
+              </tbody>
+            </table>
+          HTML
+        end
+
+        it "correctly highlights the changed cell, with the row as the lowest level element" do
+          result = Nokodiff.diff(before_html, after_html)
+
+          expect(normalise_html(result)).to eq(normalise_html(expected_html))
+        end
+      end
+
+      context "when a heading is removed from a table row" do
+        let(:after_html) do
+          <<~HTML
+            <table>
+              <thead><tr>
+                  <th scope="col">col1</th>
+              </tr></thead>
+              <tbody><tr>
+                  <td>r1c1</td>
+                  <td>r1c2</td>
+              </tr></tbody>
+            </table>
+          HTML
+        end
+
+        let(:expected_html) do
+          <<~HTML
+            <table>
+              <thead>
+                <tr class="diff del">
+                  <th scope="col">
+                    <span class="visually-hidden"> Removed row </span>col1</th>
+                  <th scope="col"><span class="diff-marker">col2</span></th>
+                </tr>
+                <tr class="diff ins">
+                    <th scope="col">
+                      <span class="visually-hidden"> Added row </span>col1</th>
+                </tr>
+              </thead>
+              <tbody><tr>
+                    <td>r1c1</td>
+                    <td>r1c2</td>
+              </tr></tbody>
+            </table>
+          HTML
+        end
+
+        it "correctly highlights the removed heading, with the row as the lowest level element" do
+          result = Nokodiff.diff(before_html, after_html)
+
+          expect(normalise_html(result)).to eq(normalise_html(expected_html))
+        end
+      end
+
+      context "when a heading is added to a table row" do
+        let(:after_html) do
+          <<~HTML
+            <table>
+              <thead><tr>
+                  <th scope="col">col1</th>
+                  <th scope="col">col2</th>
+                  <th scope="col">col3</th>
+              </tr></thead>
+              <tbody><tr>
+                  <td>r1c1</td>
+                  <td>r1c2</td>
+              </tr></tbody>
+            </table>
+          HTML
+        end
+
+        let(:expected_html) do
+          <<~HTML
+            <table>
+              <thead>
+                <tr class="diff del">
+                  <th scope="col">
+                    <span class="visually-hidden"> Removed row </span>col1</th>
+                  <th scope="col">col2</th>
+                </tr>
+                <tr class="diff ins">
+                    <th scope="col">
+                      <span class="visually-hidden"> Added row </span>col1</th>
+                    <th scope="col">col2</th>
+                    <th scope="col"><span class="diff-marker">col3</span></th>
+                </tr>
+              </thead>
+              <tbody><tr>
+                  <td>r1c1</td>
+                  <td>r1c2</td>
+              </tr></tbody>
+            </table>
+          HTML
+        end
+
+        it "correctly highlights the added heading, with the row as the lowest level element" do
+          result = Nokodiff.diff(before_html, after_html)
+
+          expect(normalise_html(result)).to eq(normalise_html(expected_html))
+        end
+      end
+
+      context "when a heading is modified within a table row" do
+        let(:after_html) do
+          <<~HTML
+            <table>
+              <thead><tr>
+                  <th scope="col">col1</th>
+                  <th scope="col">col two</th>
+              </tr></thead>
+              <tbody><tr>
+                  <td>r1c1</td>
+                  <td>r1c2</td>
+              </tr></tbody>
+            </table>
+          HTML
+        end
+
+        let(:expected_html) do
+          <<~HTML
+            <table>
+              <thead>
+                <tr class="diff del">
+                  <th scope="col">
+                    <span class="visually-hidden"> Removed row </span>col1</th>
+                  <th scope="col">col<span class="diff-marker">2</span>
+                  </th>
+                </tr>
+                <tr class="diff ins">
+                    <th scope="col">
+                      <span class="visually-hidden"> Added row </span>col1</th>
+                    <th scope="col">col<span class="diff-marker"> two</span>
+                    </th>
+                </tr>
+              </thead>
+              <tbody><tr>
+                  <td>r1c1</td>
+                  <td>r1c2</td>
+              </tr></tbody>
+            </table>
+          HTML
+        end
+
+        it "correctly highlights the changed heading, with the row as the lowest level element" do
+          result = Nokodiff.diff(before_html, after_html)
+
+          expect(normalise_html(result)).to eq(normalise_html(expected_html))
+        end
       end
     end
   end
