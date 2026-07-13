@@ -61,7 +61,7 @@ module Nokodiff
     end
 
     def changed_block(before_node, after_node)
-      if structurally_similar?(before_node, after_node) && should_not_be_treated_as_single_change?(before_node)
+      if structurally_similar?(before_node, after_node) && !treat_element_as_single_change?(before_node)
         inner_diff = Differ.new(before_node, after_node).to_html
         rebuild_element(after_node, inner_diff)
       elsif both_text_nodes?(before_node, after_node)
@@ -86,9 +86,8 @@ module Nokodiff
     # We want all changes within a paragraph, heading, table row, or list item to be treated as a single change, even if they are
     # structurally different, to avoid overwhelming the user with changes, and ensure any nested elements are included
     # within the diff, rather than being treated as added or removed content on their own.
-    def should_not_be_treated_as_single_change?(before_node)
-      !%w[p li tr th].include?(before_node.name) &&
-        !before_node.name.match(/^h[1-6]$/)
+    def treat_element_as_single_change?(before_node)
+      %w[p li tr th].include?(before_node.name) || before_node.name.match(/^h[1-6]$/)
     end
 
     def rebuild_element(template_node, inner_html)
@@ -112,6 +111,11 @@ module Nokodiff
     end
 
     def diff_sub_elements(before_html, after_html)
+
+      # TODO: Currently before_dup and before_fragment end up as two variables pointing to literally the same object getting modified in place
+      # Refactor to just use the before_fragment name when you can get it in a neat commit
+      # (Same with after_)
+
       before_dup = before_html.dup
       after_dup = after_html.dup
 
