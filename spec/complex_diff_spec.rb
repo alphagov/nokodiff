@@ -14,16 +14,20 @@ RSpec.describe "complex diff" do
         HTML
       end
 
-      it "wraps the new node in an ins tag while keeping the existing node unchanged" do
+      let(:expected_html) do
+        <<~HTML
+          <p class="diff ins">
+            <span class="visually-hidden"> Added content </span>Pre first paragraph
+          </p>
+
+          <p>Test paragraph 1</p>
+        HTML
+      end
+
+      it "gives the new node the ins class and accessible callout while keeping the existing node unchanged" do
         result = Nokodiff.diff(before_html, after_html)
 
-        expect(result).to have_tag("p", text: "Test paragraph 1")
-
-        expect(result).to have_tag("div", class: "diff") do
-          with_tag("ins", with: { "aria-label" => "added content" }) do
-            with_tag("p", text: "Pre first paragraph")
-          end
-        end
+        expect(normalise_html(result)).to eq(normalise_html(expected_html))
       end
     end
 
@@ -41,16 +45,19 @@ RSpec.describe "complex diff" do
         HTML
       end
 
-      it "wraps the removed node in a del tag" do
+      let(:expected_html) do
+        <<~HTML
+          <p>Test paragraph 1</p>
+          <p class="diff del">
+            <span class="visually-hidden"> Removed content </span>Post first paragraph
+          </p>
+        HTML
+      end
+
+      it "gives the removed node the del class and accessible callout" do
         result = Nokodiff.diff(before_html, after_html)
 
-        expect(result).to have_tag("p", text: "Test paragraph 1")
-
-        expect(result).to have_tag("div", class: "diff") do
-          with_tag("del", with: { "aria-label" => "removed content" }) do
-            with_tag("p", text: "Post first paragraph")
-          end
-        end
+        expect(normalise_html(result)).to eq(normalise_html(expected_html))
       end
     end
 
@@ -71,15 +78,29 @@ RSpec.describe "complex diff" do
         HTML
       end
 
-      it "highlights the changes" do
+      let(:expected_html) do
+        <<~HTML
+          <div>
+              <span class="diff del">
+                <span class="visually-hidden">Removed content </span>
+
+                <span class="diff-marker">t</span>est content
+
+              </span>
+              <span class="diff ins">
+                <span class="visually-hidden">Added content </span>
+
+                <span class="diff-marker">T</span>est content
+
+              </span>
+            </div>
+        HTML
+      end
+
+      it "highlights the changes using a span, and accessible callout" do
         result = Nokodiff.diff(before_html, after_html)
 
-        expect(result).to have_tag("div") do
-          with_tag("div", class: "diff") do
-            with_tag("del", with: { "aria-label" => "removed content" }, seen: "test content")
-            with_tag("ins", with: { "aria-label" => "added content" }, seen: "Test content")
-          end
-        end
+        expect(normalise_html(result)).to eq(normalise_html(expected_html))
       end
     end
 
@@ -101,17 +122,22 @@ RSpec.describe "complex diff" do
         HTML
       end
 
-      it "correctly wraps the new node in an ins tag as a sub element of the parent" do
+      let(:expected_html) do
+        <<~HTML
+          <div class="top-level">
+              <p class="diff ins">
+                <span class="visually-hidden"> Added content </span>Pre first paragraph
+              </p>
+
+              <p>Test paragraph 1</p>
+            </div>
+        HTML
+      end
+
+      it "correctly gives the new node the ins class and accessible callout as a sub element of the parent" do
         result = Nokodiff.diff(before_html, after_html)
 
-        expect(result).to have_tag("div", class: "top-level") do
-          with_tag("p", text: "Test paragraph 1")
-          with_tag("div", class: "diff") do
-            with_tag("ins", with: { "aria-label" => "added content" }) do
-              with_tag("p", text: "Pre first paragraph")
-            end
-          end
-        end
+        expect(normalise_html(result)).to eq(normalise_html(expected_html))
       end
     end
 
@@ -133,17 +159,22 @@ RSpec.describe "complex diff" do
         HTML
       end
 
-      it "correctly wraps the removed node in a del tag as a sub element of the parent" do
+      let(:expected_html) do
+        <<~HTML
+          <div class="top-level">
+            <p>Test paragraph 1</p>
+
+             <p class="diff del">
+                <span class="visually-hidden"> Removed content </span>Test paragraph to be deleted
+             </p>
+          </div>
+        HTML
+      end
+
+      it "correctly gives the removed node the del class and accessible callout as a sub element of the parent" do
         result = Nokodiff.diff(before_html, after_html)
 
-        expect(result).to have_tag("div", class: "top-level") do
-          with_tag("p", text: "Test paragraph 1")
-          with_tag("div", class: "diff") do
-            with_tag("del", with: { "aria-label" => "removed content" }) do
-              with_tag("p", text: "Test paragraph to be deleted")
-            end
-          end
-        end
+        expect(normalise_html(result)).to eq(normalise_html(expected_html))
       end
     end
 
@@ -168,29 +199,33 @@ RSpec.describe "complex diff" do
         HTML
       end
 
+      let(:expected_html) do
+        <<~HTML
+           <ul>
+              <li class="diff del">
+                 <span class="visually-hidden"> Removed content </span>Item <span class="diff-marker">1</span>
+              </li>
+              <li class="diff ins">
+                 <span class="visually-hidden"> Added content </span>Item <span class="diff-marker">One</span>
+              </li>
+
+              <li class="diff ins">
+                 <span class="visually-hidden"> Added content </span>Item 1.5
+              </li>
+
+              <li>Item 2</li>
+
+              <li class="diff del">
+                 <span class="visually-hidden"> Removed content </span>Item 3
+              </li>
+          </ul>
+        HTML
+      end
+
       it "correctly highlights the added, changed and removed nodes in a list with the divs inside each list item" do
         result = Nokodiff.diff(before_html, after_html)
 
-        expect(result).to have_tag("ul") do
-          with_tag("li") do
-            with_tag("div", class: "diff") do
-              with_tag("del", with: { "aria-label" => "removed content" }, text: "Item 1")
-              with_tag("ins", with: { "aria-label" => "added content" }, text: "Item One")
-            end
-          end
-
-          with_tag("li") do
-            with_tag("div", class: "diff") do
-              with_tag("ins", with: { "aria-label" => "added content" }, text: "Item 1.5")
-            end
-          end
-
-          with_tag("li") do
-            with_tag("div", class: "diff") do
-              with_tag("del", with: { "aria-label" => "removed content" }, text: "Item 3")
-            end
-          end
-        end
+        expect(normalise_html(result)).to eq(normalise_html(expected_html))
       end
 
       context "when list items contain nested elements" do
@@ -214,21 +249,27 @@ RSpec.describe "complex diff" do
           HTML
         end
 
+        let(:expected_html) do
+          <<~HTML
+             <ul>
+               <li class="diff del">
+                   <span class="visually-hidden"> Removed content </span>Item <span><span class="diff-marker">1</span></span>
+                </li>
+                <li class="diff ins">
+                   <span class="visually-hidden"> Added content </span>Item <span><span class="diff-marker">one</span></span>
+                </li>
+
+                <li>Item 2</li>
+
+                <li>Item 3</li>
+            </ul>
+          HTML
+        end
+
         it "correctly highlights the added, changed and removed nodes in a list with the divs inside each list item and the spans included" do
           result = Nokodiff.diff(before_html, after_html)
 
-          expect(result).to have_tag("ul") do
-            with_tag("li") do
-              with_tag("div", class: "diff") do
-                with_tag("del", with: { "aria-label" => "removed content" }, seen: "Item 1") do
-                  with_tag("span", text: "1")
-                end
-                with_tag("ins", with: { "aria-label" => "added content" }, seen: "Item one") do
-                  with_tag("span", text: "one")
-                end
-              end
-            end
-          end
+          expect(normalise_html(result)).to eq(normalise_html(expected_html))
         end
       end
     end
@@ -265,24 +306,24 @@ RSpec.describe "complex diff" do
         HTML
       end
 
+      let(:expected_html) do
+        <<~HTML
+           <div class="level-1"><div class="level-2"><div class="level-3">
+              <p>Hello World</p>
+
+              <p class="diff ins">
+                 <span class="visually-hidden"> Added content </span>Goodbye World
+              </p>
+
+              <div class="level-4"><p>Subclass text</p></div>
+          </div></div></div>
+        HTML
+      end
+
       it "correctly highlights the added node, while retaining the surrounding node structure" do
         result = Nokodiff.diff(before_html, after_html)
 
-        expect(result).to have_tag("div", class: "level-1") do
-          with_tag("div", class: "level-2") do
-            with_tag("div", class: "level-3") do
-              with_tag("p", text: "Hello World")
-              with_tag("div", class: "diff") do
-                with_tag("ins", with: { "aria-label" => "added content" }) do
-                  with_tag("p", text: "Goodbye World")
-                end
-              end
-              with_tag("div", class: "level-4") do
-                with_tag("p", text: "Subclass text")
-              end
-            end
-          end
-        end
+        expect(normalise_html(result)).to eq(normalise_html(expected_html))
       end
     end
 
@@ -321,30 +362,32 @@ RSpec.describe "complex diff" do
         HTML
       end
 
+      let(:expected_html) do
+        <<~HTML
+          <div class="level-1">
+             <div class="level-2a">
+             <p>Retain me</p>
+
+             <p class="diff del">
+                <span class="visually-hidden"> Removed content </span>Delete me
+             </p>
+             </div>
+             <div class="level-2b"><p>Retain me</p></div>
+
+             <div class="level-2c">
+               <p>Retain me</p>
+               <p class="diff ins">
+                  <span class="visually-hidden"> Added content </span>New line
+               </p>
+             </div>
+          </div>
+        HTML
+      end
+
       it "correctly highlights the changed nodes, while retaining the surrounding node structure" do
         result = Nokodiff.diff(before_html, after_html)
 
-        expect(result).to have_tag("div", class: "level-1") do
-          with_tag("div", class: "level-2a") do
-            with_tag("p", text: "Retain me")
-            with_tag("div", class: "diff") do
-              with_tag("del", with: { "aria-label" => "removed content" }) do
-                with_tag("p", text: "Delete me")
-              end
-            end
-          end
-          with_tag("div", class: "level-2b") do
-            with_tag("p", text: "Retain me")
-          end
-          with_tag("div", class: "level-2c") do
-            with_tag("p", text: "Retain me")
-            with_tag("div", class: "diff") do
-              with_tag("ins", with: { "aria-label" => "added content" }) do
-                with_tag("p", text: "New line")
-              end
-            end
-          end
-        end
+        expect(normalise_html(result)).to eq(normalise_html(expected_html))
       end
     end
 
@@ -363,20 +406,21 @@ RSpec.describe "complex diff" do
             HTML
           end
 
+          let(:expected_html) do
+            <<~HTML
+              <h#{level} class="diff del">
+                 <span class="visually-hidden"> Removed content </span>Test heading
+              </h#{level}>
+              <h#{level} class="diff ins">
+                 <span class="visually-hidden"> Added content </span>Test<span class="diff-marker">ing</span> heading
+              </h#{level}>
+            HTML
+          end
+
           it "highlights the entire heading as a change" do
             result = Nokodiff.diff(before_html, after_html)
 
-            expect(result).to have_tag("div", class: "diff") do
-              with_tag("del", with: { "aria-label" => "removed content" }) do
-                with_tag("h#{level}", text: "Test heading")
-              end
-            end
-
-            expect(result).to have_tag("div", class: "diff") do
-              with_tag("ins", with: { "aria-label" => "added content" }) do
-                with_tag("h#{level}", text: "Testing heading")
-              end
-            end
+            expect(normalise_html(result)).to eq(normalise_html(expected_html))
           end
         end
 
@@ -393,24 +437,21 @@ RSpec.describe "complex diff" do
             HTML
           end
 
+          let(:expected_html) do
+            <<~HTML
+              <h#{level} class="diff del">
+                <span class="visually-hidden"> Removed content </span><span>Test</span> heading
+              </h#{level}>
+              <h#{level} class="diff ins">
+                <span class="visually-hidden"> Added content </span><span>Test<span class="diff-marker">ing</span></span> heading
+              </h#{level}>
+            HTML
+          end
+
           it "highlights the entire heading as a change" do
             result = Nokodiff.diff(before_html, after_html)
 
-            expect(result).to have_tag("div", class: "diff") do
-              with_tag("del", with: { "aria-label" => "removed content" }) do
-                with_tag("h#{level}", seen: "Test heading") do
-                  with_tag("span", text: "Test")
-                end
-              end
-            end
-
-            expect(result).to have_tag("div", class: "diff") do
-              with_tag("ins", with: { "aria-label" => "added content" }) do
-                with_tag("h#{level}", seen: "Testing heading") do
-                  with_tag("span", text: "Testing")
-                end
-              end
-            end
+            expect(normalise_html(result)).to eq(normalise_html(expected_html))
           end
         end
       end
@@ -434,14 +475,26 @@ RSpec.describe "complex diff" do
         HTML
       end
 
-      it "wraps the changed node in an ins tag with the added text node highlighted" do
+      let(:expected_html) do
+        <<~HTML
+           <p class="diff del">
+               <span class="visually-hidden"> Removed content </span>123 Real Street<br>
+            Springfield<br>
+            England
+            </p>
+            <p class="diff ins">
+               <span class="visually-hidden"> Added content </span>123 Real Street<br>
+            Springfield<br>
+            England<br><span class="diff-marker">
+            TEST 123</span>
+          </p>
+        HTML
+      end
+
+      it "gives the changed node the ins class and accessible callout with the added text node highlighted" do
         result = Nokodiff.diff(before_html, after_html)
 
-        expect(result).to have_tag("div", class: "diff") do
-          with_tag("ins", with: { "aria-label" => "added content" }) do
-            with_tag("span", with: { "class" => "diff-marker" }, text: /TEST 123/)
-          end
-        end
+        expect(normalise_html(result)).to eq(normalise_html(expected_html))
       end
     end
   end
