@@ -1,5 +1,6 @@
 module Nokodiff
   class Differ
+    include FormattingHelpers
     def initialize(before, after)
       @before = before
       @after = after
@@ -82,7 +83,7 @@ module Nokodiff
         before_node.name == after_node.name
     end
 
-    # We want all changes within a paragraph, heading, or list item to be treated as a single change, even if they are
+    # We want all changes within a paragraph, heading, table row, or list item to be treated as a single change, even if they are
     # structurally different, to avoid overwhelming the user with changes, and ensure any nested elements are included
     # within the diff, rather than being treated as added or removed content on their own.
     def should_not_be_treated_as_single_change?(before_node)
@@ -150,21 +151,26 @@ module Nokodiff
 
     def deleted_block(html)
       <<~HTML
-      <span class="diff del">
-        #{html}
-      </span>
-     HTML
+        <span class="diff del">
+          <span class="visually-hidden">Removed content </span>
+          #{html}
+        </span>
+      HTML
     end
 
     def added_block(html)
-     <<~HTML
-      <span class="diff ins">
-        #{html}
-      </span>
-     HTML
+      <<~HTML
+        <span class="diff ins">
+          <span class="visually-hidden">Added content </span>
+          #{html}
+        </span>
+      HTML
     end
 
     def added_element(element)
+      marker_message = element.name == "tr" ? "Added row" : "Added content"
+      insert_change_marker(element, marker_message)
+
       <<~HTML
         <#{element.name} class="diff ins">
            #{element.inner_html}
@@ -173,6 +179,9 @@ module Nokodiff
     end
 
     def deleted_element(element)
+      marker_message = element.name == "tr" ? "Removed row" : "Removed content"
+      insert_change_marker(element, marker_message)
+
       <<~HTML
         <#{element.name} class="diff del">
            #{element.inner_html}
