@@ -66,7 +66,7 @@ In your application.scss file include:
 @import "nokodiff";
 ```
 
-This will include the styling for `<del>`, `<ins>` and `<span>` tags to allow colour coding, highlighting, and underlining of changes.
+This will include the styling for `.diff`, `.del`, `.ins` and other classes and `<span>` tags to allow colour coding, highlighting, and underlining of changes.
 
 ### More complex diffing with `data-diff-key`
 
@@ -111,9 +111,7 @@ Output:
     <p>First paragraph</p>
   </div>
   <div data-diff-key="zm7q">
-    <div class="diff">
-      <ins aria-label="added content"><p>Second paragraph</p></ins>
-    </div>
+      <p class="diff ins"><span class="visually-hidden">Added content </span>Second paragraph</p>
   </div>
 </div>
 ```
@@ -154,15 +152,18 @@ Output:
 
 ```html
 <div>
-  <div data-diff-key="ixn4"><p>First paragraph</p></div>
-  <div data-diff-key="zm7q">
-    <div class="diff">
-      <del aria-label="removed content"><p><span class="diff-marker">S</span>e<span class="diff-marker">cond</span> paragraph</p></del>
+    <div data-diff-key="ixn4">
+        <p>First paragraph</p>
     </div>
-    <div class="diff">
-      <ins aria-label="added content"><p><span class="diff-marker">N</span>e<span class="diff-marker">w</span> paragraph</p></ins>
+    <div data-diff-key="zm7q">
+        <p class="diff del">
+            <span class="diff-marker"><span class="visually-hidden">Diff marker </span><span class="visually-hidden">Removed content </span>S</span>e<span class="diff-marker"><span class="visually-hidden">Diff marker </span>cond</span> paragraph
+        </p>
+
+        <p class="diff ins">
+            <span class="diff-marker"><span class="visually-hidden">Diff marker </span><span class="visually-hidden">Added content </span>N</span>e<span class="diff-marker"><span class="visually-hidden">Diff marker </span>w</span> paragraph
+        </p>
     </div>
-  </div>
 </div>
 ```
 

@@ -1,5 +1,9 @@
 module Nokodiff
   class Differ
+    include FormattingHelpers
+
+    BOTTOM_LEVEL_ELEMENTS = %w[p li tr h1 h2 h3 h4 h5 h6].freeze
+
     def initialize(before, after)
       @before = before
       @after = after
@@ -13,9 +17,9 @@ module Nokodiff
         when :changed
           changed_block(diff[:before], diff[:after])
         when :deleted
-          diff[:before].name == "li" ? deleted_li(diff[:before]) : deleted_block(diff[:before])
+          diff[:before].text? ? build_deleted_text_html(diff[:before]) : build_deleted_element_html(diff[:before])
         when :added
-          diff[:after].name == "li" ? added_li(diff[:after]) : added_block(diff[:after])
+          diff[:after].text? ? build_added_text_html(diff[:after]) : build_added_element_html(diff[:after])
         end
       }.join("\n")
     end
@@ -60,21 +64,15 @@ module Nokodiff
     end
 
     def changed_block(before_node, after_node)
-      if structurally_similar?(before_node, after_node) && should_not_be_treated_as_single_change?(before_node)
+      if structurally_similar?(before_node, after_node) && !treat_element_as_single_change?(before_node)
         inner_diff = Differ.new(before_node, after_node).to_html
         rebuild_element(after_node, inner_diff)
+      elsif both_text_nodes?(before_node, after_node)
+        before_node, after_node = diff_raw_text(before_node, after_node)
+        build_deleted_text_html(before_node) + build_added_text_html(after_node)
       else
-        before_diff, after_diff = if both_text_nodes?(before_node, after_node)
-                                    diff_raw_text(before_node, after_node)
-                                  else
-                                    diff_sub_elements(before_node, after_node)
-                                  end
-
-        if before_node.name == "li"
-          deleted_li(before_diff) + added_li(after_diff)
-        else
-          deleted_block(before_diff) + added_block(after_diff)
-        end
+        before_node, after_node = diff_sub_elements(before_node, after_node)
+        build_deleted_element_html(before_node) + build_added_element_html(after_node)
       end
     end
 
@@ -88,13 +86,11 @@ module Nokodiff
         before_node.name == after_node.name
     end
 
-    # We want all changes within a paragraph, heading, or list item to be treated as a single change, even if they are
-    # structurally different, to avoid overwhelming the user with changes, and ensure any nested elements are included
-    # within the diff, rather than being treated as added or removed content on their own.
-    def should_not_be_treated_as_single_change?(before_node)
-      before_node.name != "p" &&
-        !before_node.name.match(/^h[1-6]$/) &&
-        before_node.name != "li"
+    # We want to treat all content within certain elements as single changes, even if they are structurally different,
+    # to avoid overwhelming the user with changes, and ensure any nested elements are included within the diff,
+    # rather than being treated as added or removed content on their own.
+    def treat_element_as_single_change?(before_node)
+      BOTTOM_LEVEL_ELEMENTS.include?(before_node.name)
     end
 
     def rebuild_element(template_node, inner_html)
@@ -118,19 +114,15 @@ module Nokodiff
     end
 
     def diff_sub_elements(before_html, after_html)
-      before_dup = before_html.dup
-      after_dup = after_html.dup
+      before_fragment = before_html.dup
+      after_fragment = after_html.dup
 
-      before_fragment, after_fragment = Nokodiff::TextNodeDiffs.new(before_dup, after_dup).call
+      Nokodiff::TextNodeDiffs.new(before_fragment, after_fragment).call
 
       merge_adjacent_highlighted_changes(before_fragment)
       merge_adjacent_highlighted_changes(after_fragment)
 
-      if before_html.name == "li"
-        [before_fragment.inner_html, after_fragment.inner_html]
-      else
-        [before_fragment.to_html, after_fragment.to_html]
-      end
+      [before_fragment, after_fragment]
     end
 
     def merge_adjacent_highlighted_changes(node)
@@ -159,40 +151,78 @@ module Nokodiff
       node.to_html
     end
 
-    def deleted_li(html)
-      %(
-        <li>
-          <div class="diff">
-            <del aria-label="removed content">#{html}</del>
-          </div>
-        </li>
-      )
+    def build_deleted_text_html(html)
+      <<~HTML
+        <span class="diff del">
+          <span class="visually-hidden">Removed content </span>
+          #{html}
+        </span>
+      HTML
     end
 
-    def deleted_block(html)
-      %(
-        <div class="diff">
-           <del aria-label="removed content">#{html}</del>
-        </div>
-      )
+    def build_added_text_html(html)
+      <<~HTML
+        <span class="diff ins">
+          <span class="visually-hidden">Added content </span>
+          #{html}
+        </span>
+      HTML
     end
 
-    def added_block(html)
-      %(
-        <div class="diff">
-           <ins aria-label="added content">#{html}</ins>
-        </div>
-      )
+    def build_added_element_html(element)
+      if element.name == "tr"
+        insert_table_row_change_marker(element, "Added row")
+        class_string = "#{element['class']&.gsub('del', '')} diff ins".strip
+
+        <<~HTML
+          <#{element.name} class="#{class_string}">
+             #{element.inner_html}
+          </#{element.name}>
+        HTML
+
+      else
+        # Entirely new steps OLs require that the div also have the .steps class
+        # This is either a bug or weakness in the actual govuk CSS for that class
+        class_string = element["class"].nil? ? nil : " class= \"#{element['class']}\""
+        span_class_string = element["class"]&.include?("steps") ? "diff ins steps" : "diff ins"
+
+        <<~HTML
+          <#{element.name}#{class_string}>
+            <span class="#{span_class_string}">
+              <span class="visually-hidden">Added content </span>
+              #{element.inner_html}
+            </span>
+          </#{element.name}>
+        HTML
+      end
     end
 
-    def added_li(html)
-      %(
-        <li>
-          <div class="diff">
-            <ins aria-label="added content">#{html}</ins>
-          </div>
-        </li>
-      )
+    def build_deleted_element_html(element)
+      if element.name == "tr"
+        insert_table_row_change_marker(element, "Removed row")
+        class_string = "#{element['class']&.gsub('ins', '')} diff del".strip
+
+        <<~HTML
+          <#{element.name} class="#{class_string}">
+             #{element.inner_html}
+          </#{element.name}>
+        HTML
+
+      else
+        # Entirely removed steps OLs require that the span also have the .steps class
+        # This is either a bug or weakness in the actual govuk CSS for that class
+        class_string = element["class"].nil? ? nil : " class= \"#{element['class']}\""
+        span_class_string = element["class"]&.include?("steps") ? "diff del steps" : "diff del"
+
+        <<~HTML
+          <#{element.name}#{class_string}>
+            <span class="#{span_class_string}">
+              <span class="visually-hidden">Removed content </span>
+              #{element.inner_html}
+            </span>
+          </#{element.name}>
+        HTML
+      end
     end
   end
 end

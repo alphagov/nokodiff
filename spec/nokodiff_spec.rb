@@ -6,25 +6,20 @@ RSpec.describe Nokodiff do
   end
 
   describe ".safe_html" do
+    let(:fake_html) { double("fake html") }
+    let(:result) { described_class.safe_html(fake_html) }
+
     before { stub_const("Differ", Class.new) }
 
     it "returns html_safe when html responds to html_safe" do
-      fake_html = double("fake html")
-
       allow(fake_html).to receive(:respond_to?).with(:html_safe).and_return(true)
       allow(fake_html).to receive(:html_safe).and_return("html_safe version")
-
-      result = described_class.safe_html(fake_html)
 
       expect(result).to eq("html_safe version")
     end
 
     it "returns the original object when html_safe is not available" do
-      fake_html = double("fake html")
-
       allow(fake_html).to receive(:respond_to?).with(:html_safe).and_return(false)
-
-      result = described_class.safe_html(fake_html)
 
       expect(result).to eq(fake_html)
     end
@@ -33,163 +28,234 @@ RSpec.describe Nokodiff do
   describe "#to_html" do
     context "when flat text nodes" do
       describe "are unchanged" do
-        it "returns unchanged html" do
-          html = "<p>Hello world!</p>"
+        let(:html) { "<p>Hello world!</p>" }
 
+        it "returns unchanged html" do
           result = Nokodiff.diff(html, html)
 
-          expect(result).to have_tag("p", text: "Hello world!")
-          expect(result).not_to have_tag("div", with: { class: "diff" })
-          expect(result).not_to have_tag("del", with: { "aria-label" => "removed content" })
-          expect(result).not_to have_tag("ins", with: { "aria-label" => "added content" })
+          expect(result).to eq(html)
         end
       end
 
       describe "are changed" do
-        it "wraps changed blocks in del and ins tags" do
-          before_html = "<p>Hello world!</p>"
-          after_html = "<p>Goodbye world!</p>"
+        let(:before_html) { "<p>Hello world!</p>" }
+        let(:after_html) { "<p>Goodbye world!</p>" }
+        let(:expected_html) do
+          <<~HTML
+            <p>
+              <span class="diff del">
+                <span class="visually-hidden">Removed content </span>
+                <span class="diff-marker">Hell</span>o world!
+              </span>
+            </p>
+            <p>
+                <span class="diff ins">
+                  <span class="visually-hidden">Added content </span>
+                  <span class="diff-marker">G</span>o<span class="diff-marker">odbye</span> world!
+                </span>
+            </p>
+          HTML
+        end
 
+        it "wraps changed blocks in del and ins classes and marker text" do
           result = Nokodiff.diff(before_html, after_html)
-
-          expect(result).to have_tag("div", with: { class: "diff" })
-          expect(result).to have_tag("del", with: { "aria-label" => "removed content" }) do
-            with_tag("p") do
-              with_tag("span", class: "diff-marker", text: "Hell")
-            end
-          end
-          expect(result).to have_tag("ins", with: { "aria-label" => "added content" }) do
-            with_tag("p") do
-              with_tag("span", class: "diff-marker", text: "G")
-              with_tag("span", class: "diff-marker", text: "odbye")
-            end
-          end
+          expect(normalise_html(result)).to eq(normalise_html(expected_html))
         end
       end
 
       describe "are deleted" do
+        let(:before_html) { "<p>Hello world!</p>" }
+        let(:after_html) { "" }
+        let(:expected_html) do
+          <<~HTML
+            <p>
+              <span class="diff del">
+                <span class="visually-hidden">Removed content </span>
+                Hello world!
+              </span>
+            </p>
+          HTML
+        end
+
         it "handles completely deleting content" do
-          before_html = "<p>Hello world!</p>"
-          after_html = ""
-
           result = Nokodiff.diff(before_html, after_html)
-
-          expect(result).to have_tag("div", with: { class: "diff" })
-          expect(result).to have_tag("del", with: { "aria-label" => "removed content" }) do
-            with_tag("p", text: "Hello world!")
-          end
-          expect(result).not_to have_tag("ins", with: { "aria-label" => "added content" })
+          expect(normalise_html(result)).to eq(normalise_html(expected_html))
         end
       end
 
       describe "are added" do
+        let(:before_html) { "" }
+        let(:after_html) { "<p>Hello world!</p>" }
+        let(:expected_html) do
+          <<~HTML
+            <p>
+              <span class="diff ins">
+                <span class="visually-hidden">Added content </span>
+                Hello world!
+              </span>
+            </p>
+          HTML
+        end
+
         it "handles adding entirely new content" do
-          before_html = ""
-          after_html = "<p>Hello world!</p>"
-
           result = Nokodiff.diff(before_html, after_html)
-
-          expect(result).to have_tag("div", with: { class: "diff" })
-          expect(result).not_to have_tag("del", with: { "aria-label" => "removed content" })
-          expect(result).to have_tag("ins", with: { "aria-label" => "added content" }) do
-            with_tag("p", text: "Hello world!")
-          end
+          expect(normalise_html(result)).to eq(normalise_html(expected_html))
         end
       end
     end
 
-    context "links" do
-      it "diffs changed link text" do
-        before_html = <<~HTML
-          <div>
-            <p><strong>Example links:</strong></p>
-              <ul>
-                <li><a href="https://a.example.com">Link A</a></li>
-              </ul>
-          </div>
-        HTML
-
-        after_html = <<~HTML
-          <div>
-            <p><strong>Example links:</strong></p>
-              <ul>
-                <li><a href="https://a.example.com">Link B</a></li>
-              </ul>
-          </div>
-        HTML
-
-        output = Nokodiff.diff(before_html, after_html)
-
-        expect(output).to have_tag("a", with: { href: "https://a.example.com" }) do
-          with_tag("span", class: "diff-marker", text: "A")
+    context "when links" do
+      describe "are changed" do
+        let(:before_html) do
+          <<~HTML
+            <div>
+              <p><strong>Example links:</strong></p>
+                <ul>
+                  <li><a href="https://a.example.com">Link A</a></li>
+                </ul>
+            </div>
+          HTML
         end
-        expect(output).to have_tag("a", with: { href: "https://a.example.com" }) do
-          with_tag("span", class: "diff-marker", text: "B")
+
+        let(:after_html) do
+          <<~HTML
+            <div>
+              <p><strong>Example links:</strong></p>
+                <ul>
+                  <li><a href="https://a.example.com">Link B</a></li>
+                </ul>
+            </div>
+          HTML
         end
-        expect(output).to have_tag("del", with: { "aria-label" => "removed content" })
-        expect(output).to have_tag("ins", with: { "aria-label" => "added content" })
+
+        let(:expected_html) do
+          <<~HTML
+              <div>
+                <p><strong>Example links:</strong></p>
+
+                <ul>
+                  <li>
+                    <span class="diff del">
+                      <span class="visually-hidden">Removed content </span>
+                      <a href="https://a.example.com">Link <span class="diff-marker">A</span></a>
+                    </span>
+                  </li>
+                  <li>
+                    <span class="diff ins">
+                      <span class="visually-hidden">Added content </span>
+                      <a href="https://a.example.com">Link <span class="diff-marker">B</span></a>
+                    </span>
+                  </li>
+                </ul>
+            </div>
+          HTML
+        end
+
+        it "diffs changed link text" do
+          result = Nokodiff.diff(before_html, after_html)
+          expect(normalise_html(result)).to eq(normalise_html(expected_html))
+        end
       end
-
-      it "diffs a removed link against the matching line" do
-        before_html = <<~HTML
-          <div>
-            <p><strong>Example links:</strong></p>
-              <ul>
-                <li><a href="https://a.example.com">Link A</a></li>
-                <li><a href="https://b.example.com">Link B</a></li>
-              </ul>
-          </div>
-        HTML
-
-        after_html = <<~HTML
-          <div>
-            <p><strong>Example links:</strong></p>
-              <ul>
-                <li><a href="https://b.example.com">Link B</a></li>
-              </ul>
-          </div>
-        HTML
-
-        output = Nokodiff.diff(before_html, after_html)
-
-        expect(output).to have_tag("del", with: { "aria-label" => "removed content" }) do
-          with_tag("a", with: { href: "https://a.example.com" }, text: "Link A")
+      describe "are removed" do
+        let(:before_html) do
+          <<~HTML
+            <div>
+              <p><strong>Example links:</strong></p>
+                <ul>
+                  <li><a href="https://a.example.com">Link A</a></li>
+                  <li><a href="https://b.example.com">Link B</a></li>
+                </ul>
+            </div>
+          HTML
         end
-        expect(output).to have_tag("a", with: { href: "https://b.example.com" }, text: "Link B")
+
+        let(:after_html) do
+          <<~HTML
+            <div>
+              <p><strong>Example links:</strong></p>
+                <ul>
+                  <li><a href="https://b.example.com">Link B</a></li>
+                </ul>
+            </span>
+          HTML
+        end
+
+        let(:expected_html) do
+          <<~HTML
+              <div>
+                <p><strong>Example links:</strong></p>
+
+                <ul>
+                  <li>
+                    <span class="diff del">
+                        <span class="visually-hidden">Removed content </span>
+                        <a href="https://a.example.com">Link A</a>
+                    </span>
+                  </li>
+
+                  <li><a href="https://b.example.com">Link B</a></li>
+                </ul>
+            </div>
+          HTML
+        end
+
+        it "diffs a removed link against the matching line" do
+          result = Nokodiff.diff(before_html, after_html)
+          expect(normalise_html(result)).to eq(normalise_html(expected_html))
+        end
       end
     end
 
     context "<span> tagging" do
       describe "multiple consecutive added characters" do
+        let(:before_html) { "<p> a</p>" }
+        let(:after_html) { "<p> a b c</p>" }
+        let(:expected_html) do
+          <<~HTML
+            <p>
+              <span class="diff del">
+                <span class="visually-hidden">Removed content </span>
+                a
+              </span>
+            </p>
+            <p>
+              <span class="diff ins">
+                <span class="visually-hidden">Added content </span>
+                a<span class="diff-marker"> b c</span>
+              </span>
+            </p>
+          HTML
+        end
+
         it "should merge the span tags" do
-          before_html = "<p> a </p>"
-          after_html = "<p> a b c</p>"
-
           result = Nokodiff.diff(before_html, after_html)
-
-          expect(result).to have_tag("div", with: { class: "diff" })
-          expect(result).to have_tag("ins", with: { "aria-label" => "added content" }) do
-            with_tag("p") do
-              with_tag("span", class: "diff-marker", text: "b c")
-            end
-          end
+          expect(normalise_html(result)).to eq(normalise_html(expected_html))
         end
       end
 
       describe "multiple non consecutive added characters" do
+        let(:before_html) { "<p> b</p>" }
+        let(:after_html) { "<p> a b c</p>" }
+        let(:expected_html) do
+          <<~HTML
+            <p>
+              <span class="diff del">
+                <span class="visually-hidden">Removed content </span>
+                b
+              </span>
+            </p>
+            <p>
+              <span class="diff ins">
+                <span class="visually-hidden">Added content </span>
+                <span class="diff-marker">a </span>b<span class="diff-marker"> c</span>
+              </span>
+            </p>
+          HTML
+        end
+
         it "should not merge the span tags" do
-          before_html = "<p> b </p>"
-          after_html = "<p> a b c</p>"
-
           result = Nokodiff.diff(before_html, after_html)
-
-          expect(result).to have_tag("div", with: { class: "diff" })
-          expect(result).to have_tag("ins", with: { "aria-label" => "added content" }) do
-            with_tag("p") do
-              with_tag("span", class: "diff-marker", text: "a ")
-              with_tag("span", class: "diff-marker", text: "c")
-            end
-          end
+          expect(normalise_html(result)).to eq(normalise_html(expected_html))
         end
       end
     end
@@ -199,51 +265,22 @@ RSpec.describe Nokodiff do
     context "when an element has been added" do
       let(:before_html) { load_fixture("complex/added/before") }
       let(:after_html) { load_fixture("complex/added/after") }
+      let(:expected_html) { load_fixture("complex/added/diff") }
 
       it "adds a diff showing the added content" do
         result = Nokodiff.diff(before_html, after_html)
-
-        expect(result).to have_tag("div", with: { "data-diff-key" => "description" }) do
-          with_tag("div", class: "diff") do
-            with_tag("ins", with: { "aria-label" => "added content" }) do
-              with_text("Main contact info")
-            end
-            without_tag("del")
-          end
-        end
-
-        expect(result).to have_tag("div", with: { "data-diff-key" => "telephone-1" }) do
-          without_tag("ins")
-          without_tag("del")
-        end
+        expect(normalise_html(result)).to eq(normalise_html(expected_html))
       end
     end
 
     context "when an element has been modified" do
       let(:before_html) { load_fixture("complex/modified/before") }
       let(:after_html) { load_fixture("complex/modified/after") }
+      let(:expected_html) { load_fixture("complex/modified/diff") }
 
       it "adds a diff showing the content modifications" do
         result = Nokodiff.diff(before_html, after_html)
-
-        expect(result).to have_tag("div", with: { "data-diff-key" => "telephone-1" }) do
-          with_tag("li") do
-            with_tag("div", class: "diff") do
-              with_tag("del", with: { "aria-label" => "removed content" }) do
-                with_tag("span", seen: "General enquiries:")
-                with_tag("span", seen: "0300 123 123")
-              end
-            end
-          end
-          with_tag("li") do
-            with_tag("div", class: "diff") do
-              with_tag("ins", with: { "aria-label" => "added content" }) do
-                with_tag("span", seen: "General enquiries:")
-                with_tag("span", seen: "0300 345 345")
-              end
-            end
-          end
-        end
+        expect(normalise_html(result)).to eq(normalise_html(expected_html))
       end
     end
   end
