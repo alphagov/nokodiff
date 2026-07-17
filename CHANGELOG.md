@@ -1,4 +1,8 @@
 # Changelog
+## 1.0.0 rc1
+- Change from `div` elements outside changed elements to `span`s inside to improve compatibility with tables and lists
+- General style update to how diff highlighting and markers are displayed
+- Now includes proper screen reader support with hidden text replacing previous `aria-label`s
 
 ## 0.4.2
 
