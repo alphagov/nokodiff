@@ -16,8 +16,11 @@ RSpec.describe "complex diff" do
 
       let(:expected_html) do
         <<~HTML
-          <p class="diff ins">
-            <span class="visually-hidden"> Added content </span>Pre first paragraph
+          <p>
+              <span class="diff ins">
+                <span class="visually-hidden">Added content </span>
+                Pre first paragraph
+              </span>
           </p>
 
           <p>Test paragraph 1</p>
@@ -48,8 +51,11 @@ RSpec.describe "complex diff" do
       let(:expected_html) do
         <<~HTML
           <p>Test paragraph 1</p>
-          <p class="diff del">
-            <span class="visually-hidden"> Removed content </span>Post first paragraph
+          <p>
+              <span class="diff del">
+                <span class="visually-hidden">Removed content </span>
+                Post first paragraph
+              </span>
           </p>
         HTML
       end
@@ -81,19 +87,19 @@ RSpec.describe "complex diff" do
       let(:expected_html) do
         <<~HTML
           <div>
-              <span class="diff del">
-                <span class="visually-hidden">Removed content </span>
+            <span class="diff del">
+              <span class="visually-hidden">Removed content </span>
 
-                <span class="diff-marker">t</span>est content
+              <span class="diff-marker">t</span>est content
 
-              </span>
-              <span class="diff ins">
-                <span class="visually-hidden">Added content </span>
+            </span>
+            <span class="diff ins">
+              <span class="visually-hidden">Added content </span>
 
-                <span class="diff-marker">T</span>est content
+              <span class="diff-marker">T</span>est content
 
-              </span>
-            </div>
+            </span>
+          </div>
         HTML
       end
 
@@ -125,8 +131,11 @@ RSpec.describe "complex diff" do
       let(:expected_html) do
         <<~HTML
           <div class="top-level">
-              <p class="diff ins">
-                <span class="visually-hidden"> Added content </span>Pre first paragraph
+              <p>
+                <span class="diff ins">
+                  <span class="visually-hidden">Added content </span>
+                  Pre first paragraph
+                </span>
               </p>
 
               <p>Test paragraph 1</p>
@@ -164,8 +173,11 @@ RSpec.describe "complex diff" do
           <div class="top-level">
             <p>Test paragraph 1</p>
 
-             <p class="diff del">
-                <span class="visually-hidden"> Removed content </span>Test paragraph to be deleted
+             <p>
+              <span class="diff del">
+                <span class="visually-hidden">Removed content </span>
+                Test paragraph to be deleted
+              </span>
              </p>
           </div>
         HTML
@@ -202,21 +214,33 @@ RSpec.describe "complex diff" do
       let(:expected_html) do
         <<~HTML
            <ul>
-              <li class="diff del">
-                 <span class="visually-hidden"> Removed content </span>Item <span class="diff-marker">1</span>
+              <li>
+              <span class="diff del">
+                 <span class="visually-hidden">Removed content </span>
+                 Item <span class="diff-marker">1</span>
+               </span>
               </li>
-              <li class="diff ins">
-                 <span class="visually-hidden"> Added content </span>Item <span class="diff-marker">One</span>
+              <li>
+              <span class="diff ins">
+                 <span class="visually-hidden">Added content </span>
+                 Item <span class="diff-marker">One</span>
+               </span>
               </li>
 
-              <li class="diff ins">
-                 <span class="visually-hidden"> Added content </span>Item 1.5
+              <li>
+              <span class="diff ins">
+                 <span class="visually-hidden">Added content </span>
+                 Item 1.5
+               </span>
               </li>
 
               <li>Item 2</li>
 
-              <li class="diff del">
-                 <span class="visually-hidden"> Removed content </span>Item 3
+              <li>
+              <span class="diff del">
+                 <span class="visually-hidden">Removed content </span>
+                 Item 3
+               </span>
               </li>
           </ul>
         HTML
@@ -252,11 +276,17 @@ RSpec.describe "complex diff" do
         let(:expected_html) do
           <<~HTML
              <ul>
-               <li class="diff del">
-                   <span class="visually-hidden"> Removed content </span>Item <span><span class="diff-marker">1</span></span>
+               <li>
+                    <span class="diff del">
+                       <span class="visually-hidden">Removed content </span>
+                       Item <span><span class="diff-marker">1</span></span>
+                    </span>
                 </li>
-                <li class="diff ins">
-                   <span class="visually-hidden"> Added content </span>Item <span><span class="diff-marker">one</span></span>
+                <li>
+                    <span class="diff ins">
+                       <span class="visually-hidden">Added content </span>
+                       Item <span><span class="diff-marker">one</span></span>
+                   </span>
                 </li>
 
                 <li>Item 2</li>
@@ -311,10 +341,13 @@ RSpec.describe "complex diff" do
            <div class="level-1"><div class="level-2"><div class="level-3">
               <p>Hello World</p>
 
-              <p class="diff ins">
-                 <span class="visually-hidden"> Added content </span>Goodbye World
+              <p>
+                <span class="diff ins">
+                   <span class="visually-hidden">Added content </span>
+                   Goodbye World
+                 </span>
               </p>
-
+          #{'    '}
               <div class="level-4"><p>Subclass text</p></div>
           </div></div></div>
         HTML
@@ -368,16 +401,22 @@ RSpec.describe "complex diff" do
              <div class="level-2a">
                <p>Retain me</p>
 
-               <p class="diff del">
-                  <span class="visually-hidden"> Removed content </span>Delete me
+               <p>
+                    <span class="diff del">
+                      <span class="visually-hidden">Removed content </span>
+                      Delete me
+                    </span>
                </p>
              </div>
              <div class="level-2b"><p>Retain me</p></div>
 
              <div class="level-2c">
                <p>Retain me</p>
-               <p class="diff ins">
-                  <span class="visually-hidden"> Added content </span>New line
+               <p>
+                 <span class="diff ins">
+                   <span class="visually-hidden">Added content </span>
+                     New line
+                 </span>
                </p>
              </div>
           </div>
@@ -408,11 +447,17 @@ RSpec.describe "complex diff" do
 
           let(:expected_html) do
             <<~HTML
-              <h#{level} class="diff del">
-                 <span class="visually-hidden"> Removed content </span>Test heading
+              <h#{level}>
+                <span class="diff del">
+                   <span class="visually-hidden">Removed content </span>
+                   Test heading
+                </span>
               </h#{level}>
-              <h#{level} class="diff ins">
-                 <span class="visually-hidden"> Added content </span>Test<span class="diff-marker">ing</span> heading
+              <h#{level}>
+                <span class="diff ins">
+                  <span class="visually-hidden">Added content </span>
+                  Test<span class="diff-marker">ing</span> heading
+                </span>
               </h#{level}>
             HTML
           end
@@ -439,11 +484,17 @@ RSpec.describe "complex diff" do
 
           let(:expected_html) do
             <<~HTML
-              <h#{level} class="diff del">
-                <span class="visually-hidden"> Removed content </span><span>Test</span> heading
+              <h#{level}>
+                <span class="diff del">
+                  <span class="visually-hidden">Removed content </span>
+                  <span>Test</span> heading
+                </span>
               </h#{level}>
-              <h#{level} class="diff ins">
-                <span class="visually-hidden"> Added content </span><span>Test<span class="diff-marker">ing</span></span> heading
+              <h#{level}>
+                <span class="diff ins">
+                  <span class="visually-hidden">Added content </span>
+                  <span>Test<span class="diff-marker">ing</span></span> heading
+                </span>
               </h#{level}>
             HTML
           end
@@ -477,16 +528,22 @@ RSpec.describe "complex diff" do
 
       let(:expected_html) do
         <<~HTML
-          <p class="diff del">
-             <span class="visually-hidden"> Removed content </span>123 Real Street<br>
-             Springfield<br>
-             England
+          <p>
+            <span class="diff del">
+              <span class="visually-hidden">Removed content </span>
+              123 Real Street<br>
+              Springfield<br>
+              England
+            </span>
           </p>
-          <p class="diff ins">
-             <span class="visually-hidden"> Added content </span>123 Real Street<br>
-             Springfield<br>
-             England<br><span class="diff-marker">
-             TEST 123</span>
+          <p>
+            <span class="diff ins">
+               <span class="visually-hidden">Added content </span>
+               123 Real Street<br>
+               Springfield<br>
+               England<br><span class="diff-marker">
+               TEST 123</span>
+           </span>
           </p>
         HTML
       end
@@ -516,11 +573,17 @@ RSpec.describe "complex diff" do
 
           let(:expected_html) do
             <<~HTML
-              <p class="diff del">
-                  <span class="visually-hidden"> Removed content </span><span class="diff-marker">Unbolded</span> other
+              <p>
+                <span class="diff del">
+                  <span class="visually-hidden">Removed content </span>
+                  <span class="diff-marker">Unbolded</span> other
+                </span>
               </p>
-              <p class="diff ins">
-                  <span class="visually-hidden"> Added content </span><span class="diff-marker"<b>Bolded</b></span> other
+              <p>
+                <span class="diff ins">
+                  <span class="visually-hidden">Added content </span>
+                  <span class="diff-marker"<b>Bolded</b></span> other
+                </span>
               </p>
             HTML
           end
@@ -552,11 +615,15 @@ RSpec.describe "complex diff" do
 
           let(:expected_html) do
             <<~HTML
-              <p class="diff del">
-                  <span class="visually-hidden"> Removed content </span><span class="diff-marker"<b>Bolded</b></span> other
+              <p>
+                <span class="diff del">
+                  <span class="visually-hidden">Removed content </span>
+                  <span class="diff-marker"<b>Bolded</b></span> other
+                </span>
               </p>
-              <p class="diff ins">
-                  <span class="visually-hidden"> Added content </span><span class="diff-marker">Unbolded</span> other
+              <p>
+              <span class="diff ins">
+                  <span class="visually-hidden">Added content </span><span class="diff-marker">Unbolded</span> other
               </p>
             HTML
           end
@@ -605,13 +672,13 @@ RSpec.describe "complex diff" do
               <table><tbody>
                     <tr class="diff del">
                         <td>
-                            <span class="visually-hidden"> Removed row </span><span class="diff-marker">Unbolded</span> other
+                            <span class="visually-hidden">Removed row </span><span class="diff-marker">Unbolded</span> other
                             </td>
                     </tr>
                     <tr class="diff ins">
                         <td>
-                            <span class="visually-hidden"> Added row </span><span class="diff-marker"><b>Bolded</b></span> other
-                            </td>
+                            <span class="visually-hidden">Added  row </span><span class="diff-marker"><b>Bolded</b></span> other
+                        </td>
                     </tr>
               </tbody></table>
             HTML
@@ -659,12 +726,12 @@ RSpec.describe "complex diff" do
               <table><tbody>
                     <tr class="diff del">
                         <td>
-                        <span class="visually-hidden"> Removed row </span><span class="diff-marker"><b>Bolded</b></span> other
+                        <span class="visually-hidden">Removed row </span><span class="diff-marker"><b>Bolded</b></span> other
                         </td>
                     </tr>
                     <tr class="diff ins">
                         <td>
-                        <span class="visually-hidden"> Added row </span><span class="diff-marker">Unbolded</span> other
+                        <span class="visually-hidden">Added  row </span><span class="diff-marker">Unbolded</span> other
                         </td>
                     </tr>
               </tbody></table>
@@ -740,7 +807,7 @@ RSpec.describe "complex diff" do
                 </tr>
                 <tr class="diff ins">
                   <td>
-                      <span class="visually-hidden"> Added row </span>r2c1</td>
+                      <span class="visually-hidden">Added  row </span>r2c1</td>
                   <td>r2c2</td>
                 </tr>
               </tbody>
@@ -782,7 +849,7 @@ RSpec.describe "complex diff" do
               <tbody>
                 <tr class="diff del">
                   <td>
-                      <span class="visually-hidden"> Removed row </span>r1c1</td>
+                      <span class="visually-hidden">Removed row </span>r1c1</td>
                   <td>r1c2</td>
                 </tr>
               </tbody>
@@ -823,12 +890,12 @@ RSpec.describe "complex diff" do
               <tbody>
                   <tr class="diff del">
                     <td>
-                        <span class="visually-hidden"> Removed row </span>r1c1</td>
+                        <span class="visually-hidden">Removed row </span>r1c1</td>
                     <td><span class="diff-marker">r1c2</span></td>
               </tr>
               <tr class="diff ins">
                   <td>
-                    <span class="visually-hidden"> Added row </span>r1c1</td>
+                    <span class="visually-hidden">Added  row </span>r1c1</td>
               </tr>
               </tbody>
             </table>
@@ -870,12 +937,12 @@ RSpec.describe "complex diff" do
               <tbody>
                   <tr class="diff del">
                     <td>
-                        <span class="visually-hidden"> Removed row </span>r1c1</td>
+                        <span class="visually-hidden">Removed row </span>r1c1</td>
                     <td>r1c2</td>
               </tr>
               <tr class="diff ins">
                   <td>
-                    <span class="visually-hidden"> Added row </span>r1c1</td>
+                    <span class="visually-hidden">Added  row </span>r1c1</td>
                   <td>r1c2</td>
                   <td><span class="diff-marker">r1c3</span></td>
               </tr>
@@ -918,12 +985,12 @@ RSpec.describe "complex diff" do
               <tbody>
                   <tr class="diff del">
                     <td>
-                    <span class="visually-hidden"> Removed row </span>r1c1</td>
+                    <span class="visually-hidden">Removed row </span>r1c1</td>
                   <td><span class="diff-marker">r1c2</span></td>
               </tr>
               <tr class="diff ins">
                   <td>
-                    <span class="visually-hidden"> Added row </span>r1c1</td>
+                    <span class="visually-hidden">Added  row </span>r1c1</td>
                   <td><span class="diff-marker">Changed</span></td>
               </tr>
               </tbody>
@@ -959,12 +1026,12 @@ RSpec.describe "complex diff" do
               <thead>
                 <tr class="diff del">
                   <th scope="col">
-                    <span class="visually-hidden"> Removed row </span>col1</th>
+                    <span class="visually-hidden">Removed row </span>col1</th>
                   <th scope="col"><span class="diff-marker">col2</span></th>
                 </tr>
                 <tr class="diff ins">
                     <th scope="col">
-                      <span class="visually-hidden"> Added row </span>col1</th>
+                      <span class="visually-hidden">Added  row </span>col1</th>
                 </tr>
               </thead>
               <tbody><tr>
@@ -1005,12 +1072,12 @@ RSpec.describe "complex diff" do
               <thead>
                 <tr class="diff del">
                   <th scope="col">
-                    <span class="visually-hidden"> Removed row </span>col1</th>
+                    <span class="visually-hidden">Removed row </span>col1</th>
                   <th scope="col">col2</th>
                 </tr>
                 <tr class="diff ins">
                     <th scope="col">
-                      <span class="visually-hidden"> Added row </span>col1</th>
+                      <span class="visually-hidden">Added  row </span>col1</th>
                     <th scope="col">col2</th>
                     <th scope="col"><span class="diff-marker">col3</span></th>
                 </tr>
@@ -1052,13 +1119,13 @@ RSpec.describe "complex diff" do
               <thead>
                 <tr class="diff del">
                   <th scope="col">
-                    <span class="visually-hidden"> Removed row </span>col1</th>
+                    <span class="visually-hidden">Removed row </span>col1</th>
                   <th scope="col">col<span class="diff-marker">2</span>
                   </th>
                 </tr>
                 <tr class="diff ins">
                     <th scope="col">
-                      <span class="visually-hidden"> Added row </span>col1</th>
+                      <span class="visually-hidden">Added  row </span>col1</th>
                     <th scope="col">col<span class="diff-marker"> two</span>
                     </th>
                 </tr>

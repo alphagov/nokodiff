@@ -42,11 +42,17 @@ RSpec.describe Nokodiff do
         let(:after_html) { "<p>Goodbye world!</p>" }
         let(:expected_html) do
           <<~HTML
-            <p class="diff del">
-              <span class="visually-hidden"> Removed content </span><span class="diff-marker">Hell</span>o world!
+            <p>
+              <span class="diff del">
+                <span class="visually-hidden">Removed content </span>
+                <span class="diff-marker">Hell</span>o world!
+              </span>
             </p>
-            <p class="diff ins">
-              <span class="visually-hidden"> Added content </span><span class="diff-marker">G</span>o<span class="diff-marker">odbye</span> world!
+            <p>
+                <span class="diff ins">
+                  <span class="visually-hidden">Added content </span>
+                  <span class="diff-marker">G</span>o<span class="diff-marker">odbye</span> world!
+                </span>
             </p>
           HTML
         end
@@ -62,8 +68,11 @@ RSpec.describe Nokodiff do
         let(:after_html) { "" }
         let(:expected_html) do
           <<~HTML
-            <p class="diff del">
-              <span class="visually-hidden"> Removed content </span>Hello world!
+            <p>
+              <span class="diff del">
+                <span class="visually-hidden">Removed content </span>
+                Hello world!
+              </span>
             </p>
           HTML
         end
@@ -79,8 +88,11 @@ RSpec.describe Nokodiff do
         let(:after_html) { "<p>Hello world!</p>" }
         let(:expected_html) do
           <<~HTML
-            <p class="diff ins">
-              <span class="visually-hidden"> Added content </span>Hello world!
+            <p>
+              <span class="diff ins">
+                <span class="visually-hidden">Added content </span>
+                Hello world!
+              </span>
             </p>
           HTML
         end
@@ -122,11 +134,17 @@ RSpec.describe Nokodiff do
                 <p><strong>Example links:</strong></p>
 
                 <ul>
-                  <li class="diff del">
-                    <span class="visually-hidden"> Removed content </span><a href="https://a.example.com">Link <span class="diff-marker">A</span></a>
+                  <li>
+                    <span class="diff del">
+                      <span class="visually-hidden">Removed content </span>
+                      <a href="https://a.example.com">Link <span class="diff-marker">A</span></a>
+                    </span>
                   </li>
-                  <li class="diff ins">
-                    <span class="visually-hidden"> Added content </span><a href="https://a.example.com">Link <span class="diff-marker">B</span></a>
+                  <li>
+                    <span class="diff ins">
+                      <span class="visually-hidden">Added content </span>
+                      <a href="https://a.example.com">Link <span class="diff-marker">B</span></a>
+                    </span>
                   </li>
                 </ul>
             </div>
@@ -158,7 +176,7 @@ RSpec.describe Nokodiff do
                 <ul>
                   <li><a href="https://b.example.com">Link B</a></li>
                 </ul>
-            </div>
+            </span>
           HTML
         end
 
@@ -168,8 +186,11 @@ RSpec.describe Nokodiff do
                 <p><strong>Example links:</strong></p>
 
                 <ul>
-                  <li class="diff del">
-                    <span class="visually-hidden"> Removed content </span><a href="https://a.example.com">Link A</a>
+                  <li>
+                    <span class="diff del">
+                        <span class="visually-hidden">Removed content </span>
+                        <a href="https://a.example.com">Link A</a>
+                    </span>
                   </li>
 
                   <li><a href="https://b.example.com">Link B</a></li>
@@ -191,11 +212,17 @@ RSpec.describe Nokodiff do
         let(:after_html) { "<p> a b c</p>" }
         let(:expected_html) do
           <<~HTML
-            <p class="diff del">
-              <span class="visually-hidden"> Removed content </span> a
+            <p>
+              <span class="diff del">
+                <span class="visually-hidden">Removed content </span>
+                a
+              </span>
             </p>
-            <p class="diff ins">
-              <span class="visually-hidden"> Added content </span> a<span class="diff-marker"> b c</span>
+            <p>
+              <span class="diff ins">
+                <span class="visually-hidden">Added content </span>
+                a<span class="diff-marker"> b c</span>
+              </span>
             </p>
           HTML
         end
@@ -211,11 +238,17 @@ RSpec.describe Nokodiff do
         let(:after_html) { "<p> a b c</p>" }
         let(:expected_html) do
           <<~HTML
-            <p class="diff del">
-              <span class="visually-hidden"> Removed content </span> b
+            <p>
+              <span class="diff del">
+                <span class="visually-hidden">Removed content </span>
+                b
+              </span>
             </p>
-            <p class="diff ins">
-              <span class="visually-hidden"> Added content </span> <span class="diff-marker">a </span>b<span class="diff-marker"> c</span>
+            <p>
+              <span class="diff ins">
+                <span class="visually-hidden">Added content </span>
+                <span class="diff-marker">a </span>b<span class="diff-marker"> c</span>
+              </span>
             </p>
           HTML
         end

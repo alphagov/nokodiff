@@ -68,6 +68,13 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
   padding: $comparison-sidebar-padding;
   clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
 
+  td::before {
+    // Backup to handle any inputted classes which make use of a ::before attached to a td element
+    // unsetting all styles for it will prevent it interfering with the ::before that we need to use
+    // for the diff marker
+    all: unset;
+  }
+
   .diff {
     position: static;
     margin-bottom: 10px;
@@ -163,10 +170,18 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
   }
 
   .help-notice {
-    &.diff {
+    $help-notice-offset: -45px;
+    .diff {
+      &::after, &::before {
+        top: -15px;
+        min-height: calc(1.5em + 30px);
+        left: -$comparison-sidebar-padding + $help-notice-offset;
+      }
+
       &::before {
-        top: 5px;
-        min-height: 1.3157894737em;
+        top: -15px;
+        min-height: calc(1.5em + 30px);
+        left: -$comparison-sidebar-offset + $help-notice-offset;
       }
     }
   }
@@ -199,7 +214,7 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
   // List-specific overrides for non-govuk lists
   $non-govuk-list-offset: -40px;
 
-  li.diff {
+  li span.diff, ul span.diff{
     &::after {
       left: -$comparison-sidebar-padding + $non-govuk-list-offset;
     }
@@ -213,7 +228,7 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
   $govuk-list-offset: -20px;
 
   .gem-c-govspeak & {
-    ul li.diff, ul.diff {
+    ul li span.diff, ul span.diff {
       &::after {
         left: -$comparison-sidebar-padding + $govuk-list-offset;
       }
@@ -223,7 +238,7 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
       }
     }
 
-    ol li.diff {
+    ol li span.diff {
       list-style-type: decimal;
 
       &::marker {
@@ -240,29 +255,37 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
       }
     }
 
-    // Steps are causing problems as they also make use of the ::before element. The best compromise we can achieve for now is
-    // setting them back to list style, and having visible markers for elements where we've overridden the ::before
-    $steps-list-offset: -34px;
+    //govuk "steps"-style ol overrides
+    $steps-list-offset: -48px;
 
     ol.steps {
-      li {
+      li{
         display: list-item;
         list-style-type: decimal;
-        &::marker { content: "" }
+        padding-left: 0.25em;
+        margin-left: 2.25em;
+
+        &::before {
+          display: none;
+        }
+        &::after { left: -$comparison-sidebar-padding + $steps-list-offset !important; }
+        &::marker {  content: "#."; }
       }
 
-      li.diff {
-        margin-left: 1.8em;
-        padding-left: 0.7em;
+      li span.diff {
         &::marker { content: unset; }
         &::before {
-          top: 0;
+          top: -2px;
           left: -$comparison-sidebar-offset + $steps-list-offset;
           height: 100%;
           width: $comparison-sidebar-width;
-          min-height: 1.5em;
+          min-height: 1.6em;
         }
-        &::after { left: -$comparison-sidebar-padding + $steps-list-offset;}
+        &::after {
+          top: -2px;
+          left: -$comparison-sidebar-padding + $steps-list-offset;
+          min-height: 1.6em;
+        }
       }
     }
   }

@@ -170,27 +170,59 @@ module Nokodiff
     end
 
     def build_added_element_html(element)
-      marker_message = element.name == "tr" ? "Added row" : "Added content"
-      class_string = "#{element['class']&.gsub('del', '')} diff ins".strip
-      insert_change_marker(element, marker_message)
+      if element.name == "tr"
+        insert_table_row_change_marker(element, "Added row")
+        class_string = "#{element['class']&.gsub('del', '')} diff ins".strip
 
-      <<~HTML
-        <#{element.name} class="#{class_string}">
-           #{element.inner_html}
-        </#{element.name}>
-      HTML
+        <<~HTML
+          <#{element.name} class="#{class_string}">
+             #{element.inner_html}
+          </#{element.name}>
+        HTML
+
+      else
+        # Entirely new steps OLs require that the div also have the .steps class
+        # This is either a bug or weakness in the actual govuk CSS for that class
+        class_string = element["class"].nil? ? nil : " class= \"#{element['class']}\""
+        span_class_string = element["class"]&.include?("steps") ? "diff ins steps" : "diff ins"
+
+        <<~HTML
+          <#{element.name}#{class_string}>
+            <span class="#{span_class_string}">
+              <span class="visually-hidden">Added content </span>
+              #{element.inner_html}
+            </span>
+          </#{element.name}>
+        HTML
+      end
     end
 
     def build_deleted_element_html(element)
-      marker_message = element.name == "tr" ? "Removed row" : "Removed content"
-      class_string = "#{element['class']&.gsub('ins', '')} diff del".strip
-      insert_change_marker(element, marker_message)
+      if element.name == "tr"
+        insert_table_row_change_marker(element, "Removed row")
+        class_string = "#{element['class']&.gsub('ins', '')} diff del".strip
 
-      <<~HTML
-        <#{element.name} class="#{class_string}">
-           #{element.inner_html}
-        </#{element.name}>
-      HTML
+        <<~HTML
+          <#{element.name} class="#{class_string}">
+             #{element.inner_html}
+          </#{element.name}>
+        HTML
+
+      else
+        # Entirely removed steps OLs require that the span also have the .steps class
+        # This is either a bug or weakness in the actual govuk CSS for that class
+        class_string = element["class"].nil? ? nil : " class= \"#{element['class']}\""
+        span_class_string = element["class"]&.include?("steps") ? "diff del steps" : "diff del"
+
+        <<~HTML
+          <#{element.name}#{class_string}>
+            <span class="#{span_class_string}">
+              <span class="visually-hidden">Removed content </span>
+              #{element.inner_html}
+            </span>
+          </#{element.name}>
+        HTML
+      end
     end
   end
 end

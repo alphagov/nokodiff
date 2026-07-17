@@ -7,16 +7,12 @@ module Nokodiff
       end
     end
 
-    def insert_change_marker(element, message)
+    def insert_table_row_change_marker(element, message)
       marker = Nokogiri::XML::Node.new("span", element.document)
       marker.content = "#{message} "
       marker["class"] = "visually-hidden"
 
-      if element.name == "tr"
-        element.children.first.prepend_child(marker)
-      else
-        element.prepend_child(marker)
-      end
+      element.children.first.prepend_child(marker)
     end
   end
 end
