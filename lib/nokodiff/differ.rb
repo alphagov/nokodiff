@@ -1,6 +1,9 @@
 module Nokodiff
   class Differ
     include FormattingHelpers
+
+    BOTTOM_LEVEL_ELEMENTS = %w[p li tr h1 h2 h3 h4 h5 h6].freeze
+
     def initialize(before, after)
       @before = before
       @after = after
@@ -14,9 +17,9 @@ module Nokodiff
         when :changed
           changed_block(diff[:before], diff[:after])
         when :deleted
-          diff[:before].text? ? deleted_block(diff[:before]) : deleted_element(diff[:before])
+          diff[:before].text? ? build_deleted_text_html(diff[:before]) : build_deleted_element_html(diff[:before])
         when :added
-          diff[:after].text? ? added_block(diff[:after]) : added_element(diff[:after])
+          diff[:after].text? ? build_added_text_html(diff[:after]) : build_added_element_html(diff[:after])
         end
       }.join("\n")
     end
@@ -66,10 +69,10 @@ module Nokodiff
         rebuild_element(after_node, inner_diff)
       elsif both_text_nodes?(before_node, after_node)
         before_node, after_node = diff_raw_text(before_node, after_node)
-        deleted_block(before_node) + added_block(after_node)
+        build_deleted_text_html(before_node) + build_added_text_html(after_node)
       else
         before_node, after_node = diff_sub_elements(before_node, after_node)
-        deleted_element(before_node) + added_element(after_node)
+        build_deleted_element_html(before_node) + build_added_element_html(after_node)
       end
     end
 
@@ -83,11 +86,11 @@ module Nokodiff
         before_node.name == after_node.name
     end
 
-    # We want all changes within a paragraph, heading, table row, or list item to be treated as a single change, even if they are
-    # structurally different, to avoid overwhelming the user with changes, and ensure any nested elements are included
-    # within the diff, rather than being treated as added or removed content on their own.
+    # We want to treat all content within certain elements as single changes, even if they are structurally different,
+    # to avoid overwhelming the user with changes, and ensure any nested elements are included within the diff,
+    # rather than being treated as added or removed content on their own.
     def treat_element_as_single_change?(before_node)
-      %w[p li tr th].include?(before_node.name) || before_node.name.match(/^h[1-6]$/)
+      BOTTOM_LEVEL_ELEMENTS.include?(before_node.name)
     end
 
     def rebuild_element(template_node, inner_html)
@@ -148,7 +151,7 @@ module Nokodiff
       node.to_html
     end
 
-    def deleted_block(html)
+    def build_deleted_text_html(html)
       <<~HTML
         <span class="diff del">
           <span class="visually-hidden">Removed content </span>
@@ -157,7 +160,7 @@ module Nokodiff
       HTML
     end
 
-    def added_block(html)
+    def build_added_text_html(html)
       <<~HTML
         <span class="diff ins">
           <span class="visually-hidden">Added content </span>
@@ -166,23 +169,25 @@ module Nokodiff
       HTML
     end
 
-    def added_element(element)
+    def build_added_element_html(element)
       marker_message = element.name == "tr" ? "Added row" : "Added content"
+      class_string = "#{element['class']&.gsub('del', '')} diff ins".strip
       insert_change_marker(element, marker_message)
 
       <<~HTML
-        <#{element.name} class="diff ins">
+        <#{element.name} class="#{class_string}">
            #{element.inner_html}
         </#{element.name}>
       HTML
     end
 
-    def deleted_element(element)
+    def build_deleted_element_html(element)
       marker_message = element.name == "tr" ? "Removed row" : "Removed content"
+      class_string = "#{element['class']&.gsub('ins', '')} diff del".strip
       insert_change_marker(element, marker_message)
 
       <<~HTML
-        <#{element.name} class="diff del">
+        <#{element.name} class="#{class_string}">
            #{element.inner_html}
         </#{element.name}>
       HTML
