@@ -1,1 +1,1 @@
-This repo is owned by the content modelling team. Please let us know in #govuk-publishing-content-modelling-dev when you raise any PRs.
+This repo is owned by the Content Reuse team. Please let us know in #govuk-publishing-content-reuse-dev when you raise any PRs.
