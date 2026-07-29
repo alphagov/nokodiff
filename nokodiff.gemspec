@@ -23,17 +23,12 @@ Gem::Specification.new do |spec|
   spec.require_paths = %w[lib]
 
   spec.add_development_dependency "activesupport"
+  spec.add_development_dependency "byebug"
   spec.add_development_dependency "rake", "13.4.2"
   spec.add_development_dependency "rspec-html-matchers", "0.10.0"
   spec.add_development_dependency "rspec-rails"
   spec.add_development_dependency "rubocop-govuk", "5.2.1"
   spec.add_development_dependency "simplecov"
 
-  spec.add_dependency "actionview", ">= 6", "< 8.1.4"
-  spec.add_dependency "byebug"
   spec.add_dependency "diff-lcs"
-  spec.add_dependency "gds-api-adapters", ">= 101.0", "< 103.4"
-  spec.add_dependency "govspeak", ">= 10.6.3"
-  spec.add_dependency "rails", ">= 6", "< 8.1.4"
-  spec.add_dependency "view_component", "~> 4"
 end
