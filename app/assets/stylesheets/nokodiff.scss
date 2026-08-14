@@ -282,7 +282,21 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
           display: none;
         }
         &::after { left: -$comparison-sidebar-padding + $steps-list-offset !important; }
-        &::marker {  content: "#."; }
+        &::marker {
+          //content: "#.";
+          background-color: #0b0c0c;
+          border-radius: 50%;
+          color: #fff;
+          float: left;
+          font-size: 80%;
+          height: 1.75em;
+          left: .3em;
+          line-height: 1.75em;
+          position: absolute;
+          text-align: center;
+          top: .9em;
+          width: 1.75em;
+        }
       }
 
       li span.diff {
