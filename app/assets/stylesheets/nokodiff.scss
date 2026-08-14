@@ -254,10 +254,10 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
     ol li span.diff {
       list-style-type: decimal;
 
-      &::marker {
-        background-color: #0b0c0c;
-        border-radius: 50%;
-      }
+      //&::marker {
+      //  background-color: #0b0c0c;
+      //  border-radius: 50%;
+      //}
 
       &::after {
         left: $comparison-sidebar-padding;
@@ -272,25 +272,30 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
     $steps-list-offset: -48px;
 
     ol.steps {
+      counter-reset: custom-count 0;
       li{
         display: list-item;
-        list-style-type: decimal;
+        //list-style-type: decimal;
+        list-style-type: none;
         padding-left: 0.25em;
         margin-left: 2.25em;
 
-        &::before {
-          display: none;
-        }
+        //&::before {
+        //  display: none;
+        //}
         &::after { left: -$comparison-sidebar-padding + $steps-list-offset !important; }
-        &::marker {
+        &::before {
           //content: "#.";
           background-color: #0b0c0c;
           border-radius: 50%;
           color: #fff;
+          counter-increment: custom-count;
+          content: counter(custom-count);
           float: left;
           font-size: 80%;
           height: 1.75em;
-          left: .3em;
+          //left: .3em;
+          left: -40px;
           line-height: 1.75em;
           position: absolute;
           text-align: center;
