@@ -290,6 +290,7 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
         list-style-type: none;
         padding-left: 0.25em;
         margin-left: 2.25em;
+        width: calc(100% - 2.25em);
 
         //&::before {
         //  display: none;
