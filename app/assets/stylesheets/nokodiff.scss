@@ -181,6 +181,31 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
 
   .help-notice {
     $help-notice-offset: -45px;
+
+    &:before {
+      display: none;
+    }
+
+    p {
+      position: relative;
+
+      &:before {
+        content: "!";
+        font-weight: 700;
+        border-radius: 50%;
+        color: var(--govuk-body-background-colour, #ffffff);
+        background: var(--govuk-text-colour, #0b0c0c);
+        font-size: 30px;
+        line-height: 29px;
+        text-align: center;
+        position: absolute;
+        top: calc(50% - 17.5px);
+        left: $help-notice-offset;
+        min-width: 35px;
+        min-height: 35px;
+      }
+    }
+
     .diff {
       &::after, &::before {
         top: -15px;
@@ -193,11 +218,11 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
       }
     }
 
-    p:nth-child(n+2) .diff {
-      &::after, &::before {
-        top: -10px;
-      }
-    }
+    // p:nth-child(n+2) .diff {
+    //   &::after, &::before {
+    //     top: -10px;
+    //   }
+    // }
   }
 
  .example, .info-notice {
