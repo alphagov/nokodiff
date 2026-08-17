@@ -95,7 +95,8 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
       bottom: 0;
       left: -$comparison-sidebar-padding;
       min-height: 1.5em;
-      width: 100vw;
+      right: 0;
+      // width: 100vw;
       display: block;
       z-index: -1;
     }
