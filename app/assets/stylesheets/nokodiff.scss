@@ -368,8 +368,12 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
 
   tr.diff {
     position: static;
-    display: table-row;
+    // display: table-row;
     transform: scale(1);
+
+    &.del, &.ins {
+      display: table-row;
+    }
 
     &.del::after, &.ins::after {
       left: -$comparison-sidebar-padding + $table-row-offset;
