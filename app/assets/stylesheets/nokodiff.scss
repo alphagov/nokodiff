@@ -360,10 +360,38 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
   }
 
   // Table-specific overrides
-    $table-row-offset: -2px;
+  $table-row-offset: -2px;
 
   table {
     overflow-x: visible;
+  }
+
+  // This element is generated before new tables
+  // We need to remove it from the display and
+  // style the table that follows it as a new element
+  & > span.diff.ins {
+    display: none;
+
+    & + table {
+      position: relative;
+      background: $added-color;
+      padding-left: $comparison-sidebar-padding;
+      margin-left: -$comparison-sidebar-padding;
+      width: calc(100% + $comparison-sidebar-padding);
+
+      &:before {
+        content: "+";
+        position: absolute;
+        left: -$comparison-sidebar-width;
+        width: $comparison-sidebar-width;
+        height: 100%;
+        min-height: 1.5em;
+        line-height: 1.5em;
+        text-align: center;
+        z-index: 10;
+        background: $diff-marker-added-color;
+      }
+    }
   }
 
   tr.diff {
