@@ -394,6 +394,31 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
     }
   }
 
+  & > span.diff.del {
+    display: none;
+
+    & + table {
+      position: relative;
+      background: $removed-color;
+      padding-left: $comparison-sidebar-padding;
+      margin-left: -$comparison-sidebar-padding;
+      width: calc(100% + $comparison-sidebar-padding);
+
+      &:before {
+        content: "-";
+        position: absolute;
+        left: -$comparison-sidebar-width;
+        width: $comparison-sidebar-width;
+        height: 100%;
+        min-height: 1.5em;
+        line-height: 1.5em;
+        text-align: center;
+        z-index: 10;
+        background: $diff-marker-removed-color;
+      }
+    }
+  }
+
   tr.diff {
     position: static;
     // display: table-row;
