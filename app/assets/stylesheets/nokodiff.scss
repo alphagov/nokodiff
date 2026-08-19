@@ -311,11 +311,45 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
       }
     }
 
+    // Deal with the number values of ordered lists (including steps)
+    // by changing the increment value depending on sequence of diffs
+    ol {
+      counter-reset: item 0;
+      list-style: none;
+      margin-left: 20px;
+
+      li {
+        position: relative;
+      }
+
+      li:before {
+        position: absolute;
+        left: -20px;
+        counter-increment: item 1;
+        content: counter(item);
+      }
+
+      li:has(.diff) + li:not(:has(.diff)),
+      li:not(:has(.diff)) + li:has(.diff) {
+        &:before {
+          counter-increment: item 1;
+          content: counter(item);
+        };
+      }
+
+      li:has(.del) + li:has(.ins) {
+        &:before {
+          counter-increment: item 0;
+          content: counter(item);
+        }
+      }
+    }
+
     //govuk "steps"-style ol overrides
     $steps-list-offset: -48px;
 
     ol.steps {
-      counter-reset: custom-count 0;
+      // counter-reset: custom-count 0;
       li{
         display: list-item;
         //list-style-type: decimal;
@@ -332,8 +366,8 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
           background-color: #0b0c0c;
           border-radius: 50%;
           color: #fff;
-          counter-increment: custom-count;
-          content: counter(custom-count);
+          // counter-increment: custom-count;
+          // content: counter(custom-count);
           float: left;
           font-size: 80%;
           height: 1.75em;
