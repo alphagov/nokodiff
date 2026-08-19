@@ -322,7 +322,6 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
         //}
         &::after { left: -$comparison-sidebar-padding + $steps-list-offset !important; }
         &::before {
-          //content: "#.";
           background-color: #0b0c0c;
           border-radius: 50%;
           color: #fff;
@@ -331,7 +330,6 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
           float: left;
           font-size: 80%;
           height: 1.75em;
-          //left: .3em;
           left: -40px;
           line-height: 1.75em;
           position: absolute;
@@ -385,6 +383,7 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
         left: -$comparison-sidebar-width;
         width: $comparison-sidebar-width;
         height: 100%;
+        font-weight: normal;
         min-height: 1.5em;
         line-height: 1.5em;
         text-align: center;
@@ -405,11 +404,12 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
       width: calc(100% + $comparison-sidebar-padding);
 
       &:before {
-        content: "-";
+        content: "−";
         position: absolute;
         left: -$comparison-sidebar-width;
         width: $comparison-sidebar-width;
         height: 100%;
+        font-weight: normal;
         min-height: 1.5em;
         line-height: 1.5em;
         text-align: center;
@@ -457,12 +457,14 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
       color: $text-colour;
       background-color: $diff-marker-removed-color;
       content: "−";
+      font-weight: normal;
     }
 
     &.ins td:first-child::before, &.ins th:first-child::before {
       color: $text-colour;
       background-color: $diff-marker-added-color;
       content: "+";
+      font-weight: normal;
     }
   }
 }
