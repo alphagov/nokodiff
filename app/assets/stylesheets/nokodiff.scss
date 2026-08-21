@@ -35,33 +35,6 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
   user-select: none !important;
 }
 
-.visually-hidden {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  // If margin is set to a negative value it can cause text to be announced in
-  // the wrong order in VoiceOver for OSX
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: hidden !important;
-
-  clip: rect(0 0 0 0) !important;
-  clip-path: inset(50%) !important;
-
-  border: 0 !important;
-
-  // For long content, line feeds are not interpreted as spaces and small width
-  // causes content to wrap 1 word per line:
-  // https://medium.com/@jessebeach/beware-smushed-off-screen-accessible-text-5952a4c2cbfe
-  white-space: nowrap !important;
-
-  // Prevent users from selecting or copying visually-hidden text. This prevents
-  // a user unintentionally copying more text than they intended and needing to
-  // manually trim it down again.
-  user-select: none !important;
-
-}
-
 .compare-editions {
   position: relative;
   border-left: $comparison-sidebar-width solid $light-grey;
@@ -96,7 +69,6 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
       left: -$comparison-sidebar-padding;
       min-height: 1.5em;
       right: 0;
-      // width: 100vw;
       display: block;
       z-index: -1;
     }
@@ -224,12 +196,6 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
         left: -$comparison-sidebar-offset + $help-notice-offset;
       }
     }
-
-    // p:nth-child(n+2) .diff {
-    //   &::after, &::before {
-    //     top: -10px;
-    //   }
-    // }
   }
 
  .example, .info-notice {
@@ -286,11 +252,6 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
 
     ol li span.diff {
       list-style-type: decimal;
-
-      //&::marker {
-      //  background-color: #0b0c0c;
-      //  border-radius: 50%;
-      //}
 
       &::after {
         left: $comparison-sidebar-padding;
@@ -354,23 +315,10 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
       margin-left: -$comparison-sidebar-padding;
       width: calc(100% + $comparison-sidebar-padding);
 
-      // counter-reset: custom-count 0;
       & > li {
-        // display: list-item;
-        //list-style-type: decimal;
-        // list-style-type: none;
-        // padding-left: 0.25em;
-        // margin-left: 2.25em;
-        // width: calc(100% - 2.25em);
-        // padding-left: $comparison-sidebar-padding;
-
         position: relative;
-        // padding-left: $comparison-sidebar-padding;
-        // margin: -.75em 0 -.75em -$comparison-sidebar-padding;
         margin-top: 0.75em;
         margin-bottom: 0.75em;
-        // margin-left: -$comparison-sidebar-padding;
-        // width: calc(100% + $comparison-sidebar-padding);
         padding-top: 0;
         padding-bottom: 0;
 
@@ -382,26 +330,8 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
           background: $added-color;
         }
 
-        //&::before {
-        //  display: none;
-        //}
-        // &::after { left: -$comparison-sidebar-padding + $steps-list-offset !important; }
-
         &::before {
-          // background-color: #0b0c0c;
-          // border-radius: 50%;
-          // color: #fff;
-          // // counter-increment: custom-count;
-          // // content: counter(custom-count);
-          // // float: left;
-          // font-size: 80%;
-          // height: 1.75em;
-          // // left: -40px;
-          // line-height: 1.75em;
-          // position: absolute;
-          // text-align: center;
-          top: 0; // .9em;
-          // width: 1.75em;
+          top: 0;
           margin-left: $comparison-sidebar-padding;
        }
 
@@ -416,20 +346,13 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
 
       li span.diff {
         margin-bottom: 0;
-        // &::marker { content: unset; }
+
         &::before {
-          // top: -2px;
           left: -$comparison-sidebar-offset + $steps-list-offset;
           height: 100%;
           width: $comparison-sidebar-width;
           min-height: auto; // 1.6em;
-          // padding: 0.75em 0;
         }
-        // &::after {
-        //   top: -2px;
-        //   left: -$comparison-sidebar-padding + $steps-list-offset;
-        //   min-height: 1.6em;
-        // }
       }
     }
   }
@@ -498,7 +421,6 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
 
   tr.diff {
     position: static;
-    // display: table-row;
     transform: scale(1);
 
     &.del, &.ins {
