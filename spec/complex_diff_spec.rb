@@ -555,6 +555,66 @@ RSpec.describe "complex diff" do
       end
     end
 
+    context "when a sub-element is added or removed alongside text that does not change" do
+      context "and the sub-element is removed from the start of a paragraph" do
+        let(:before_html) do
+          <<~HTML
+            <p><b>Bolded</b> text that stays the same</p>
+          HTML
+        end
+
+        let(:after_html) do
+          <<~HTML
+            <p>text that stays the same</p>
+          HTML
+        end
+
+        it "keeps the sub-element in the removed content" do
+          result = Nokodiff.diff(before_html, after_html)
+
+          expect(result).to have_tag("span.diff.del") do
+            with_tag "b", text: "Bolded"
+          end
+        end
+
+        it "does not highlight the text that stays the same" do
+          result = Nokodiff.diff(before_html, after_html)
+          highlighted = Nokogiri::HTML.fragment(result).css(".diff-marker").map(&:text).join(" ")
+
+          expect(highlighted).not_to include("text that stays the same")
+        end
+      end
+
+      context "and the sub-element is added to the start of a paragraph" do
+        let(:before_html) do
+          <<~HTML
+            <p>text that stays the same</p>
+          HTML
+        end
+
+        let(:after_html) do
+          <<~HTML
+            <p><a href="/apply">Apply online</a> text that stays the same</p>
+          HTML
+        end
+
+        it "keeps the sub-element in the added content" do
+          result = Nokodiff.diff(before_html, after_html)
+
+          expect(result).to have_tag("span.diff.ins") do
+            with_tag "a", text: "Apply online"
+          end
+        end
+
+        it "does not highlight the text that stays the same" do
+          result = Nokodiff.diff(before_html, after_html)
+          highlighted = Nokogiri::HTML.fragment(result).css(".diff-marker").map(&:text).join(" ")
+
+          expect(highlighted).not_to include("text that stays the same")
+        end
+      end
+    end
+
     context "when a sub-element of a" do
       # This is split between Paragraph and Table as when this issuse was first investigated, Table was affected slightly differently and caused an exception rather than just a malformed diff
       context "paragraph" do
