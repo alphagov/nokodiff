@@ -21,14 +21,28 @@ module Nokodiff
       elsif mixed_text_and_element_nodes(before_node, after_node)
         mark_nodes_as_changed(before_node, after_node)
       elsif before_node&.element? || after_node&.element?
-        before_children = before_node ? before_node.children.to_a : []
-        after_children = after_node ? after_node.children.to_a : []
-
-        max_child_count = [before_children.length, after_children.length].max
-
-        (0..max_child_count).each do |i|
-          diff_text_nodes(before_children[i], after_children[i])
+        paired_children(before_node, after_node).each do |before_child, after_child|
+          diff_text_nodes(before_child, after_child)
         end
+      end
+    end
+
+    # Children are paired by content rather than by position. Pairing by
+    # position means an element added or removed part-way through shifts every
+    # sibling after it, so unchanged text lines up against nothing and is
+    # reported as a change.
+    def paired_children(before_node, after_node)
+      before_children = before_node ? before_node.children.to_a : []
+      after_children = after_node ? after_node.children.to_a : []
+
+      Diff::LCS.sdiff(
+        before_children.map { |node| node.to_html.strip },
+        after_children.map { |node| node.to_html.strip },
+      ).map do |change|
+        [
+          change.action == "+" ? nil : before_children[change.old_position],
+          change.action == "-" ? nil : after_children[change.new_position],
+        ]
       end
     end
 
