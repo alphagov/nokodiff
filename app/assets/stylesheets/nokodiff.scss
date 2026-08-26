@@ -121,14 +121,23 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
     }
   }
 
-  // Global govspeak-specific overrides
+  // Govspeak-specific overrides
   .gem-c-govspeak & {
-    &::before { min-height: 1.3157894737em; }
+    &::before { min-height: 5em; }
+  }
+
+  .diff .gem-c-button.govuk-button{
+    margin-top: 22px;
+  }
+
+  .form-download .diff {
+    padding-top: 10px;
+    padding-bottom: 3px;
   }
 
   // Inset/callout elements overrides
 
-  .address {
+  .address, .contact {
     .diff{
       $address-offset: -16px;
 
