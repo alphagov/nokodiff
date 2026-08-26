@@ -300,7 +300,8 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
       }
 
       li:has(.diff) + li:not(:has(.diff)),
-      li:not(:has(.diff)) + li:has(.diff) {
+      li:not(:has(.diff)) + li:has(.diff),
+      li:not(:has(.diff)) + li:not(:has(.diff)) {
         &:before {
           counter-increment: item 1;
           content: counter(item);
