@@ -314,6 +314,13 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
           content: counter(item);
         }
       }
+
+      // This is required to over-ride the visually-hidden element
+      // that is otherwise assigned the first counter
+      // when a new set of steps are added
+      & > span.steps > span + li:before {
+        content: "1";
+      }
     }
 
     //govuk "steps"-style ol overrides
