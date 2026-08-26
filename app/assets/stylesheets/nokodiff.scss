@@ -299,6 +299,12 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
         content: counter(item);
       }
 
+      // Over-ride style for <li> elements inside a span.diff
+      // Ideally the markup would be changed so this is not needed
+      &.steps > span.diff > li:before {
+        left: 0;
+      }
+
       li:has(.diff) + li:not(:has(.diff)),
       li:not(:has(.diff)) + li:has(.diff),
       li:not(:has(.diff)) + li:not(:has(.diff)) {
@@ -329,10 +335,14 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
     ol.steps {
       @extend .steps;
 
+      &:has(>span.diff) {
+        @include diff-block;
+      }
+
       margin-left: -$comparison-sidebar-padding;
       width: calc(100% + $comparison-sidebar-padding);
 
-      & > li {
+      li {
         position: relative;
         margin-top: 0.75em;
         margin-bottom: 0.75em;
