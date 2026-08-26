@@ -240,6 +240,15 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
   $govuk-list-offset: -20px;
 
   .gem-c-govspeak & {
+    ul.list-no-bullets {
+      list-style: none;
+      padding-left: 0;
+
+      span.diff:before {
+        left: -$comparison-sidebar-width - $comparison-sidebar-padding;
+      }
+    }
+
     ul li span.diff, ul span.diff {
       &::after {
         left: -$comparison-sidebar-padding + $govuk-list-offset;
