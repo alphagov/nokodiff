@@ -253,11 +253,6 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
     ol li span.diff {
       list-style-type: decimal;
 
-      &::marker {
-        background-color: #0b0c0c;
-        border-radius: 50%;
-      }
-
       &::after {
         left: $comparison-sidebar-padding;
       }
@@ -267,36 +262,96 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
       }
     }
 
+    ol:not(.steps) span.diff {
+      &::before {
+        left: -75px;
+      }
+
+      &::after {
+        left: -75px;
+      }
+    }
+
+    // Deal with the number values of ordered lists (including steps)
+    // by changing the increment value depending on sequence of diffs
+    ol {
+      counter-reset: item 0;
+      list-style: none;
+      margin-left: 20px;
+
+      li {
+        position: relative;
+      }
+
+      li:before {
+        position: absolute;
+        left: -20px;
+        counter-increment: item 1;
+        content: counter(item);
+      }
+
+      li:has(.diff) + li:not(:has(.diff)),
+      li:not(:has(.diff)) + li:has(.diff) {
+        &:before {
+          counter-increment: item 1;
+          content: counter(item);
+        };
+      }
+
+      li:has(.del) + li:has(.ins) {
+        &:before {
+          counter-increment: item 0;
+          content: counter(item);
+        }
+      }
+    }
+
     //govuk "steps"-style ol overrides
     $steps-list-offset: -48px;
 
     ol.steps {
-      li{
-        display: list-item;
-        list-style-type: decimal;
-        padding-left: 0.25em;
-        margin-left: 2.25em;
+      @extend .steps;
+
+      margin-left: -$comparison-sidebar-padding;
+      width: calc(100% + $comparison-sidebar-padding);
+
+      & > li {
+        position: relative;
+        margin-top: 0.75em;
+        margin-bottom: 0.75em;
+        padding-top: 0;
+        padding-bottom: 0;
+
+        &:has(.del) {
+          background: $removed-color;
+        }
+
+        &:has(.ins) {
+          background: $added-color;
+        }
 
         &::before {
-          display: none;
+          top: 0;
+          margin-left: $comparison-sidebar-padding;
         }
-        &::after { left: -$comparison-sidebar-padding + $steps-list-offset !important; }
-        &::marker {  content: "#."; }
+
+        & > span {
+          margin-left: $comparison-sidebar-padding;
+
+          p {
+            margin-bottom: 0;
+          }
+        }
       }
 
       li span.diff {
-        &::marker { content: unset; }
+        margin-bottom: 0;
+
         &::before {
-          top: -2px;
           left: -$comparison-sidebar-offset + $steps-list-offset;
           height: 100%;
           width: $comparison-sidebar-width;
-          min-height: 1.6em;
-        }
-        &::after {
-          top: -2px;
-          left: -$comparison-sidebar-padding + $steps-list-offset;
-          min-height: 1.6em;
+          min-height: auto; // 1.6em;
         }
       }
     }
