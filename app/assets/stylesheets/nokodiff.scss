@@ -358,16 +358,74 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
   }
 
   // Table-specific overrides
-    $table-row-offset: -2px;
+  $table-row-offset: -2px;
 
   table {
     overflow-x: visible;
   }
 
+  // This element is generated before new tables
+  // We need to remove it from the display and
+  // style the table that follows it as a new element
+  & > span.diff.ins {
+    display: none;
+
+    & + table {
+      position: relative;
+      background: $added-color;
+      padding-left: $comparison-sidebar-padding;
+      margin-left: -$comparison-sidebar-padding;
+      width: calc(100% + $comparison-sidebar-padding);
+
+      &:before {
+        content: "+";
+        position: absolute;
+        left: -$comparison-sidebar-width;
+        width: $comparison-sidebar-width;
+        height: 100%;
+        font-weight: normal;
+        min-height: 1.5em;
+        line-height: 1.5em;
+        text-align: center;
+        z-index: 10;
+        background: $diff-marker-added-color;
+      }
+    }
+  }
+
+  & > span.diff.del {
+    display: none;
+
+    & + table {
+      position: relative;
+      background: $removed-color;
+      padding-left: $comparison-sidebar-padding;
+      margin-left: -$comparison-sidebar-padding;
+      width: calc(100% + $comparison-sidebar-padding);
+
+      &:before {
+        content: "−";
+        position: absolute;
+        left: -$comparison-sidebar-width;
+        width: $comparison-sidebar-width;
+        height: 100%;
+        font-weight: normal;
+        min-height: 1.5em;
+        line-height: 1.5em;
+        text-align: center;
+        z-index: 10;
+        background: $diff-marker-removed-color;
+      }
+    }
+  }
+
   tr.diff {
     position: static;
-    display: table-row;
     transform: scale(1);
+
+    &.del, &.ins {
+      display: table-row;
+    }
 
     &.del::after, &.ins::after {
       left: -$comparison-sidebar-padding + $table-row-offset;
@@ -398,12 +456,14 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
       color: $text-colour;
       background-color: $diff-marker-removed-color;
       content: "−";
+      font-weight: normal;
     }
 
     &.ins td:first-child::before, &.ins th:first-child::before {
       color: $text-colour;
       background-color: $diff-marker-added-color;
       content: "+";
+      font-weight: normal;
     }
   }
 }
