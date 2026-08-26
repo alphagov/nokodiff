@@ -332,6 +332,10 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
         padding-top: 0;
         padding-bottom: 0;
 
+        & > p {
+          margin-left: $comparison-sidebar-padding;
+        }
+
         &:has(.del) {
           background: $removed-color;
         }
