@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "percy/capybara"
 require "simplecov"
 SimpleCov.start do
   minimum_coverage 100
