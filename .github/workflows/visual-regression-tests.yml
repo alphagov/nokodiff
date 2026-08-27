@@ -1,0 +1,26 @@
+name: Percy
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+jobs:
+  percy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: spec/dummy
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          working-directory: spec/dummy
+          bundler-cache: true
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+      - run: yarn install
+      - run: npm install --save-dev @percy/cli
+      - run: bin/rails dartsass:build
+      - run: npx percy exec -- bundle exec rspec spec/visual_regression_spec.rb
+        env:
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
