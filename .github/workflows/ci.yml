@@ -46,8 +46,8 @@ jobs:
           node-version: '14'
       - run: bundle exec rake
       - run: npm install --save-dev @percy/cli
-      # - run: npx percy snapshot spec/dummy/app/views/application
-      - run: npx percy snapshot .github/workflows/visual-regression-tests.yml
+      - run: npx percy snapshot spec/dummy/app/views/application/index
+      # - run: npx percy snapshot .github/workflows/visual-regression-tests.yml
       # - run: yarn run percy exec -- bundle exec rspec --tag visual_regression
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
