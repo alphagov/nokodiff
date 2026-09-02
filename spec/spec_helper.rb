@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-require "percy/capybara"
+# require "rails_helper"
+# require "percy/capybara"
 require "simplecov"
 SimpleCov.start do
   minimum_coverage 100
@@ -11,6 +12,7 @@ require "nokodiff"
 require "active_support/core_ext/string/output_safety"
 require "active_support/core_ext/string"
 require "rspec-html-matchers"
+# require "url_helpers"
 
 Dir[File.join(File.dirname(__FILE__), "support", "**", "*.rb")].sort.each { |f| require f }
 
@@ -26,4 +28,10 @@ RSpec.configure do |config|
   end
 
   config.include RSpecHtmlMatchers
+
+  config.filter_run_excluding not_applicable: true, visual_regression: true
+  # Need to treat Dummy as app. See: 
+  # https://stackoverflow.com/questions/19867202/combining-url-helpers-for-a-rails-engine-and-a-base-application-in-rspec
+  # config.include RSpec.application.routes.url_helpers, type: :feature
+  # config.include Rails.application.routes.url_helpers, type: :feature
 end
