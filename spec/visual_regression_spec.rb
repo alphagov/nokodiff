@@ -5,7 +5,6 @@ require "uri"
 
 # RSpec.describe Nokodiff::TextNodeDiffs, type: :system do
 RSpec.describe "Visual regression", type: :system do
-  # rubocop:disable RSpec/NoExpectationExample
   describe "visual regression test runner Percy", :visual_regression do
     it "takes a screenshot of the test page" do
       # Freeze time for consistency
@@ -38,15 +37,14 @@ RSpec.describe "Visual regression", type: :system do
 
       #   visit(link)
 
-        # name = title.gsub(/(: Default|) preview - Component Guide/, "")
+      # name = title.gsub(/(: Default|) preview - Component Guide/, "")
 
-        page.find(:css, "body", wait: 10)
+      page.find(:css, "body", wait: 10)
 
-        page.percy_snapshot("Test page")
+      page.percy_snapshot("Test page")
       # end
 
       # travel_back
     end
   end
-  # rubocop:enable RSpec/NoExpectationExample
 end
