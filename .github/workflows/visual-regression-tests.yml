@@ -12,7 +12,6 @@ jobs:
         with:
           node-version: '14'
       - run: npm install --save-dev @percy/cli
-      - run: yarn run percy exec -- bundle exec rspec --tag visual_regression # npx percy snapshot _site/ # or any directory such as public/
+      - run: npx percy exec -- bundle exec rspec spec/visual_regression_spec.rb
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
-          
