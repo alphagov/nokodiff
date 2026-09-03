@@ -26,7 +26,7 @@ RSpec.configure do |config|
 
   config.include RSpecHtmlMatchers
 
-  config.filter_run_excluding not_applicable: true # , visual_regression: true
+  config.filter_run_excluding not_applicable: true, visual_regression: true
   # Need to treat Dummy as app. See:
   # https://stackoverflow.com/questions/19867202/combining-url-helpers-for-a-rails-engine-and-a-base-application-in-rspec
 
