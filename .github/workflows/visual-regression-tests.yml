@@ -1,9 +1,11 @@
+name: VisualRegressionTest
+
 on:
   push:
     branches:
       - main
 jobs:
-  name: VisualRegressionTest
+  # name: VisualRegressionTest
   build:
     runs-on: ubuntu-latest
     steps:
@@ -12,6 +14,6 @@ jobs:
         with:
           node-version: '14'
       - run: npm install --save-dev @percy/cli
-      - run: npx percy exec -- bundle exec rspec spec/visual_regression_spec.rb
+      - run: npx percy exec -- bundle exec rspec --tag visual_regression
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
