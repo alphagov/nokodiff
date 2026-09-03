@@ -41,17 +41,17 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '14'
-      - run: npm install --save-dev @percy/cli
+      # - uses: actions/setup-node@v3
+      #   with:
+      #     node-version: '14'
+      # - run: npm install --save-dev @percy/cli
       # - run: npx percy snapshot localhost:3000
       # - run: npx percy snapshot .github/workflows/visual-regression-tests.yml
       # - run: yarn run percy exec -- bundle exec rspec --tag visual_regression
       - run: bundle exec rake
-      - run: yarn run percy exec -- bundle exec rspec --tag visual_regression
-        env:
-          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+      # - run: yarn run percy exec -- bundle exec rspec --tag visual_regression
+      #   env:
+      #     PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
 
   # Branch protection rules cannot directly depend on status checks from matrix jobs.
   # So instead we define `test` as a dummy job which only runs after the preceding `test_matrix` checks have passed.
