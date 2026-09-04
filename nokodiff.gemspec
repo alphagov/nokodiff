@@ -24,6 +24,7 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "activesupport"
   spec.add_development_dependency "byebug"
+  spec.add_development_dependency "percy-capybara"
   spec.add_development_dependency "rake", "13.4.2"
   spec.add_development_dependency "rspec-html-matchers", "0.10.0"
   spec.add_development_dependency "rspec-rails"

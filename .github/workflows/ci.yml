@@ -1,13 +1,13 @@
 name: CI
 
 on:
-  workflow_dispatch: {}
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - ".git**"
-  pull_request:
+  # workflow_dispatch: {}
+  # push:
+  #   branches:
+  #     - main
+  #   paths-ignore:
+  #     - ".git**"
+  # pull_request:
 
 jobs:
   codeql-sast:

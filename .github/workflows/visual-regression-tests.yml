@@ -1,0 +1,23 @@
+name: VisualRegressionTest
+
+on: [push]
+  # push:
+  #   branches:
+  #     - main
+jobs:
+  # name: VisualRegressionTest
+  visual-regression-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+      - run: yarn install --frozen-lockfile
+      - run: npm install --save-dev @percy/cli
+      - run: npx percy exec -- bundle exec rspec --tag visual_regression
+        env:
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
