@@ -39,6 +39,8 @@ gem "dartsass-rails"
 gem "govuk_publishing_components"
 gem "sprockets-rails"
 
+gem "json", "< 3"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
@@ -52,4 +54,8 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   gem "nokodiff", path: "../../"
+
+  gem "govuk_test"
+  gem "percy-capybara"
+  gem "rspec-rails"
 end
