@@ -9,30 +9,26 @@ $comparison-sidebar-width: 40px;
 $comparison-sidebar-padding: 15px;
 $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padding;
 
-.visually-hidden {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  // If margin is set to a negative value it can cause text to be announced in
-  // the wrong order in VoiceOver for OSX
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: hidden !important;
+@mixin diff-block {
+  position: relative;
+  background: $added-color;
+  padding-left: $comparison-sidebar-padding;
+  margin-left: -$comparison-sidebar-padding;
+  width: calc(100% + $comparison-sidebar-padding);
 
-  clip: rect(0 0 0 0) !important;
-  clip-path: inset(50%) !important;
-
-  border: 0 !important;
-
-  // For long content, line feeds are not interpreted as spaces and small width
-  // causes content to wrap 1 word per line:
-  // https://medium.com/@jessebeach/beware-smushed-off-screen-accessible-text-5952a4c2cbfe
-  white-space: nowrap !important;
-
-  // Prevent users from selecting or copying visually-hidden text. This prevents
-  // a user unintentionally copying more text than they intended and needing to
-  // manually trim it down again.
-  user-select: none !important;
+  &:before {
+    content: " ";
+    position: absolute;
+    left: -$comparison-sidebar-width;
+    width: $comparison-sidebar-width;
+    height: 100%;
+    font-weight: normal;
+    min-height: 1.5em;
+    line-height: 1.5em;
+    text-align: center;
+    z-index: 10;
+    background: $diff-marker-added-color;
+  }
 }
 
 .visually-hidden {
@@ -59,7 +55,6 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
   // a user unintentionally copying more text than they intended and needing to
   // manually trim it down again.
   user-select: none !important;
-
 }
 
 .compare-editions {
@@ -95,7 +90,7 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
       bottom: 0;
       left: -$comparison-sidebar-padding;
       min-height: 1.5em;
-      width: 100vw;
+      right: 0;
       display: block;
       z-index: -1;
     }
@@ -148,14 +143,23 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
     }
   }
 
-  // Global govspeak-specific overrides
+  // Govspeak-specific overrides
   .gem-c-govspeak & {
-    &::before { min-height: 1.3157894737em; }
+    &::before { min-height: 5em; }
+  }
+
+  .diff .gem-c-button.govuk-button{
+    margin-top: 22px;
+  }
+
+  .form-download .diff {
+    padding-top: 10px;
+    padding-bottom: 3px;
   }
 
   // Inset/callout elements overrides
 
-  .address {
+  .address, .contact {
     .diff{
       $address-offset: -16px;
 
@@ -171,6 +175,38 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
 
   .help-notice {
     $help-notice-offset: -45px;
+
+    &:before {
+      display: none;
+    }
+
+    p {
+      position: relative;
+
+      &:before {
+        content: "!";
+        font-weight: 700;
+        border-radius: 50%;
+        color: var(--govuk-body-background-colour, #ffffff);
+        background: var(--govuk-text-colour, #0b0c0c);
+        font-size: 30px;
+        line-height: 29px;
+        text-align: center;
+        position: absolute;
+        margin-top: -5px;
+        left: $help-notice-offset;
+        min-width: 35px;
+        min-height: 35px;
+      }
+
+      &:first-child:after {
+        content: ".";
+        display: block;
+        clear: both;
+        visibility: hidden;
+      }
+    }
+
     .diff {
       &::after, &::before {
         top: -15px;
@@ -179,8 +215,6 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
       }
 
       &::before {
-        top: -15px;
-        min-height: calc(1.5em + 30px);
         left: -$comparison-sidebar-offset + $help-notice-offset;
       }
     }
@@ -228,6 +262,15 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
   $govuk-list-offset: -20px;
 
   .gem-c-govspeak & {
+    ul.list-no-bullets {
+      list-style: none;
+      padding-left: 0;
+
+      span.diff:before {
+        left: -$comparison-sidebar-width - $comparison-sidebar-padding;
+      }
+    }
+
     ul li span.diff, ul span.diff {
       &::after {
         left: -$comparison-sidebar-padding + $govuk-list-offset;
@@ -241,11 +284,6 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
     ol li span.diff {
       list-style-type: decimal;
 
-      &::marker {
-        background-color: #0b0c0c;
-        border-radius: 50%;
-      }
-
       &::after {
         left: $comparison-sidebar-padding;
       }
@@ -255,52 +293,164 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
       }
     }
 
+    ol:not(.steps) span.diff {
+      &::before {
+        left: -75px;
+      }
+
+      &::after {
+        left: -75px;
+      }
+    }
+
+    // Deal with the number values of ordered lists (including steps)
+    // by changing the increment value depending on sequence of diffs
+    ol {
+      counter-reset: item 0;
+      list-style: none;
+      margin-left: 20px;
+
+      li {
+        position: relative;
+      }
+
+      li:before {
+        position: absolute;
+        left: -20px;
+        counter-increment: item 1;
+        content: counter(item);
+      }
+
+      // Over-ride style for <li> elements inside a span.diff
+      // Ideally the markup would be changed so this is not needed
+      &.steps > span.diff > li:before {
+        left: 0;
+      }
+
+      li:has(.diff) + li:not(:has(.diff)),
+      li:not(:has(.diff)) + li:has(.diff),
+      li:not(:has(.diff)) + li:not(:has(.diff)) {
+        &:before {
+          counter-increment: item 1;
+          content: counter(item);
+        };
+      }
+
+      li:has(.del) + li:has(.ins) {
+        &:before {
+          counter-increment: item 0;
+          content: counter(item);
+        }
+      }
+
+      // This is required to over-ride the visually-hidden element
+      // that is otherwise assigned the first counter
+      // when a new set of steps are added
+      & > span.steps > span + li:before {
+        content: "1";
+      }
+    }
+
     //govuk "steps"-style ol overrides
     $steps-list-offset: -48px;
 
     ol.steps {
-      li{
-        display: list-item;
-        list-style-type: decimal;
-        padding-left: 0.25em;
-        margin-left: 2.25em;
+      @extend .steps;
+
+      &:has(>span.diff) {
+        @include diff-block;
+      }
+
+      margin-left: -$comparison-sidebar-padding;
+      width: calc(100% + $comparison-sidebar-padding);
+
+      li {
+        position: relative;
+        margin-top: 0.75em;
+        margin-bottom: 0.75em;
+        padding-top: 0;
+        padding-bottom: 0;
+
+        & > p {
+          margin-left: $comparison-sidebar-padding;
+        }
+
+        &:has(.del) {
+          background: $removed-color;
+        }
+
+        &:has(.ins) {
+          background: $added-color;
+        }
 
         &::before {
-          display: none;
+          top: 0;
+          margin-left: $comparison-sidebar-padding;
         }
-        &::after { left: -$comparison-sidebar-padding + $steps-list-offset !important; }
-        &::marker {  content: "#."; }
+
+        & > span {
+          margin-left: $comparison-sidebar-padding;
+
+          p {
+            margin-bottom: 0;
+          }
+        }
       }
 
       li span.diff {
-        &::marker { content: unset; }
+        margin-bottom: 0;
+
         &::before {
-          top: -2px;
           left: -$comparison-sidebar-offset + $steps-list-offset;
           height: 100%;
           width: $comparison-sidebar-width;
-          min-height: 1.6em;
-        }
-        &::after {
-          top: -2px;
-          left: -$comparison-sidebar-padding + $steps-list-offset;
-          min-height: 1.6em;
+          min-height: auto; // 1.6em;
         }
       }
     }
   }
 
   // Table-specific overrides
-    $table-row-offset: -2px;
+  $table-row-offset: -2px;
 
   table {
     overflow-x: visible;
   }
 
+  // This element is generated before new tables
+  // We need to remove it from the display and
+  // style the table that follows it as a new element
+  & > span.diff.ins {
+    display: none;
+
+    & + table {
+      @include diff-block;
+
+      &:before {
+        content: "+";
+      }
+    }
+  }
+
+  & > span.diff.del {
+    display: none;
+
+    & + table {
+      @include diff-block;
+
+      &:before {
+        content: "−";
+      }
+    }
+  }
+
   tr.diff {
     position: static;
-    display: table-row;
     transform: scale(1);
+
+    &.del, &.ins {
+      display: table-row;
+    }
 
     &.del::after, &.ins::after {
       left: -$comparison-sidebar-padding + $table-row-offset;
@@ -331,12 +481,14 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
       color: $text-colour;
       background-color: $diff-marker-removed-color;
       content: "−";
+      font-weight: normal;
     }
 
     &.ins td:first-child::before, &.ins th:first-child::before {
       color: $text-colour;
       background-color: $diff-marker-added-color;
       content: "+";
+      font-weight: normal;
     }
   }
 }
