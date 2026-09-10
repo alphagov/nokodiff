@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/alphagov/nokodiff"
   spec.license       = "MIT"
 
-  spec.required_ruby_version = ">= 3.2"
+  spec.required_ruby_version = ">= 4.0.5"
   spec.files = Dir[
     "{node_modules/govuk-frontend,app,lib}/**/*", "LICENCE.txt", "README.md"
   ]
