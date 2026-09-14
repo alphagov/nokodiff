@@ -135,7 +135,7 @@ module Nokodiff
       node.children.each_cons(2) do |left, right|
         next unless node_is_a_change?(left) && node_is_a_change?(right)
 
-        left.content = left.content + right.content
+        left.children += right.children
         right.remove
 
         merge_adjacent_highlighted_changes(node)

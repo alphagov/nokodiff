@@ -561,7 +561,7 @@ RSpec.describe "complex diff" do
         context "is added" do
           let(:before_html) do
             <<~HTML
-              <p>Unbolded other/p>
+              <p>Unbolded other</p>
             HTML
           end
 
@@ -576,20 +576,19 @@ RSpec.describe "complex diff" do
               <p>
                 <span class="diff del">
                   <span class="visually-hidden">Removed content </span>
-                  <span class="diff-marker">Unbolded</span> other
+                  <span class="diff-marker">Unbolded other</span>
                 </span>
               </p>
               <p>
                 <span class="diff ins">
                   <span class="visually-hidden">Added content </span>
-                  <span class="diff-marker"<b>Bolded</b></span> other
+                  <span class="diff-marker"><b>Bolded</b> other</span>
                 </span>
               </p>
             HTML
           end
 
-          it "is not able to correctly highlight the diff, and the sub-element tag is lost" do
-            pending("Known issue: https://github.com/alphagov/nokodiff/issues/43")
+          it "highlights the entire added sub-element, retaining its tag, in the 'inserted' section" do
             result = Nokodiff.diff(before_html, after_html)
 
             expect(normalise_html(result)).to eq(normalise_html(expected_html))
@@ -603,7 +602,7 @@ RSpec.describe "complex diff" do
         context "is removed" do
           let(:before_html) do
             <<~HTML
-              <p><b>Bolded</b> other/p>
+              <p><b>Bolded</b> other</p>
             HTML
           end
 
@@ -618,18 +617,19 @@ RSpec.describe "complex diff" do
               <p>
                 <span class="diff del">
                   <span class="visually-hidden">Removed content </span>
-                  <span class="diff-marker"<b>Bolded</b></span> other
+                  <span class="diff-marker"><b>Bolded</b> other</span>
                 </span>
               </p>
               <p>
               <span class="diff ins">
-                  <span class="visually-hidden">Added content </span><span class="diff-marker">Unbolded</span> other
+                  <span class="visually-hidden">Added content </span>
+                  <span class="diff-marker">Unbolded other</span>
+                </span>
               </p>
             HTML
           end
 
-          it "is not able to correctly highlight the diff, and the sub-element tag is lost" do
-            pending("Known issue: https://github.com/alphagov/nokodiff/issues/43")
+          it "highlights the entire removed sub-element, included its tag, in the 'deleted' section" do
             result = Nokodiff.diff(before_html, after_html)
 
             expect(normalise_html(result)).to eq(normalise_html(expected_html))
@@ -672,20 +672,19 @@ RSpec.describe "complex diff" do
               <table><tbody>
                     <tr class="diff del">
                         <td>
-                            <span class="visually-hidden">Removed row </span><span class="diff-marker">Unbolded</span> other
+                            <span class="visually-hidden">Removed row </span><span class="diff-marker">Unbolded other</span>
                             </td>
                     </tr>
                     <tr class="diff ins">
                         <td>
-                            <span class="visually-hidden">Added  row </span><span class="diff-marker"><b>Bolded</b></span> other
+                            <span class="visually-hidden">Added  row </span><span class="diff-marker"><b>Bolded</b> other</span>
                         </td>
                     </tr>
               </tbody></table>
             HTML
           end
 
-          it "is not able to correctly highlight the diff, and the sub-element tag is lost" do
-            pending("Known issue: https://github.com/alphagov/nokodiff/issues/43")
+          it "highlights the entire added sub-element, retaining its tag, in the 'inserted' section" do
             result = Nokodiff.diff(before_html, after_html)
 
             expect(normalise_html(result)).to eq(normalise_html(expected_html))
@@ -726,20 +725,19 @@ RSpec.describe "complex diff" do
               <table><tbody>
                     <tr class="diff del">
                         <td>
-                        <span class="visually-hidden">Removed row </span><span class="diff-marker"><b>Bolded</b></span> other
+                        <span class="visually-hidden">Removed row </span><span class="diff-marker"><b>Bolded</b> other</span>
                         </td>
                     </tr>
                     <tr class="diff ins">
                         <td>
-                        <span class="visually-hidden">Added  row </span><span class="diff-marker">Unbolded</span> other
+                        <span class="visually-hidden">Added  row </span><span class="diff-marker">Unbolded other</span>
                         </td>
                     </tr>
               </tbody></table>
             HTML
           end
 
-          it "is not able to correctly highlight the diff, and the sub-element tag is lost" do
-            pending("Known issue: https://github.com/alphagov/nokodiff/issues/43")
+          it "highlights the entire removed sub-element, included its tag, in the 'deleted' section" do
             result = Nokodiff.diff(before_html, after_html)
 
             expect(normalise_html(result)).to eq(normalise_html(expected_html))
