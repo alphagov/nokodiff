@@ -1,10 +1,20 @@
 module Nokodiff
   module FormattingHelpers
-    def highlight_changes(char, fragment)
+    def wrap_character_as_change(char, fragment)
       Nokogiri::XML::Node.new("span", fragment.document).tap do |n|
         n.content = char
         n["class"] = "diff-marker"
       end
+    end
+
+    def wrap_node_as_change(node)
+      return unless node
+
+      wrapper = Nokogiri::XML::Node.new("span", node.document)
+      wrapper["class"] = "diff-marker"
+
+      node.replace(wrapper)
+      wrapper.add_child(node)
     end
 
     def insert_table_row_change_marker(element, message)

@@ -20,6 +20,7 @@ spec/dummy/.byebug_history
 .rspec_status
 .byebug_history
 
-Gemfile.lock
+/Gemfile.lock
 /.idea
 /spec/dummy/app/assets/builds/application.css
+node_modules
