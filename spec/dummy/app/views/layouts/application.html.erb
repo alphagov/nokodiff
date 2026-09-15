@@ -1,19 +1,24 @@
-<%= render "govuk_publishing_components/components/layout_for_public", {
-  title: "GOV.UK",
-  title_lang: I18n.locale,
-  omit_feedback_form: true
-} do %>
-  <%= yield :before_content %>
+<!DOCTYPE html>
+<html class="govuk-template" lang="<%= I18n.locale %>">
+  <head>
+    <meta charset="utf-8">
+    <title>GOV.UK</title>
+    <%= csrf_meta_tags %>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <%= stylesheet_link_tag "application", media: "all" %>
+  </head>
+  <body class="govuk-template__body">
+    <%= yield :before_content %>
 
-  <div class="govuk-width-container">
+    <div class="govuk-width-container">
+      <%= yield :before_main %>
 
-    <%= yield :before_main %>
+      <main role="main" id="content" class="govuk-main-wrapper">
+        <span id="Top"></span>
+        <%= yield %>
+      </main>
+    </div>
 
-    <main role="main" id="content" class="govuk-main-wrapper">
-      <span id="Top"></span>
-      <%= yield %>
-    </main>
-  </div>
-
-  <%= yield :after_content %>
-<% end %>
+    <%= yield :after_content %>
+  </body>
+</html>
