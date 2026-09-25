@@ -357,8 +357,16 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
     ol.steps {
       @extend .steps;
 
-      &:has(>span.diff) {
+      &:has(>span.diff.del) {
         @include diff-block;
+
+        background: $removed-color;
+      }
+
+      &:has(>span.diff.ins) {
+        @include diff-block;
+
+        background: $added-color;
       }
 
       margin-left: -$comparison-sidebar-padding;
@@ -417,9 +425,9 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
     overflow-x: visible;
   }
 
-  // This element is generated before new tables
-  // We need to remove it from the display and
-  // style the table that follows it as a new element
+  // These elements are generated before new and removed dtables
+  // We need to remove them from the display and
+  // style the tables that follows them as a new/removed element
   & > span.diff.ins {
     display: none;
 
@@ -438,8 +446,11 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
     & + table {
       @include diff-block;
 
+      background: $removed-color;
+
       &:before {
         content: "−";
+        background: $removed-color;
       }
     }
   }
