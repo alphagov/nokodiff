@@ -2,7 +2,6 @@
 
 require "nokogiri"
 require "diff-lcs"
-require "byebug"
 
 require_relative "nokodiff/formatting_helpers"
 require_relative "nokodiff/version"
