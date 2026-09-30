@@ -1,5 +1,10 @@
 {
   "devDependencies": {
     "@percy/cli": "^1.32.9"
+  },
+  "overrides": {
+    "@percy/cli": {
+      "uuid": "^11.1.1"
+    }
   }
 }
