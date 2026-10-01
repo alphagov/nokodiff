@@ -1,17 +1,25 @@
 # Changelog
+
+## 1.1.0 - 2026-10-01
+
+- Remove require "byebug" from the library entry point
+- Updated before/after fixtures to enable diff view generation for various element types
+
 ## 1.0.0 – 2026-09-18
 
 ### Breaking Changes
-* **Ruby Version Requirement:** Upgraded required Ruby version to `3.3`.
-* **Dropped Legacy Ruby Support:** Removed support for Ruby 3.2.x versions.
+
+- **Ruby Version Requirement:** Upgraded required Ruby version to `3.3`.
+- **Dropped Legacy Ruby Support:** Removed support for Ruby 3.2.x versions.
 
 ### Other changes
-* **Screen Reader Accessibility:** Replaced previous `aria-label` attributes with visually hidden screen reader text elements.
-* **GOV.UK Publishing Component Overrides:** Added custom styling overrides for all components within the GOV.UK publishing components guide.
-* **Local Development Environment:** Added a `spec/dummy` Rails application and the `bin/run-dummy-app` task script to preview diff outputs locally in a browser.
-* **Inline Element Wrapping:** Swapped `<div>` wrappers outside changed elements for inline `<span>` elements placed inside changed elements to improve compatibility with HTML tables and lists.
-* **Visual Diff Styling:** Updated default visual styling for diff highlights, deletions, and change markers.
-* **Nested Semantic HTML Comparison:** Enhanced semantic comparison for bottom-level tags (e.g., `<p>`) containing nested inline sub-elements (e.g., `<b>`, `<a>`) so sub-element formatting and styling are preserved during diff calculations.
+
+- **Screen Reader Accessibility:** Replaced previous `aria-label` attributes with visually hidden screen reader text elements.
+- **GOV.UK Publishing Component Overrides:** Added custom styling overrides for all components within the GOV.UK publishing components guide.
+- **Local Development Environment:** Added a `spec/dummy` Rails application and the `bin/run-dummy-app` task script to preview diff outputs locally in a browser.
+- **Inline Element Wrapping:** Swapped `<div>` wrappers outside changed elements for inline `<span>` elements placed inside changed elements to improve compatibility with HTML tables and lists.
+- **Visual Diff Styling:** Updated default visual styling for diff highlights, deletions, and change markers.
+- **Nested Semantic HTML Comparison:** Enhanced semantic comparison for bottom-level tags (e.g., `<p>`) containing nested inline sub-elements (e.g., `<b>`, `<a>`) so sub-element formatting and styling are preserved during diff calculations.
 
 ## 0.4.2
 
