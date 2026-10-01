@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1 - 2026-10-01
+
+- Bumps a number of dependencies to address security vulnerabilities.
+
 ## 1.1.0 - 2026-10-01
 
 - Remove require "byebug" from the library entry point
