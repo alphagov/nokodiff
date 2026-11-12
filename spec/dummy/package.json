@@ -1,11 +1,12 @@
 {
   "devDependencies": {
-    "@percy/cli": "^1.32.11"
+    "@percy/cli": "^1.32.12"
   },
   "overrides": {
     "@percy/cli": {
       "uuid": "^11.1.1",
-      "fast-xml-parser": "^5.7.0"
+      "fast-xml-parser": "^5.7.0",
+      "minimatch": "^11.0.1"
     }
   }
 }
