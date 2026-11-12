@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "@percy/cli": "^1.32.11"
+    "@percy/cli": "^1.32.12"
   },
   "overrides": {
     "@percy/cli": {
