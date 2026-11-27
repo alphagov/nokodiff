@@ -468,7 +468,6 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
       // left: -$comparison-sidebar-padding + $table-row-offset; - doesn't seem to do anything
       // Need to account for border in row element - don't think this is needed
       height: 100%;
-      // height: calc(100% - 1px);
       // top: 1px;
     }
 
@@ -479,30 +478,31 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
     //   display: none;
     // }
 
-    td:first-child::before, th:first-child::before {
-      position: absolute;
-      left: -$comparison-sidebar-offset;
-      width: $comparison-sidebar-width;
-      height: 100%;
-      min-height: 1.5em;
-      top: 1px;
-      line-height: 1.5em;
-      text-align: center;
-      z-index: 10;
-    }
+    // This is all a duplicate of `.compare-editions .diff::before` and `.compare-editions .diff.del::before` and `.compare-editions .diff.ins::before`
+    // td:first-child::before, th:first-child::before {
+    //   position: absolute;
+    //   left: -$comparison-sidebar-offset;
+    //   width: $comparison-sidebar-width;
+    //   height: 100%;
+    //   min-height: 1.5em;
+    //   top: 1px;
+    //   line-height: 1.5em;
+    //   text-align: center;
+    //   z-index: 10;
+    // }
 
-    &.del td:first-child::before, &.del th:first-child::before {
-      color: $text-colour;
-      background-color: $diff-marker-removed-color;
-      content: "−";
-      font-weight: normal;
-    }
+    // &.del td:first-child::before, &.del th:first-child::before {
+    //   color: $text-colour;
+    //   background-color: $diff-marker-removed-color;
+    //   content: "−";
+    //   font-weight: normal;
+    // }
 
-    &.ins td:first-child::before, &.ins th:first-child::before {
-      color: $text-colour;
-      background-color: $diff-marker-added-color;
-      content: "+";
-      font-weight: normal;
-    }
+    // &.ins td:first-child::before, &.ins th:first-child::before {
+    //   color: $text-colour;
+    //   background-color: $diff-marker-added-color;
+    //   content: "+";
+    //   font-weight: normal;
+    // }
   }
 }
