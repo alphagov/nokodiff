@@ -1,3 +1,4 @@
+$govuk-page-width: 1140px;
 $added-color: #e6fff3;
 $diff-marker-added-color: #99ffcf;
 $removed-color: #fadede;
@@ -469,6 +470,11 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
       // Need to account for border in row element - don't think this is needed
       height: 100%;
       // top: 1px;
+
+      // set width of background colour area to be viewport minus various padding
+      // This needs to be adjusted for the current breakpoint
+      width: calc(100vw - ($comparison-sidebar-padding * 4) - $comparison-sidebar-offset);
+      max-width: $govuk-page-width - $comparison-sidebar-offset;
     }
 
     // Attaching a ::before psuedoelement to a <tr> creates a phantom column so we need to hide it
