@@ -419,7 +419,7 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
   }
 
   // Table-specific overrides
-  $table-row-offset: -2px;
+  // $table-row-offset: -2px; - now is unused - remove
 
   table {
     overflow-x: visible;
@@ -456,25 +456,28 @@ $comparison-sidebar-offset: $comparison-sidebar-width + $comparison-sidebar-padd
   }
 
   tr.diff {
-    position: static;
-    transform: scale(1);
+    // position: static; | over-written - therefore does nothing - get rid
+    // transform: scale(1); | hides table rules which should not happen - get rid
 
     &.del, &.ins {
+      // otherwise displays block (overwrites default)
       display: table-row;
     }
 
     &.del::after, &.ins::after {
-      left: -$comparison-sidebar-padding + $table-row-offset;
-      // Need to account for border in row element
+      // left: -$comparison-sidebar-padding + $table-row-offset; - doesn't seem to do anything
+      // Need to account for border in row element - don't think this is needed
       height: 100%;
-      top: 1px;
+      // height: calc(100% - 1px);
+      // top: 1px;
     }
 
     // Attaching a ::before psuedoelement to a <tr> creates a phantom column so we need to hide it
     // and instead attach one to the first-child <td>
-    &::before {
-      display: none;
-    }
+    // Think this is no longer needed
+    // &::before {
+    //   display: none;
+    // }
 
     td:first-child::before, th:first-child::before {
       position: absolute;
